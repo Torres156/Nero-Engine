@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "akxhpLS5JDe44uZDfjOfAiXkA31V/NDDWqxvlyGCFe6rteabUXC1DbQvOf/dl6bfT3IUwkv1OlMz1SsuHH8HGg==",
+  "success": true,
+  "projectFilePath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Gustavo\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
