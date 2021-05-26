@@ -11,23 +11,18 @@ namespace Nero.Control
     using static Renderer;
     public class Form : Bond
     {
-        public const int BAR_HEIGHT = 25;
+        public const int BAR_HEIGHT = 35;
 
         #region Properties
         /// <summary>
         /// Titulo do formulário
         /// </summary>
-        public string Title = "";
-
-        /// <summary>
-        /// Cor da Barra
-        /// </summary>
-        public Color BarColor = new Color(12, 33, 33, 240); //  new Color(65, 95, 101, 220);
-
+        public string[] Title = new string[(int)Languages.count];
+                
         /// <summary>
         /// Cor de fundo
         /// </summary>
-        public Color FillColor = new Color(10, 10, 10, 255);
+        public Color FillColor = new Color(0, 0, 0, 240);
 
         /// <summary>
         /// Botão de fechar
@@ -45,11 +40,15 @@ namespace Nero.Control
         /// </summary>
         public int Border_Rounded = 4;
 
-
         /// <summary>
         /// Pode ser arrastado
         /// </summary>
         public bool canDragged = true;
+
+        /// <summary>
+        /// Usar multiplas linguas
+        /// </summary>
+        public bool UseMultipleLanguage = true;
                 
         private bool isModal = false;
         #endregion
@@ -60,7 +59,10 @@ namespace Nero.Control
         /// </summary>
         /// <param name="bond"></param>
         public Form(Bond bond) : base(bond)
-        { }
+        {
+            for (int i = 0; i < (int)Languages.count; i++)
+                Title[i] = "";
+        }
 
         /// <summary>
         /// Desenha o formulario
@@ -71,23 +73,25 @@ namespace Nero.Control
         {
             var gp = GlobalPosition();
 
-            // Barra
+            // Fundo
             if (Border_Rounded > 0)
                 DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16);
             else
                 DrawRectangle(target, gp, Size, FillColor);
-            DrawText(target, Title, 11, gp + new Vector2((Size.x - GetTextWidth(Title, 11)) / 2, 5), Color.White);
 
-            // Fundo
-            if (Border_Rounded > 0)
-                DrawRoundedRectangle(target, gp + new Vector2(4, BAR_HEIGHT + 4), Size - new Vector2(8, 8 + BAR_HEIGHT), new Color(255, 255, 255, 30), 4, 16);
-            else
-                DrawRectangle(target, gp + new Vector2(4, BAR_HEIGHT + 4), Size - new Vector2(8, 8 + BAR_HEIGHT), new Color(255, 255, 255, 30));
+            var currentTitle = UseMultipleLanguage ? Title[(int)Game.CurrentLanguage] : Title[0];
+            DrawText(target, currentTitle, 20, gp + new Vector2((Size.x - GetTextWidth(currentTitle, 20)) / 2, 5), Color.White);
+
+            //var cline = new Color(80, 80, 80,80);
+            //DrawLine(target, gp + new Vector2(20, BAR_HEIGHT), gp + new Vector2(Size.x - 20, BAR_HEIGHT), cline);
 
             // Botão de fechar
             if (Button_Exit)
-                DrawText(target, "X", 12, gp + new Vector2(Size.x - 15, 4), hover_exit ? new Color(212, 241, 248) : new Color(152, 181, 188));
-
+            {
+                if (hover_exit)
+                    DrawRoundedRectangle(target, gp + new Vector2(Size.x - 24, 4), new Vector2(20), new Color(255, 255, 255, 20), 4, 4);
+                DrawText(target, "X", 16, gp + new Vector2(Size.x - 24 + (20 - GetTextWidth("X", 16)) / 2, 4), Color.White);
+            }
             base.Draw(target, states);
         }
 
@@ -105,8 +109,8 @@ namespace Nero.Control
             hover_exit = false;
 
             if (Hover())
-                if (Button_Exit && e.x >= gp.x + (Size.x - 15) && e.x <= gp.x + Size.x - 4
-                    && e.y >= gp.y + 4 && e.y <= gp.y + 18)
+                if (Button_Exit && e.x >= gp.x + (Size.x - 24) && e.x <= gp.x + Size.x - 4
+                    && e.y >= gp.y + 4 && e.y <= gp.y + 28)
                 {
                     hover_exit = true;
                     Game.SetCursor(Cursor.CursorType.Hand);
@@ -151,7 +155,7 @@ namespace Nero.Control
 
                 var gp = GlobalPosition();
                 if (canDragged)
-                    if (e.X >= gp.x && e.X <= gp.x + Size.x - 20)
+                    if (e.X >= gp.x && e.X <= gp.x + Size.x - 24)
                         if (e.Y >= gp.y && e.Y <= gp.y + BAR_HEIGHT)
                         {
                             var mousep = new Vector2(e.X, e.Y) - gp;
@@ -204,6 +208,9 @@ namespace Nero.Control
 
         public virtual void Form_Dragged()
         { }
+
+        public void SetTitle(Languages lang, string text)
+            => Title[(int)lang] = text;
         #endregion
 
     }

@@ -1,0 +1,29 @@
+{
+  "Name": "pLogin",
+  "FillColor": {
+    "R": 10,
+    "G": 10,
+    "B": 10,
+    "A": 230
+  },
+  "OutlineThickness": 0.0,
+  "OutlineColor": {
+    "R": 100,
+    "G": 100,
+    "B": 100,
+    "A": 230
+  },
+  "Border_Opacity": 255,
+  "Border_Rounded": 4,
+  "Anchor": 4,
+  "BondName": "Scene",
+  "Position": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "Size": {
+    "x": 300.0,
+    "y": 350.0
+  },
+  "Visible": true
+}

@@ -156,12 +156,17 @@ namespace Nero.Control
             if (Hover())
             {
                 var gp = GlobalPosition();
-                float percent = (1f) / (Maximum + 1f);
+                float percent = (1f) / (Maximum + 1);
                 float height = (Size.y - 2) * percent;
-                var pos = gp + new Vector2(1, 1 + height * Value);
+                float height_real = height < 8 ? 8 : height;
+                percent = Value / (float)(Maximum + 1);
+                float posY = (Size.y - 2) * percent;
+                posY = posY < 0 ? 0 : posY;
+                if (posY + height_real > Size.y - 2) posY = Size.y - 2 - height_real;
+                var pos = gp + new Vector2(1, posY);
                 if (e.Button == Mouse.Button.Left && Maximum > 1)
                     if (e.X >= pos.x && e.X <= pos.x + Size.x - 2)
-                        if (e.Y >= pos.y && e.Y <= pos.y + height)
+                        if (e.Y >= pos.y && e.Y <= pos.y + height_real)
                         {
                             _press = true;
                             _y = e.Y;

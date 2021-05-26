@@ -43,9 +43,9 @@ namespace Nero.Control
         /// <param name="name"></param>
         public T FindControl<T>(string name) where T : Control
         {
-            var control = (T)controls.Where(i => i.GetType().Name.ToLower() == name.ToLower()).FirstOrDefault();
+            var control = (T)controls.Where(i => i.Name.ToLower() == name.ToLower()).FirstOrDefault();
             if (control == null)
-                control = forms.Where(i => i.GetType().Name.ToLower() == name.ToLower()).FirstOrDefault() as T;
+                control = forms.Where(i => i.Name.ToLower() == name.ToLower()).FirstOrDefault() as T;
 
             return control;
         }

@@ -16,7 +16,7 @@ namespace Nero.Control
         /// <summary>
         /// Texto no botão
         /// </summary>
-        public string Text = "";
+        public string[] Text = new string[(int)Languages.count];
 
         /// <summary>
         /// Cor do Botão
@@ -70,6 +70,11 @@ namespace Nero.Control
         public bool UseCursorHand = true;
 
         /// <summary>
+        /// Usa multiplas línguas
+        /// </summary>
+        public bool UseMultipleLanguage = true;
+
+        /// <summary>
         /// Marcador
         /// </summary>
         public bool Checked
@@ -116,7 +121,8 @@ namespace Nero.Control
         /// <param name="bond"></param>
         public Button(Bond bond) : base(bond)
         {
-
+            for (int i = 0; i < (int)Languages.count; i++)
+                Text[i] = "";
         }
 
         /// <summary>
@@ -167,7 +173,8 @@ namespace Nero.Control
                 DrawTexture(target, Texture, new Rectangle(gp + new Vector2(1), Size - new Vector2(2)), new Color(255, 255, 255, opacity));
 
             // Texto do botão
-            DrawText(target, Text, TextSize, gp + new Vector2((Size.x - GetTextWidth(Text, (uint)TextSize)) / 2, (Size.y / 2) - (TextSize * .7f)), TextColor);
+            string currentText = UseMultipleLanguage ? Text[(int)Game.CurrentLanguage] : Text[0];
+            DrawText(target, currentText, TextSize, gp + new Vector2((Size.x - GetTextWidth(currentText, (uint)TextSize)) / 2, (Size.y / 2) - (TextSize * .7f)), TextColor);
 
 
 
@@ -230,6 +237,9 @@ namespace Nero.Control
             if (Texture != null)
                 Texture.Destroy();
         }
+
+        public void SetText(Languages lang, string text)
+            => Text[(int)lang] = text;
         #endregion 
     }
 }

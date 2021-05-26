@@ -1,0 +1,46 @@
+{
+  "item": [
+    {
+      "word": [
+        "Nova Conta",
+        "New Account"
+      ]
+    },
+    {
+      "word": [
+        "Conta:",
+        "Account:"
+      ]
+    },
+    {
+      "word": [
+        "Senha:",
+        "Password:"
+      ]
+    },
+    {
+      "word": [
+        "Repetir Senha:",
+        "Repeat Password:"
+      ]
+    },
+    {
+      "word": [
+        "Mínimo 3 letras para conta!",
+        "Minimum 3 letters for account!"
+      ]
+    },
+    {
+      "word": [
+        "Mínimo 3 letras para senha!",
+        "Minimum 3 letters for password!"
+      ]
+    },
+    {
+      "word": [
+        "As senhas não estão iguais!",
+        "Passwords are not the same!"
+      ]
+    }
+  ]
+}

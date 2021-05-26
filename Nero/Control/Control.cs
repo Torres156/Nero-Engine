@@ -6,10 +6,25 @@ using System.Threading.Tasks;
 
 namespace Nero.Control
 {
+    using Newtonsoft.Json;
     using SFML.Window;
     public abstract class Control : GameObject
     {
+        /// <summary>
+        /// Carrega um controle
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <param name="obj"></param>
+        public static void LoadJson<T>(string filePath, out T obj) where T : Control
+        {
+            JsonHelper.Load<T>(filePath, out obj);
+            obj?.SetBond();
+        }
+
         #region Properties
+        public string Name = "";
+
         /// <summary>
         /// Posição
         /// </summary>
@@ -28,7 +43,9 @@ namespace Nero.Control
         /// <summary>
         /// Vinculo
         /// </summary>
+        [JsonIgnore]
         public Bond Bond { get; private set; }
+        public string BondName = "";
 
         /// <summary>
         /// Visibilidade do controle
@@ -71,7 +88,8 @@ namespace Nero.Control
         /// Construtor
         /// </summary>
         public Control()
-        { }
+        {
+        }
 
         /// <summary>
         /// Construtor
@@ -80,7 +98,11 @@ namespace Nero.Control
         public Control(Bond Bond)
         {
             this.Bond = Bond;
-            Bond?.AddControl(this);
+            if (Bond != null)
+            {
+                Bond.AddControl(this);
+                BondName = Bond is SceneBase ? "Scene" : Bond.Name;
+            }
         }
 
         /// <summary>
@@ -95,8 +117,8 @@ namespace Nero.Control
 
             if (Bond != null && Bond is Form)
             {
-                bondpos += new Vector2(4, 4 + Form.BAR_HEIGHT);
-                bondsize -= new Vector2(8, 8 + Form.BAR_HEIGHT);
+                bondpos += new Vector2(0, 4 + Form.BAR_HEIGHT);
+                bondsize -= new Vector2(0, 8 + Form.BAR_HEIGHT);
             }
 
             switch (Anchor)
@@ -270,6 +292,21 @@ namespace Nero.Control
         public virtual void Destroy()
         {
             
+        }
+
+        void SetBond()
+        {
+            if (BondName.Length > 0)
+            {
+                var s = Game.GetScene();
+                Bond bnd;
+                if (BondName == "Scene")
+                    bnd = s;
+                else
+                    bnd = s.FindControl<Bond>(BondName);                
+                Bond = bnd;
+                bnd?.AddControl(this);
+            }
         }
 
         #endregion

@@ -19,7 +19,7 @@ namespace Nero.Control
         /// <summary>
         /// Texto
         /// </summary>
-        public string Text = "";
+        public string[] Text = new string[(int)Languages.count];
 
         /// <summary>
         /// Valor
@@ -46,6 +46,11 @@ namespace Nero.Control
         /// Escala da borda
         /// </summary>
         public float Border_Scale = 0.15f;
+
+        /// <summary>
+        /// Usa multiplas línguas
+        /// </summary>
+        public bool UseMultipleLanguage = true;
         #endregion
 
         #region Events
@@ -58,7 +63,10 @@ namespace Nero.Control
         /// </summary>
         /// <param name="bond"></param>
         public CheckBox(Bond bond) : base(bond)
-        { }
+        {
+            for (int i = 0; i < (int)Languages.count; i++)
+                Text[i] = "";
+        }
 
         /// <summary>
         /// Desenha o checkbox
@@ -68,7 +76,8 @@ namespace Nero.Control
         public override void Draw(RenderTarget target, RenderStates states)
         {
             var gp = GlobalPosition();
-            Size = new Vector2(18 + GetTextWidth(Text, 11), 14);
+            var currentText = UseMultipleLanguage ? Text[(int)Game.CurrentLanguage] : Text[0];
+            Size = new Vector2(18 + GetTextWidth(currentText, 11), 14);
 
             if (Align == CheckBoxAligns.Left)
             {
@@ -80,7 +89,7 @@ namespace Nero.Control
                 if (_checked)
                     DrawRoundedRectangle(target, gp + new Vector2(1, 1), new Vector2(12, 12), new Color(200, 200, 200),4,4);
 
-                DrawText(target, Text, 11, gp + new Vector2(18, 0), new Color(200, 200, 200), 1, new Color(40, 40, 40));
+                DrawText(target, currentText, 11, gp + new Vector2(18, 0), new Color(200, 200, 200));
             }
             else if (Align == CheckBoxAligns.Right)
             {
@@ -92,11 +101,14 @@ namespace Nero.Control
                 if (_checked)
                     DrawRectangle(target, gp + new Vector2(Size.x - 14, 0) + new Vector2(1, 1), new Vector2(12, 12), new Color(200, 200, 200));
 
-                DrawText(target, Text, 11, gp, new Color(200, 200, 200), 1, new Color(40, 40, 40));
+                DrawText(target, currentText, 11, gp, new Color(200, 200, 200));
             }
 
             base.Draw(target, states);
         }
+
+        public void SetText(Languages lang, string text)
+            => Text[(int)lang] = text;
 
         /// <summary>
         /// Solta o clique

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projetos\\Nero\\Nero-Engine\\NIC.Client\\NIC.Client.csproj": {}
+    "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj": {}
   },
   "projects": {
-    "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj": {
+    "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj",
+        "projectUniqueName": "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj",
         "projectName": "Nero",
-        "projectPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj",
-        "packagesPath": "C:\\Users\\Gustavo\\.nuget\\packages\\",
-        "outputPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\obj\\",
+        "projectPath": "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj",
+        "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
+        "outputPath": "D:\\Projeto\\Nero-Engine\\Nero\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\Gustavo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Pichau\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -26,8 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.stride3d.net/nuget": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
@@ -48,6 +47,10 @@
             "CSFML": {
               "target": "Package",
               "version": "[2.5.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             }
           },
           "imports": [
@@ -65,24 +68,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Projetos\\Nero\\Nero-Engine\\NIC.Client\\NIC.Client.csproj": {
+    "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projetos\\Nero\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
+        "projectUniqueName": "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
         "projectName": "NIC.Client",
-        "projectPath": "D:\\Projetos\\Nero\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
-        "packagesPath": "C:\\Users\\Gustavo\\.nuget\\packages\\",
-        "outputPath": "D:\\Projetos\\Nero\\Nero-Engine\\NIC.Client\\obj\\",
+        "projectPath": "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
+        "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
+        "outputPath": "D:\\Projeto\\Nero-Engine\\NIC.Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\Gustavo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Pichau\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -91,15 +94,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packages.stride3d.net/nuget": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj": {
-                "projectPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj"
+              "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj": {
+                "projectPath": "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj"
               }
             }
           }
@@ -113,6 +115,12 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -128,7 +136,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

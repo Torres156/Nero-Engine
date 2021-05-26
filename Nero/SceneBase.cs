@@ -68,7 +68,7 @@ namespace Nero
 
             if (form_Priority != null)
             {
-                DrawRectangle(target, Vector2.Zero, Game.Size, new Color(0, 0, 0, 100));
+                DrawRectangle(target, Vector2.Zero, Game.Size, new Color(0, 0, 0, 200));
                 form_Priority.Draw(target, states);
             }
             priority?.Draw(target, states);

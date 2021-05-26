@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "hJjo3bpuyecUJx5t3XlBhJvpKGs/Kcl8yzWXdQl++ZTS2fX9NsCZWguvidOFcQKwdlpLEZ2DFq4DJ9a0tvtttA==",
+  "dgSpecHash": "2EiHYv80JM1Cj3iTebzhIXzpXB9jIF1SLTjAtGF2FUxDm6Z395oKzOjR6kOrrfVuygNUVCSNYgD+PCw7dXOqXg==",
   "success": true,
-  "projectFilePath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj",
+  "projectFilePath": "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Gustavo\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512"
+    "C:\\Users\\Pichau\\.nuget\\packages\\csfml\\2.5.0\\csfml.2.5.0.nupkg.sha512",
+    "C:\\Users\\Pichau\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],
   "logs": []
 }

@@ -167,7 +167,10 @@ namespace Nero.Control
         public int Value
         {
             get => ToInt32();
-            set => Text = value.ToString();
+            set
+            {
+                if (isNumeric) Text = value.ToString();
+            }
         }
 
         RenderTexture render;

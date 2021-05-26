@@ -34,6 +34,7 @@ namespace Nero
         public static bool VSync = false;                           // Modo V-Sync
         public static bool Fullscreen = false;                      // Modo tela cheia
         public static bool UseCompactTexture = false;               // Usar modo compacto para texturas
+        public static Languages CurrentLanguage = Languages.PT_BR;  // Lingua atual
                 
 
         // Cena
@@ -120,7 +121,6 @@ namespace Nero
                     scene?.Update();
                     OnUpdate.Invoke();
                     Sound.ProcessSounds();
-
 
                     // Dispara os eventos da janela                    
                     Window.DispatchEvents();
