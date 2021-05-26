@@ -41,16 +41,16 @@ namespace Nero.Control
         public byte Border_Opacity = 255;
 
         /// <summary>
-        /// Escala da borda
+        /// Arredondamento
         /// </summary>
-        public float Border_Scale = 0.3f;
+        public int Border_Rounded = 4;
+
 
         /// <summary>
         /// Pode ser arrastado
         /// </summary>
         public bool canDragged = true;
-
-        public bool Rounded = true;
+                
         private bool isModal = false;
         #endregion
 
@@ -72,14 +72,14 @@ namespace Nero.Control
             var gp = GlobalPosition();
 
             // Barra
-            if (Rounded)
-                DrawRoundedRectangle(target, gp, Size, FillColor, 4, 16);
+            if (Border_Rounded > 0)
+                DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16);
             else
                 DrawRectangle(target, gp, Size, FillColor);
             DrawText(target, Title, 11, gp + new Vector2((Size.x - GetTextWidth(Title, 11)) / 2, 5), Color.White);
 
             // Fundo
-            if (Rounded)
+            if (Border_Rounded > 0)
                 DrawRoundedRectangle(target, gp + new Vector2(4, BAR_HEIGHT + 4), Size - new Vector2(8, 8 + BAR_HEIGHT), new Color(255, 255, 255, 30), 4, 16);
             else
                 DrawRectangle(target, gp + new Vector2(4, BAR_HEIGHT + 4), Size - new Vector2(8, 8 + BAR_HEIGHT), new Color(255, 255, 255, 30));
@@ -109,7 +109,7 @@ namespace Nero.Control
                     && e.y >= gp.y + 4 && e.y <= gp.y + 18)
                 {
                     hover_exit = true;
-                    Game.SetCursor(System.Windows.Forms.Cursors.Hand);
+                    Game.SetCursor(Cursor.CursorType.Hand);
                 }
 
 

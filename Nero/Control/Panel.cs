@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,7 @@ namespace Nero.Control
         /// <summary>
         /// Espessura da borda
         /// </summary>
-        public float OutlineThickness = 1;
+        public float OutlineThickness = 0;
 
         /// <summary>
         /// Cor da borda
@@ -34,7 +34,7 @@ namespace Nero.Control
         /// <summary>
         /// Escala da borda
         /// </summary>
-        public float Border_Scale = 0.3f;
+        public int Border_Rounded = 4;
         #endregion
 
         #region Methods
@@ -53,8 +53,11 @@ namespace Nero.Control
         public override void Draw(RenderTarget target, RenderStates states)
         {
             var gp = GlobalPosition();
-            DrawShadowRectangle(target, gp - new Vector2(OutlineThickness, OutlineThickness), Size + new Vector2(OutlineThickness, OutlineThickness) * 2, Border_Opacity, Border_Scale);
-            DrawRectangle(target, gp, Size, FillColor, OutlineThickness, OutlineColor);
+
+            if (Border_Rounded > 0)
+                DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16, OutlineThickness, OutlineColor);
+            else
+                DrawRectangle(target, gp, Size, FillColor, OutlineThickness, OutlineColor);
 
             base.Draw(target, states);
         }

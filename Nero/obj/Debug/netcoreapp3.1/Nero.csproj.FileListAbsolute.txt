@@ -16,3 +16,12 @@ D:\Projeto\Nero\Nero\obj\Debug\netcoreapp3.1\Nero.pdb
 D:\Projetos\Nero\Nero\obj\Debug\netcoreapp3.1\Nero.csprojAssemblyReference.cache
 D:\Projetos\Nero\Build\Nero\netcoreapp3.1\Nero.pdb
 D:\Projetos\Nero\Nero\obj\Debug\netcoreapp3.1\Nero.pdb
+D:\Projetos\Nero\Nero-Engine\Build\Nero\netcoreapp3.1\Nero.deps.json
+D:\Projetos\Nero\Nero-Engine\Build\Nero\netcoreapp3.1\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Build\Nero\netcoreapp3.1\Nero.pdb
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.csprojAssemblyReference.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.AssemblyInfoInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.AssemblyInfo.cs
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.csproj.CoreCompileInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\netcoreapp3.1\Nero.pdb

@@ -288,7 +288,6 @@ namespace Nero
                 for (int i = controls.Count - 1; i >= 0; i--)
                     if (controls[i] != null && controls[i] != priority && controls[i].Visible && controls[i].MouseMoved(e)) return true;
 
-            Game.SetCursor(System.Windows.Forms.Cursors.Default);
 
             return base.MouseMoved(e);
         }

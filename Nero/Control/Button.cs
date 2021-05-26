@@ -89,9 +89,9 @@ namespace Nero.Control
         public bool isChecked = false;
 
         /// <summary>
-        /// Cantos arredondados
+        /// Arredondamento
         /// </summary>
-        public bool Rounded = true;
+        public int Border_Rounded = 4;
 
         /// <summary>
         /// Cor da borda
@@ -131,18 +131,18 @@ namespace Nero.Control
             if (_debugHover && !Hover()) _debugHover = false;
 
             // Fundo 
-            if (Rounded)
+            if (Border_Rounded > 0)
             {
                 if (isChecked)
-                    DrawRoundedRectangle(target, gp, Size, FillColor, 4f, 4,
+                    DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16,
                         Checked ? OutlineThicknessChecked : OutlineThickness, Checked ? OutlineColorChecked : OutlineColor);
                 else
-                    DrawRoundedRectangle(target, gp, Size, FillColor, 4f, 4, OutlineThickness, OutlineColor);
+                    DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16, OutlineThickness, OutlineColor);
                 if (_debugHover)
                     if (_debugPress)
-                        DrawRoundedRectangle(target, gp, Size, new Color(0, 0, 0, 60), 4f, 4);
+                        DrawRoundedRectangle(target, gp, Size, new Color(0, 0, 0, 60), Border_Rounded, 4);
                     else
-                        DrawRoundedRectangle(target, gp, Size, new Color(255, 255, 255, 60), 4f, 4);
+                        DrawRoundedRectangle(target, gp, Size, new Color(255, 255, 255, 60), Border_Rounded, 4);
             }
             else
             {
@@ -187,7 +187,7 @@ namespace Nero.Control
             if (Hover())
             {
                 if (UseCursorHand)
-                    Game.SetCursor( System.Windows.Forms.Cursors.Hand);
+                    Game.SetCursor(Cursor.CursorType.Hand);
 
                 _debugHover = true;
             }                

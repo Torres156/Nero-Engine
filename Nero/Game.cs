@@ -21,9 +21,6 @@ namespace Nero
         public static RenderWindow Window;                                                  // Dispositivo gráfico para janela
         
 
-        static System.Windows.Forms.Form form;                                              // Janela do jogo
-
-
         // Configurações
         public static Vector2 Size = new Vector2(1024, 600);        // Tamanho da janela
         public static Vector2 MinSize = new Vector2(640, 360);      // Tamanho mínimo para a janela
@@ -31,16 +28,24 @@ namespace Nero
         public static Vector2 FPS_position = new Vector2(10, 10);   // Posição do FPS
         public static View DefaultView { get; private set; }        // Definição para Resolução
         public static Color BackgroundColor = Color.CornflowerBlue; // Cor do fundo da janela
-        public static bool Button_Maximize = false;                 // Botão de maximizar a janela
+        public static bool WindowMaximized = false;                 // Botão de maximizar a janela
+        public static bool WindowResized = true;                    // Permitir o resize da janela
         public static string Title = "Nero Library Game";           // Titulo da janela
         public static bool VSync = false;                           // Modo V-Sync
         public static bool Fullscreen = false;                      // Modo tela cheia
+        public static bool UseCompactTexture = false;               // Usar modo compacto para texturas
                 
 
         // Cena
         static SceneBase scene = null;      // Cena atual
         static SceneBase nextscene = null;  // Proxima cena
         static Type StartScene = null;      // Cena inicial
+
+        // Cursores
+        static Cursor cursor_hand = new Cursor(Cursor.CursorType.Hand);     // Cursor: Mão
+        static Cursor cursor_arrow = new Cursor(Cursor.CursorType.Arrow);   // Cursor: Arrow
+        static Cursor currentCursor = cursor_arrow;                         // Cursor atual
+        static Cursor newCursor = currentCursor;                            // Novo Cursor
 
 
         #region Controladores de janela
@@ -56,33 +61,16 @@ namespace Nero
         public static Action OnResize = delegate { };       // Evento de redimensionar a janela
         public static Action OnClosed = delegate { };       // Evento de fechar o jogo
                         
-        
-        /// <summary>
-        /// Borda da janela
-        /// </summary>
-        public static System.Windows.Forms.FormBorderStyle WindowBorder
-        {
-            get
-            {
-                var frm = (System.Windows.Forms.Form)System.Windows.Forms.Form.FromHandle(Window.SystemHandle);
-                return frm.FormBorderStyle;
-            }
-            set
-            {
-                var frm = (System.Windows.Forms.Form)System.Windows.Forms.Form.FromHandle(Window.SystemHandle);
-                frm.FormBorderStyle = value;
-            }
-        }
-
+           
         /// <summary>
         /// Roda o jogo
         /// </summary>
-        public static void Run(System.Windows.Forms.FormBorderStyle BorderStyle, bool maximized = false)
+        public static void Run()
         {
             OnResources.Invoke();
-            CreateWindow(BorderStyle);
-
-            if (maximized )
+            CreateWindow();
+            
+            if (WindowMaximized)
             {
                 var i = Window.SystemHandle;
                 ShowWindow(i, SW_MAXIMIZE);
@@ -97,8 +85,7 @@ namespace Nero
                 scene.LoadContent();
             }
 
-            Running = true;
-            form?.Show();
+            Running = true;            
             GameLoop();
         }
 
@@ -135,10 +122,10 @@ namespace Nero
                     Sound.ProcessSounds();
 
 
-                    // Dispara os eventos da janela
-                    System.Windows.Forms.Application.DoEvents();
+                    // Dispara os eventos da janela                    
                     Window.DispatchEvents();
 
+                    newCursor = cursor_arrow;
                     if (Window.HasFocus())
                     {
                         #region Mouse Events
@@ -181,8 +168,11 @@ namespace Nero
                         }
                         #endregion
                     }
-                    if (form.Cursor != currentCursor)
-                        form.Cursor = currentCursor;
+                    if (newCursor != currentCursor)
+                    {
+                        currentCursor = newCursor;
+                        Window.SetMouseCursor(currentCursor);
+                    }
                     Window.Clear(BackgroundColor);
                     
 
@@ -215,31 +205,19 @@ namespace Nero
         /// <summary>
         /// Cria a janela
         /// </summary>
-        static void CreateWindow(System.Windows.Forms.FormBorderStyle borderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle)
+        static void CreateWindow()
         {
-            form = new System.Windows.Forms.Form();
-            form.ClientSize = new System.Drawing.Size((int)Size.x, (int)Size.y);
-            form.MaximizeBox = Button_Maximize;
-            form.Text = Title;
-            form.MinimumSize = new System.Drawing.Size((int)MinSize.x, (int)MinSize.y);
-            form.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-
+            var video = new VideoMode((uint)Size.x, (uint)Size.y);
             if (!Fullscreen)
-            {
-                form.FormBorderStyle = borderStyle;
-                Window = new RenderWindow(form.Handle, new ContextSettings(32, 8, 8));                
-            }
+                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8));            
             else
-            {
-                var video = VideoMode.DesktopMode;
-                form.ClientSize = new System.Drawing.Size((int)video.Width, (int)video.Height);
-                form.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                Window = new RenderWindow(form.Handle, new ContextSettings(32, 8, 8));                
-            }
+                Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 8, 8));
+
             DefaultView = Window.DefaultView;
             Window.SetActive(false);
             Window.SetFramerateLimit(0);
             Window.SetVerticalSyncEnabled(VSync);
+            Window.SetMouseCursor(currentCursor);
         }
 
         /// <summary>
@@ -253,16 +231,7 @@ namespace Nero
             Window.KeyPressed += Window_KeyPressed;
             Window.KeyReleased += Window_KeyReleased;
             Window.Resized += Window_Resized;
-
-            form.FormClosing += Form_FormClosing;
-        }
-
-        private static void Form_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            OnClosed?.Invoke();
-            form.Hide();
-            Running = false;
+                        
         }
 
         private static void Window_Resized(object sender, SizeEventArgs e)
@@ -270,6 +239,7 @@ namespace Nero
             Size = (Vector2)Window.Size;            
             DefaultView = new View(new FloatRect(0, 0, Size.x, Size.y));
             Window.SetView(DefaultView);
+            
             OnResize?.Invoke();
 
             if (scene != null)
@@ -318,6 +288,7 @@ namespace Nero
         private static void Window_Closed(object sender, EventArgs e)
         {
             Window.Close();
+            OnClosed?.Invoke();
             Running = false;
         }
 
@@ -387,37 +358,31 @@ namespace Nero
 
         public static void ToggleFullscreen()
         {
-            //if (!isFullscreen)
-            //{
-            //    Window.Close();
-            //    Window = new RenderWindow(VideoMode.DesktopMode, Title, Styles.Fullscreen);
-            //    Window.SetVerticalSyncEnabled(VSync);
-            //    HandleEvents();
-            //    isFullscreen = true;
-            //    _size = Size;
-            //    Size = (Vector2)Window.Size;
-            //}
-            //else
-            //{
-            //    Size = _size;
-            //    Window.Close();
-            //    CreateWindow();
-            //    HandleEvents();
-            //    isFullscreen = false;
-            //}
+            if (!Fullscreen)
+            {
+                Window.Close();
+                Window = new RenderWindow(VideoMode.DesktopMode, Title, Styles.Fullscreen);
+                Window.SetVerticalSyncEnabled(VSync);
+                HandleEvents();
+                Fullscreen = true;                
+                Size = (Vector2)Window.Size;
+            }
+            else
+            {                
+                Window.Close();
+                CreateWindow();
+                HandleEvents();
+                Fullscreen = false;
+            }
 
             if (scene != null)
                 scene.Resize();
         }
 
-        public static System.Windows.Forms.Form GetForm()
-            => form;
-
-        public static void SetCursor(System.Windows.Forms.Cursor value)
+        public static void SetCursor(Cursor.CursorType type)
         {
-            if (currentCursor != value)
-                currentCursor = value;
+            newCursor = type == Cursor.CursorType.Arrow ? cursor_arrow : cursor_hand;
         }
-        static System.Windows.Forms.Cursor currentCursor;
+                
     }
 }

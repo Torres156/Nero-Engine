@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,14 +72,10 @@ namespace Nero
         /// <returns>True if the point is inside</returns>
         ////////////////////////////////////////////////////////////
         public bool Contains(float x, float y)
-        {
-            float minX = Math.Min(x, x + width);
-            float maxX = Math.Max(x, x + width);
-            float minY = Math.Min(y, y + height);
-            float maxY = Math.Max(y, y + height);
+            => x >= this.x && x <= this.x + width && y >= this.y && y <= this.y + height;
 
-            return (x >= minX) && (x < maxX) && (y >= minY) && (y < maxY);
-        }
+        public bool Contains(Vector2 value)
+            => Contains(value.x, value.y);
 
         ////////////////////////////////////////////////////////////
         /// <summary>

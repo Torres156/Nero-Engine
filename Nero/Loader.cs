@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,17 +49,27 @@ namespace Nero
         /// <param name="filepath"></param>
         /// <returns></returns>
         internal static NativeTexture LoadNativeTexture(string filepath)
-        {            
-            var data = LoadData(filepath);
-            return new NativeTexture(data);
+        {
+            if (Game.UseCompactTexture)
+            {
+                var data = LoadData(filepath);
+                return new NativeTexture(data);
+            }
+            else
+                return new NativeTexture(filepath);
         }
 
         internal static LargeTexture LoadLargeTexture(string filepath)
-        {            
-            var data = LoadData(filepath);
+        {
+            if (Game.UseCompactTexture)
+            {
+                var data = LoadData(filepath);
 
-            var img = new Image(data);
-            return new LargeTexture(img);
+                var img = new Image(data);
+                return new LargeTexture(img);
+            }
+            else
+                return new LargeTexture(filepath);
         }
 
     }
