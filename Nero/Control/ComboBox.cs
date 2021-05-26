@@ -132,7 +132,7 @@ namespace Nero.Control
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void B_open_OnMouseReleased(Control sender, MouseButtonEvent e)
+        private void B_open_OnMouseReleased(ControlBase sender, MouseButtonEvent e)
         {
             _openBox = !_openBox;
             if (_openBox)
@@ -157,7 +157,7 @@ namespace Nero.Control
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="target"></param>
-        private void B_open_OnDraw(Control sender, RenderTarget target)
+        private void B_open_OnDraw(ControlBase sender, RenderTarget target)
         {
             var gp = sender.GlobalPosition();
             DrawText(target, "˅", 12, gp + new Vector2(4, 1), new Color(10,10,10));

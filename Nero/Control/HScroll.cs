@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +8,7 @@ namespace Nero.Control
     using SFML.Graphics;
     using static Renderer;
     using Color = Nero.Color;
-    public class HScroll : Control
+    public class HScroll : ControlBase
     {
         /// <summary>
         /// Máximo de valor
@@ -23,7 +23,7 @@ namespace Nero.Control
         /// <summary>
         /// Cor de fundo
         /// </summary>
-        public Color FillColor = new Color(20, 20, 20, 200);
+        public Color FillColor = new Color(40, 40, 40, 200);
 
         /// <summary>
         /// Espessura da borda

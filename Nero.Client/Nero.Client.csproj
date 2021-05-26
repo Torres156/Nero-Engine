@@ -3,7 +3,9 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>NIC.Client.Program</StartupObject>
+    <StartupObject>Nero.Client.Program</StartupObject>
+    <AssemblyName>Nero.Client</AssemblyName>
+    <RootNamespace>Nero.Client</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

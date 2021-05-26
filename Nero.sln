@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nero", "Nero\Nero.csproj", "{093D7D64-7119-42E5-96F7-922830196A5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NIC.Client", "NIC.Client\NIC.Client.csproj", "{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nero.Client", "Nero.Client\Nero.Client.csproj", "{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

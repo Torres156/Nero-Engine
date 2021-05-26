@@ -14,7 +14,7 @@ namespace Nero.Control
         /// <summary>
         /// Cor de fundo
         /// </summary>
-        public Color FillColor = new Color(0, 0, 0, 240);
+        public Color FillColor = new Color(0, 0, 0, 220);
 
         /// <summary>
         /// Espessura da borda

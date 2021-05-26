@@ -10,7 +10,7 @@ namespace Nero.Control
     using SFML.Graphics;
     using SFML.Window;
     using Color = Nero.Color;
-    public class TextBox : Control
+    public class TextBox : ControlBase
     {
         #region Static
         /// <summary>

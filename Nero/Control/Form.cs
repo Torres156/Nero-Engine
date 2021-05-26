@@ -22,7 +22,7 @@ namespace Nero.Control
         /// <summary>
         /// Cor de fundo
         /// </summary>
-        public Color FillColor = new Color(0, 0, 0, 240);
+        public Color FillColor = new Color(0, 0, 0, 220);
 
         /// <summary>
         /// Botão de fechar
@@ -89,7 +89,7 @@ namespace Nero.Control
             if (Button_Exit)
             {
                 if (hover_exit)
-                    DrawRoundedRectangle(target, gp + new Vector2(Size.x - 24, 4), new Vector2(20), new Color(255, 255, 255, 20), 4, 4);
+                    DrawRoundedRectangle(target, gp + new Vector2(Size.x - 24, 4), new Vector2(20), new Color(255, 255, 255, 40), 4, 4);
                 DrawText(target, "X", 16, gp + new Vector2(Size.x - 24 + (20 - GetTextWidth("X", 16)) / 2, 4), Color.White);
             }
             base.Draw(target, states);

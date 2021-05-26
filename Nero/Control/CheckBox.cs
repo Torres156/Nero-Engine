@@ -8,7 +8,7 @@ namespace Nero.Control
 {
     using SFML.Window;    
     using static Renderer;
-    public class CheckBox : Control
+    public class CheckBox : ControlBase
     {
         #region Properties
         /// <summary>

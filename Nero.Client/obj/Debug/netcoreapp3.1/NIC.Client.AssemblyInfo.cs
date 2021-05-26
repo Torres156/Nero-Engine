@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("NIC.Client")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Nero.Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("NIC.Client")]
-[assembly: System.Reflection.AssemblyTitleAttribute("NIC.Client")]
+[assembly: System.Reflection.AssemblyProductAttribute("Nero.Client")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Nero.Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.

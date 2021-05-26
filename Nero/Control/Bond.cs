@@ -8,12 +8,12 @@ namespace Nero.Control
 {
     using SFML.System;
     using SFML.Window;
-    public abstract class Bond : Control
+    public abstract class Bond : ControlBase
     {
         #region Properties
-        protected List<Control> controls;
+        protected List<ControlBase> controls;
         protected List<Form> forms;
-        protected Control priority;
+        protected ControlBase priority;
         protected FormDragged formDragged;
         #endregion
 
@@ -23,7 +23,7 @@ namespace Nero.Control
         /// </summary>
         public Bond() : base()
         {
-            controls = new List<Control>();
+            controls = new List<ControlBase>();
             forms = new List<Form>();
         }
 
@@ -33,7 +33,7 @@ namespace Nero.Control
         /// <param name="bond"></param>
         public Bond(Bond bond) : base(bond)
         {
-            controls = new List<Control>();
+            controls = new List<ControlBase>();
             forms = new List<Form>();
         }
 
@@ -41,7 +41,7 @@ namespace Nero.Control
         /// Encontra um controle
         /// </summary>
         /// <param name="name"></param>
-        public T FindControl<T>(string name) where T : Control
+        public T FindControl<T>(string name) where T : ControlBase
         {
             var control = (T)controls.Where(i => i.Name.ToLower() == name.ToLower()).FirstOrDefault();
             if (control == null)
@@ -55,7 +55,7 @@ namespace Nero.Control
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T FindControl<T>() where T : Control
+        public T FindControl<T>() where T : ControlBase
             => FindControl<T>(typeof(T).Name);
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace Nero.Control
         /// Adiciona um controle ao vinculo
         /// </summary>
         /// <param name="control"></param>
-        public void AddControl(Control control)
+        public void AddControl(ControlBase control)
         {
             if (control.GetType().Name == "Form" || control.GetType().BaseType.Name == "Form")
                 forms.Add((Form)control);
@@ -220,7 +220,7 @@ namespace Nero.Control
         /// Seta um controle como prioridade
         /// </summary>
         /// <param name="control"></param>
-        public void SetControlPriority(Control control)
+        public void SetControlPriority(ControlBase control)
         {
             priority = control;
         }

@@ -8,7 +8,7 @@ namespace Nero.Control
 {
     using Newtonsoft.Json;
     using SFML.Window;
-    public abstract class Control : GameObject
+    public abstract class ControlBase : GameObject
     {
         /// <summary>
         /// Carrega um controle
@@ -16,7 +16,7 @@ namespace Nero.Control
         /// <typeparam name="T"></typeparam>
         /// <param name="filePath"></param>
         /// <param name="obj"></param>
-        public static void LoadJson<T>(string filePath, out T obj) where T : Control
+        public static void LoadJson<T>(string filePath, out T obj) where T : ControlBase
         {
             JsonHelper.Load<T>(filePath, out obj);
             obj?.SetBond();
@@ -75,11 +75,11 @@ namespace Nero.Control
         public event HandleMouseScrolled OnMouseScrolled;
 
         // Delegates
-        public delegate void HandleCommon(Control sender);
-        public delegate void HandleDraw(Control sender, RenderTarget target);
-        public delegate void HandleMouseButton(Control sender, MouseButtonEvent e);
-        public delegate void HandleMouseScrolled(Control sender, MouseWheelScrollEventArgs e);
-        public delegate void HandleMouseMove(Control sender, Vector2 e);
+        public delegate void HandleCommon(ControlBase sender);
+        public delegate void HandleDraw(ControlBase sender, RenderTarget target);
+        public delegate void HandleMouseButton(ControlBase sender, MouseButtonEvent e);
+        public delegate void HandleMouseScrolled(ControlBase sender, MouseWheelScrollEventArgs e);
+        public delegate void HandleMouseMove(ControlBase sender, Vector2 e);
         #endregion
 
         #region Methods
@@ -87,7 +87,7 @@ namespace Nero.Control
         /// <summary>
         /// Construtor
         /// </summary>
-        public Control()
+        public ControlBase()
         {
         }
 
@@ -95,7 +95,7 @@ namespace Nero.Control
         /// Construtor
         /// </summary>
         /// <param name="Bond"></param>
-        public Control(Bond Bond)
+        public ControlBase(Bond Bond)
         {
             this.Bond = Bond;
             if (Bond != null)

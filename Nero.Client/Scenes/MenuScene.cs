@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NIC.Client.Scenes
+namespace Nero.Client.Scenes
 {
     using static Renderer;
     class MenuScene : SceneBase
@@ -55,20 +55,20 @@ namespace NIC.Client.Scenes
             background.Smooth = true;
 
             // Login
-            Control.LoadJson("data/ui/menu/login/panel_login.json", out pLogin);
-            Control.LoadJson("data/ui/menu/login/textbox_account.json", out txtAccount);
-            Control.LoadJson("data/ui/menu/login/textbox_password.json", out txtPassword);
-            Control.LoadJson("data/ui/menu/login/checkbox_save.json", out chkSave);
-            Control.LoadJson("data/ui/menu/login/button_enter.json", out btnEnter);
-            Control.LoadJson("data/ui/menu/login/button_exit.json", out btnExit);
+            ControlBase.LoadJson("data/ui/menu/login/panel_login.json", out pLogin);
+            ControlBase.LoadJson("data/ui/menu/login/textbox_account.json", out txtAccount);
+            ControlBase.LoadJson("data/ui/menu/login/textbox_password.json", out txtPassword);
+            ControlBase.LoadJson("data/ui/menu/login/checkbox_save.json", out chkSave);
+            ControlBase.LoadJson("data/ui/menu/login/button_enter.json", out btnEnter);
+            ControlBase.LoadJson("data/ui/menu/login/button_exit.json", out btnExit);
 
             // Registro
-            Control.LoadJson("data/ui/menu/register/panel_register.json", out pRegister);
-            Control.LoadJson("data/ui/menu/register/textbox_account.json", out txtRAccount);
-            Control.LoadJson("data/ui/menu/register/textbox_password.json", out txtRPassword);
-            Control.LoadJson("data/ui/menu/register/textbox_password2.json", out txtRPassword2);
-            Control.LoadJson("data/ui/menu/register/button_register.json", out btnRRegister);
-            Control.LoadJson("data/ui/menu/register/button_exit.json", out btnRExit);
+            ControlBase.LoadJson("data/ui/menu/register/panel_register.json", out pRegister);
+            ControlBase.LoadJson("data/ui/menu/register/textbox_account.json", out txtRAccount);
+            ControlBase.LoadJson("data/ui/menu/register/textbox_password.json", out txtRPassword);
+            ControlBase.LoadJson("data/ui/menu/register/textbox_password2.json", out txtRPassword2);
+            ControlBase.LoadJson("data/ui/menu/register/button_register.json", out btnRRegister);
+            ControlBase.LoadJson("data/ui/menu/register/button_exit.json", out btnRExit);
 
 
             // Configurações
@@ -110,6 +110,7 @@ namespace NIC.Client.Scenes
             {
                 Position = new Vector2(196, 140),
                 UseMultipleLanguage = false,
+                Checked = true,
             };
             chkAutoTile.Text[0] = "AutoTile";
 
@@ -144,7 +145,7 @@ namespace NIC.Client.Scenes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="target"></param>
-        private void FrmSettings_OnDraw(Control sender, RenderTarget target)
+        private void FrmSettings_OnDraw(ControlBase sender, RenderTarget target)
         {
             var gp = sender.GlobalPosition();
 
@@ -166,7 +167,7 @@ namespace NIC.Client.Scenes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="target"></param>
-        private void PRegister_OnDraw(Control sender, RenderTarget target)
+        private void PRegister_OnDraw(ControlBase sender, RenderTarget target)
         {
             var gp = sender.GlobalPosition();
 
@@ -206,7 +207,7 @@ namespace NIC.Client.Scenes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PLogin_OnMouseReleased(Control sender, Nero.SFML.Window.MouseButtonEvent e)
+        private void PLogin_OnMouseReleased(ControlBase sender, Nero.SFML.Window.MouseButtonEvent e)
         {
             if (_hoverLogin > -1)
                 switch(_hoverLogin)
@@ -227,7 +228,7 @@ namespace NIC.Client.Scenes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PLogin_OnMouseMove(Control sender, Vector2 e)
+        private void PLogin_OnMouseMove(ControlBase sender, Vector2 e)
         {
             _hoverLogin = -1;
             var gp = sender.GlobalPosition();
@@ -253,7 +254,7 @@ namespace NIC.Client.Scenes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="target"></param>
-        private void PLogin_OnDraw(Control sender, RenderTarget target)
+        private void PLogin_OnDraw(ControlBase sender, RenderTarget target)
         {
             var gp = sender.GlobalPosition();
 

@@ -10,7 +10,7 @@ namespace Nero.Control
     //using SFML.Graphics;
     using static Renderer;
     using Color = Nero.Color;
-    public class Button : Control
+    public class Button : ControlBase
     {
         #region Properties
         /// <summary>

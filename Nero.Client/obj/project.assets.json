@@ -374,23 +374,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Pichau\\.nuget\\packages\\": {},
+    "C:\\Users\\Gustavo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
-      "projectName": "NIC.Client",
-      "projectPath": "D:\\Projeto\\Nero-Engine\\NIC.Client\\NIC.Client.csproj",
-      "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
-      "outputPath": "D:\\Projeto\\Nero-Engine\\NIC.Client\\obj\\",
+      "projectUniqueName": "D:\\Projetos\\Nero\\Nero-Engine\\Nero.Client\\Nero.Client.csproj",
+      "projectName": "Nero.Client",
+      "projectPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero.Client\\Nero.Client.csproj",
+      "packagesPath": "C:\\Users\\Gustavo\\.nuget\\packages\\",
+      "outputPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero.Client\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Pichau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gustavo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -399,14 +399,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://packages.stride3d.net/nuget": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj": {
-              "projectPath": "D:\\Projeto\\Nero-Engine\\Nero\\Nero.csproj"
+            "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj": {
+              "projectPath": "D:\\Projetos\\Nero\\Nero-Engine\\Nero\\Nero.csproj"
             }
           }
         }
@@ -441,7 +442,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

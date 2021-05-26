@@ -1,7 +1,7 @@
 using Nero;
 using System;
 
-namespace NIC.Client
+namespace Nero.Client
 {
     class Program
     {

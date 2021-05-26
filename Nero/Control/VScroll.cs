@@ -10,7 +10,7 @@ namespace Nero.Control
     using SFML.Graphics;
     using static Renderer;
     using Color = Nero.Color;
-    public class VScroll : Control
+    public class VScroll : ControlBase
     {
         /// <summary>
         /// Máximo de valor
