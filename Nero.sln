@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nero", "Nero\Nero.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nero.Client", "Nero.Client\Nero.Client.csproj", "{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nero.Server", "Nero.Server\Nero.Server.csproj", "{D78C751F-C243-4645-80D9-ADFA2312ABB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDBA82A-2A1D-4BA9-B6E7-0A99D582540A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78C751F-C243-4645-80D9-ADFA2312ABB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78C751F-C243-4645-80D9-ADFA2312ABB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78C751F-C243-4645-80D9-ADFA2312ABB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78C751F-C243-4645-80D9-ADFA2312ABB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

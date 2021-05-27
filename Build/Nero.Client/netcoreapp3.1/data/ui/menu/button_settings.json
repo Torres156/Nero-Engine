@@ -1,0 +1,54 @@
+{
+  "Text": [
+    "",
+    ""
+  ],
+  "FillColor": {
+    "R": 0,
+    "G": 0,
+    "B": 0,
+    "A": 0
+  },
+  "OutlineThickness": 0.0,
+  "OutlineColor": {
+    "R": 40,
+    "G": 40,
+    "B": 40,
+    "A": 255
+  },
+  "Border_Opacity": 255,
+  "Border_Scale": 0.1,
+  "TextColor": {
+    "R": 10,
+    "G": 10,
+    "B": 10,
+    "A": 230
+  },
+  "TextSize": 12,
+  "Texture": null,
+  "CanAutoCheck": true,
+  "UseCursorHand": true,
+  "UseMultipleLanguage": true,
+  "isChecked": false,
+  "Border_Rounded": 4,
+  "OutlineColorChecked": {
+    "R": 60,
+    "G": 165,
+    "B": 253,
+    "A": 255
+  },
+  "OutlineThicknessChecked": 2.0,
+  "Name": "",
+  "Anchor": 2,
+  "BondName": "Scene",
+  "Checked": false,
+  "Position": {
+    "x": 40.0,
+    "y": 40.0
+  },
+  "Size": {
+    "x": 32.0,
+    "y": 32.0
+  },
+  "Visible": true
+}

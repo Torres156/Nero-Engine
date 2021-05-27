@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Nero.Client/1.0.0": {
         "dependencies": {
+          "LiteNetLib": "0.9.5",
           "Nero": "1.0.0",
           "Newtonsoft.Json": "13.0.1"
         },
@@ -309,6 +310,14 @@
           }
         }
       },
+      "LiteNetLib/0.9.5": {
+        "runtime": {
+          "lib/netcoreapp3.1/LiteNetLib.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
@@ -340,6 +349,13 @@
       "sha512": "sha512-A3X+zyjAtvIQkpwCSS/F5fDOFRWeT+USIAK+DhGujNufF+qV1ty5cYGJihmmGeokX3yd89uZoNH8mcsmXCY/yw==",
       "path": "csfml/2.5.0",
       "hashPath": "csfml.2.5.0.nupkg.sha512"
+    },
+    "LiteNetLib/0.9.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-k2IqYY67aV3h82D/k9lYx7pj9ESoKPaAfcJwkn0yZZhMlkZ1i48b4g9PgNSzYsvUbyuP010JxxYCZYXaupgMAg==",
+      "path": "litenetlib/0.9.5",
+      "hashPath": "litenetlib.0.9.5.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",

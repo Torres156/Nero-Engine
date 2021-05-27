@@ -239,6 +239,15 @@
           }
         }
       },
+      "LiteNetLib/0.9.5": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/LiteNetLib.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/LiteNetLib.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
@@ -334,6 +343,32 @@
         "runtimes/win-x86/native/openal32.dll"
       ]
     },
+    "LiteNetLib/0.9.5": {
+      "sha512": "k2IqYY67aV3h82D/k9lYx7pj9ESoKPaAfcJwkn0yZZhMlkZ1i48b4g9PgNSzYsvUbyuP010JxxYCZYXaupgMAg==",
+      "type": "package",
+      "path": "litenetlib/0.9.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/LiteNetLib.dll",
+        "lib/net35/LiteNetLib.pdb",
+        "lib/net35/LiteNetLib.xml",
+        "lib/netcoreapp2.1/LiteNetLib.deps.json",
+        "lib/netcoreapp2.1/LiteNetLib.dll",
+        "lib/netcoreapp2.1/LiteNetLib.pdb",
+        "lib/netcoreapp2.1/LiteNetLib.xml",
+        "lib/netcoreapp3.1/LiteNetLib.deps.json",
+        "lib/netcoreapp3.1/LiteNetLib.dll",
+        "lib/netcoreapp3.1/LiteNetLib.pdb",
+        "lib/netcoreapp3.1/LiteNetLib.xml",
+        "lib/netstandard2.0/LiteNetLib.deps.json",
+        "lib/netstandard2.0/LiteNetLib.dll",
+        "lib/netstandard2.0/LiteNetLib.pdb",
+        "lib/netstandard2.0/LiteNetLib.xml",
+        "litenetlib.0.9.5.nupkg.sha512",
+        "litenetlib.nuspec"
+      ]
+    },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
@@ -369,6 +404,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "LiteNetLib >= 0.9.5",
       "Nero >= 1.0.0",
       "Newtonsoft.Json >= 13.0.1"
     ]
@@ -422,6 +458,10 @@
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
         "dependencies": {
+          "LiteNetLib": {
+            "target": "Package",
+            "version": "[0.9.5, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.1, )"

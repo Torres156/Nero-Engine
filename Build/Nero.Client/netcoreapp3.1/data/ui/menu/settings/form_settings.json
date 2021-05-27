@@ -1,0 +1,29 @@
+{
+  "Title": [
+    "Configurações",
+    "Settings"
+  ],
+  "FillColor": {
+    "R": 0,
+    "G": 0,
+    "B": 0,
+    "A": 220
+  },
+  "Button_Exit": true,
+  "Border_Opacity": 255,
+  "Border_Rounded": 4,
+  "canDragged": false,
+  "UseMultipleLanguage": true,
+  "Name": "frmSettings",
+  "Anchor": 4,
+  "BondName": "Scene",
+  "Position": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "Size": {
+    "x": 350.0,
+    "y": 350.0
+  },
+  "Visible": false
+}

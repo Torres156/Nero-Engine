@@ -89,6 +89,7 @@ namespace Nero.Control
         /// </summary>
         public ControlBase()
         {
+            
         }
 
         /// <summary>

@@ -2,6 +2,7 @@ using Nero;
 using Nero.Control;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Nero.Client.Scenes
@@ -9,7 +10,9 @@ namespace Nero.Client.Scenes
     using static Renderer;
     class MenuScene : SceneBase
     {
-        Texture background;
+        // Texturas
+        Texture background; // Fundo
+        Texture settings;   // Configurações
 
 
         // Login
@@ -36,13 +39,21 @@ namespace Nero.Client.Scenes
         HScroll hsSound;
         HScroll hsMusic;
         CheckBox chkVSync;
-        CheckBox chkAutoTile;
+        ComboBox cmbLanguage;
+        Button btnSave;
 
 
         // Textos
         LanguageWords login_words = new LanguageWords();
         LanguageWords register_words = new LanguageWords();
         LanguageWords settings_words = new LanguageWords();
+
+
+        // Publics
+        Button btnSettings;
+
+        // Privates
+        long timerConnect;
 
 
         /// <summary>
@@ -54,6 +65,9 @@ namespace Nero.Client.Scenes
             background = new Texture("res/ui/background-title.png", true);
             background.Smooth = true;
 
+            settings = new Texture("res/ui/settings.png");
+            settings.Smooth = true;
+
             // Login
             ControlBase.LoadJson("data/ui/menu/login/panel_login.json", out pLogin);
             ControlBase.LoadJson("data/ui/menu/login/textbox_account.json", out txtAccount);
@@ -61,6 +75,9 @@ namespace Nero.Client.Scenes
             ControlBase.LoadJson("data/ui/menu/login/checkbox_save.json", out chkSave);
             ControlBase.LoadJson("data/ui/menu/login/button_enter.json", out btnEnter);
             ControlBase.LoadJson("data/ui/menu/login/button_exit.json", out btnExit);
+            chkSave.Checked = WindowSettings.Instance.Account_Save.Length > 0;
+            txtAccount.Text = WindowSettings.Instance.Account_Save;
+
 
             // Registro
             ControlBase.LoadJson("data/ui/menu/register/panel_register.json", out pRegister);
@@ -72,47 +89,23 @@ namespace Nero.Client.Scenes
 
 
             // Configurações
-            frmSettings = new Form(this)
-            {
-                Size = new Vector2(350,250),
-                Anchor = Anchors.Center,
-                canDragged = false,
-                Visible = false,
-            };
-            frmSettings.SetTitle(Languages.PT_BR, "Configurações");
-            frmSettings.SetTitle(Languages.EN_USA, "Settings");
-            frmSettings.ShowDialog();
+            ControlBase.LoadJson("data/ui/menu/settings/form_settings.json", out frmSettings);
+            ControlBase.LoadJson("data/ui/menu/settings/hscroll_sound.json", out hsSound);
+            ControlBase.LoadJson("data/ui/menu/settings/hscroll_music.json", out hsMusic);
+            ControlBase.LoadJson("data/ui/menu/settings/checkbox_vsync.json", out chkVSync);
+            ControlBase.LoadJson("data/ui/menu/settings/combobox_language.json", out cmbLanguage);
+            ControlBase.LoadJson("data/ui/menu/settings/button_save.json", out btnSave);
+            ControlBase.LoadJson("data/ui/menu/button_settings.json", out btnSettings);
 
-            hsSound = new HScroll(frmSettings)
-            {
-                Size = new Vector2(140, 10),
-                Position = new Vector2(20, 60),
-                Maximum = 100,
-                Value = 100,
-            };
+            hsSound.Value = WindowSettings.Instance.Volume_Sound;
+            hsMusic.Value = WindowSettings.Instance.Volume_Music;
+            chkVSync.Checked = WindowSettings.Instance.VSync;                
+            cmbLanguage.SelectIndex = (int)WindowSettings.Instance.Language;
 
-            hsMusic = new HScroll(frmSettings)
-            {
-                Size = new Vector2(140, 10),
-                Position = new Vector2(195, 60),
-                Maximum = 100,
-                Value = 100,
-            };
+            btnSettings.OnDraw += BtnSettings_OnDraw;
+            btnSettings.OnMouseReleased += (sender, e) => frmSettings.ShowDialog();
+            btnSave.OnMouseReleased += BtnSave_OnMouseReleased;
 
-            chkVSync = new CheckBox(frmSettings)
-            {
-                Position = new Vector2(21, 140),
-                UseMultipleLanguage = false,
-            };
-            chkVSync.Text[0] = "V-Sync";
-
-            chkAutoTile = new CheckBox(frmSettings)
-            {
-                Position = new Vector2(196, 140),
-                UseMultipleLanguage = false,
-                Checked = true,
-            };
-            chkAutoTile.Text[0] = "AutoTile";
 
             // Events
             pLogin.OnDraw += PLogin_OnDraw;
@@ -122,6 +115,7 @@ namespace Nero.Client.Scenes
             btnRExit.OnMouseReleased += (sender, e) => { pRegister.Hide(); pLogin.Show(); };
             pRegister.OnDraw += PRegister_OnDraw;
             frmSettings.OnDraw += FrmSettings_OnDraw;
+            btnEnter.OnMouseReleased += BtnEnter_OnMouseReleased;
 
 
             // Textbox nexts
@@ -138,6 +132,51 @@ namespace Nero.Client.Scenes
             settings_words.AddText("Som:", "Sound:");
             settings_words.AddText("Música:", "Music:");
             settings_words.AddText("Gráficos", "Graphics");
+            settings_words.AddText("Linguagem", "Language");
+
+            Sound.PlayMusic("res/music/main.ogg");
+        }
+
+        private void BtnEnter_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            var acc = txtAccount.Text.Trim();
+            var pwd = txtPassword.Text.Trim();
+
+            if (chkSave.Checked)
+            {
+                WindowSettings.Instance.Account_Save = acc;
+                WindowSettings.Save();
+            }
+        }
+
+        private void BtnSave_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            // Som
+            WindowSettings.Instance.Volume_Sound = hsSound.Value;
+            Sound.Volume_Sound = (byte)WindowSettings.Instance.Volume_Sound;
+
+            // Musica
+            WindowSettings.Instance.Volume_Music = hsMusic.Value;
+            Sound.Volume_Music = (byte)WindowSettings.Instance.Volume_Music;
+            if (Sound.Volume_Music == 0)
+                Sound.StopMusic();
+            else
+                Sound.PlayMusic("res/music/main.ogg");
+
+            // VSync
+            WindowSettings.Instance.VSync = chkVSync.Checked;
+            Game.Window.SetVerticalSyncEnabled(WindowSettings.Instance.VSync);
+
+            // Linguagem
+            WindowSettings.Instance.Language = (Languages)cmbLanguage.SelectIndex;
+            Game.CurrentLanguage = WindowSettings.Instance.Language;
+            WindowSettings.Save();            
+        }
+
+        private void BtnSettings_OnDraw(ControlBase sender, RenderTarget target)
+        {
+            var gp = sender.GlobalPosition();
+            DrawTexture(target, settings, new Rectangle(gp, sender.Size));
         }
 
         /// <summary>
@@ -160,6 +199,9 @@ namespace Nero.Client.Scenes
 
             text = settings_words.GetText(2);
             DrawText(target, text, 16, gp + new Vector2(20, 140), Color.White);
+
+            text = settings_words.GetText(3);
+            DrawText(target, text, 16, gp + new Vector2(20, 220), Color.White);
         }
 
         /// <summary>
@@ -298,6 +340,20 @@ namespace Nero.Client.Scenes
             DrawTexture(target, background, new Rectangle(Vector2.Zero, Size));
 
             base.Draw(target, states);
+        }
+
+        /// <summary>
+        /// Atualiza a cena
+        /// </summary>
+        public override void Update()
+        {
+            if (!Network.Socket.IsConnected && Environment.TickCount64 > timerConnect)
+            {
+                Network.Socket.Connect();
+                timerConnect = Environment.TickCount64 + 2000;
+            }
+
+            base.Update();
         }
     }
 }

@@ -39,8 +39,7 @@ namespace Nero.Control
         /// Modo arredondado
         /// </summary>
         public bool Rounded = true;
-
-        public SceneBase scene;
+                
 
         /// <summary>
         /// Construtor
@@ -57,9 +56,6 @@ namespace Nero.Control
         /// <param name="states"></param>
         public override void Draw(RenderTarget target, RenderStates states)
         {
-            if (scene == null)
-                scene = Game.GetScene();
-
             if (Value < 0) Value = 0;
             if (Value > Maximum) Value = Maximum;
             var gp = GlobalPosition();
@@ -168,7 +164,7 @@ namespace Nero.Control
                         {
                             _press = true;
                             _y = e.Y;
-                            scene?.SetControlPriority(this);
+                            Game.GetScene()?.SetControlPriority(this);
                         }
             }
             return result;
@@ -177,7 +173,7 @@ namespace Nero.Control
         public override bool MouseReleased(MouseButtonEvent e)
         {
             _press = false;
-            scene?.SetControlPriority(null);
+            Game.GetScene()?.SetControlPriority(null);
             return base.MouseReleased(e);
         }
 

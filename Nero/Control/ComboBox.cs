@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,8 +88,6 @@ namespace Nero.Control
         int _hover = -1;
         Button b_open;
 
-        public SceneBase Scene = null;
-
         #endregion
 
         #region Events
@@ -118,16 +116,6 @@ namespace Nero.Control
         }
 
         /// <summary>
-        /// Construtor
-        /// </summary>
-        /// <param name="bond"></param>
-        /// <param name="scene"></param>
-        public ComboBox(Bond bond, SceneBase scene) : this(bond)
-        {
-            this.Scene = scene;
-        }
-
-        /// <summary>
         /// Abre a caixa
         /// </summary>
         /// <param name="sender"></param>
@@ -137,15 +125,15 @@ namespace Nero.Control
             _openBox = !_openBox;
             if (_openBox)
             {
-                if (Scene != null)
-                    Scene?.SetControlPriority(this);
+                if (Game.GetScene() != null)
+                    Game.GetScene()?.SetControlPriority(this);
                 else
                     Bond?.SetControlPriority(this);
             }
             else
             {
-                if (Scene != null)
-                    Scene?.SetControlPriority(null);
+                if (Game.GetScene() != null)
+                    Game.GetScene()?.SetControlPriority(null);
                 else
                     Bond?.SetControlPriority(null);
             }
@@ -171,8 +159,6 @@ namespace Nero.Control
         public override void Draw(RenderTarget target, RenderStates states)
         {
             var gp = GlobalPosition();
-            if (Scene == null)
-                Scene = Game.GetScene();
 
             // Fundo
             if (_openBox) DrawShadowRectangle(target, gp + new Vector2(0, 19) - new Vector2(OutlineThickness, OutlineThickness),
@@ -260,8 +246,8 @@ namespace Nero.Control
                     SelectIndex = _hover;
                     _openBox = false;
                     Size = new Vector2(Size.x, 0);
-                    if (Scene != null)
-                        Scene?.SetControlPriority(null);
+                    if (Game.GetScene() != null)
+                        Game.GetScene()?.SetControlPriority(null);
                     else
                         Bond?.SetControlPriority(null);
                 }

@@ -1,0 +1,54 @@
+{
+  "Text": [
+    "Salvar Configurações",
+    "Save Settings"
+  ],
+  "FillColor": {
+    "R": 230,
+    "G": 230,
+    "B": 230,
+    "A": 255
+  },
+  "OutlineThickness": 0.0,
+  "OutlineColor": {
+    "R": 40,
+    "G": 40,
+    "B": 40,
+    "A": 255
+  },
+  "Border_Opacity": 255,
+  "Border_Scale": 0.1,
+  "TextColor": {
+    "R": 10,
+    "G": 10,
+    "B": 10,
+    "A": 230
+  },
+  "TextSize": 12,
+  "Texture": null,
+  "CanAutoCheck": true,
+  "UseCursorHand": true,
+  "UseMultipleLanguage": true,
+  "isChecked": false,
+  "Border_Rounded": 12,
+  "OutlineColorChecked": {
+    "R": 60,
+    "G": 165,
+    "B": 253,
+    "A": 255
+  },
+  "OutlineThicknessChecked": 2.0,
+  "Name": "",
+  "Anchor": 7,
+  "BondName": "frmSettings",
+  "Checked": false,
+  "Position": {
+    "x": 0.0,
+    "y": 10.0
+  },
+  "Size": {
+    "x": 150.0,
+    "y": 30.0
+  },
+  "Visible": true
+}

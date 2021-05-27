@@ -12,3 +12,11 @@ D:\Projetos\Nero\Nero-Engine\NIC.Client\obj\Debug\netcoreapp3.1\Nero.Client.cspr
 D:\Projetos\Nero\Nero-Engine\NIC.Client\obj\Debug\netcoreapp3.1\Nero.Client.dll
 D:\Projetos\Nero\Nero-Engine\NIC.Client\obj\Debug\netcoreapp3.1\Nero.Client.pdb
 D:\Projetos\Nero\Nero-Engine\NIC.Client\obj\Debug\netcoreapp3.1\Nero.Client.genruntimeconfig.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.csprojAssemblyReference.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.AssemblyInfoInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.AssemblyInfo.cs
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.csproj.CoreCompileInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.csproj.CopyComplete
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.dll
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.pdb
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\netcoreapp3.1\Nero.Client.genruntimeconfig.cache

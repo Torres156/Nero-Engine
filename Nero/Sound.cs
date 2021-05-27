@@ -57,9 +57,11 @@ namespace Nero
         /// <param name="fileName"></param>
         public static void PlayMusic(string fileName, bool replay = true)
         {
-            var filePath = Game.Path + fileName;
+            var filePath = fileName;
             if (!File.Exists(filePath))
                 throw new Exception($"Nero::Sound::PlayMusic()\n");
+
+            if (vol_Music == 0) return;
 
             if (cacheMusic == fileName) return;
 
@@ -81,6 +83,8 @@ namespace Nero
             {
                 musicDevice.Stop();
                 musicDevice.Dispose();
+                musicDevice = null;
+                cacheMusic = "";
             }
         }
 
@@ -90,6 +94,8 @@ namespace Nero
         /// <param name="buffer"></param>
         public static void PlaySound(SFML.Audio.SoundBuffer buffer)
         {
+            if (vol_Sound == 0) return;
+
             var s = new SFML.Audio.Sound(buffer);
             s.Volume = Volume_Sound;
             s.Play();
