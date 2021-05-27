@@ -1,4 +1,5 @@
 using Nero;
+using Nero.Client.Network;
 using Nero.Control;
 using System;
 using System.Collections.Generic;
@@ -60,8 +61,7 @@ namespace Nero.Client.Scenes
         /// Carrega os recursos
         /// </summary>
         public override void LoadContent()
-        {
-            FadeActive = false;
+        {            
             background = new Texture("res/ui/background-title.png", true);
             background.Smooth = true;
 
@@ -116,6 +116,7 @@ namespace Nero.Client.Scenes
             pRegister.OnDraw += PRegister_OnDraw;
             frmSettings.OnDraw += FrmSettings_OnDraw;
             btnEnter.OnMouseReleased += BtnEnter_OnMouseReleased;
+            btnRRegister.OnMouseReleased += BtnRRegister_OnMouseReleased;
 
 
             // Textbox nexts
@@ -137,18 +138,68 @@ namespace Nero.Client.Scenes
             Sound.PlayMusic("res/music/main.ogg");
         }
 
+        /// <summary>
+        /// Registra nova conta
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnRRegister_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            var acc = txtRAccount.Text.Trim();
+            var pwd = txtRPassword.Text.Trim();
+            var pwd2 = txtRPassword2.Text.Trim();
+
+            if (acc.Length < 3)
+            {
+                Alert(register_words.GetText(4));
+                return;
+            }
+
+            if (pwd.Length < 3)
+            {
+                Alert(register_words.GetText(5));
+                return;
+            }
+
+            if (pwd != pwd2)
+            {
+                Alert(register_words.GetText(6));
+                return;
+            }
+
+            Sender.Register(acc, pwd);
+        }
+
+        /// <summary>
+        /// Entra na conta
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnEnter_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
             var acc = txtAccount.Text.Trim();
             var pwd = txtPassword.Text.Trim();
+
+            if (acc.Length < 3 || pwd.Length < 3)
+            {
+                Alert("Nome ou senha inválida!");
+                return;
+            }
 
             if (chkSave.Checked)
             {
                 WindowSettings.Instance.Account_Save = acc;
                 WindowSettings.Save();
             }
+
+            Sender.Login(acc, pwd);
         }
 
+        /// <summary>
+        /// Salva as configurações
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
             // Som
@@ -173,6 +224,11 @@ namespace Nero.Client.Scenes
             WindowSettings.Save();            
         }
 
+        /// <summary>
+        /// Desenho no painel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="target"></param>
         private void BtnSettings_OnDraw(ControlBase sender, RenderTarget target)
         {
             var gp = sender.GlobalPosition();

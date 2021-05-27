@@ -9,7 +9,20 @@ namespace Nero.Client.Network
     {
         enum Packets
         {
-            Register,
+            Register, Login,
+        }
+
+        /// <summary>
+        /// Entra na conta
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="password"></param>
+        public static void Login(string account, string password)
+        {
+            var buffer = Create(Packets.Login);
+            buffer.Put(account);
+            buffer.Put(password);
+            SendTo(buffer);
         }
 
         /// <summary>
@@ -19,18 +32,18 @@ namespace Nero.Client.Network
         /// <param name="password"></param>
         public static void Register(string account, string password)
         {
-            var buffer = CreateMessage(Packets.Register);
+            var buffer = Create(Packets.Register);
             buffer.Put(account);
             buffer.Put(password);
             SendTo(buffer);
         }
 
         /// <summary>
-        /// Cria um pacote de mensagem
+        /// Cria um pacote
         /// </summary>
         /// <param name="packet"></param>
         /// <returns></returns>
-        static NetDataWriter CreateMessage(Packets packet)
+        static NetDataWriter Create(Packets packet)
         {
             var buffer = new NetDataWriter();
             buffer.Put((short)packet);

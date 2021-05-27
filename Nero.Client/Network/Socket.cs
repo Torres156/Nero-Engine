@@ -36,7 +36,7 @@ namespace Nero.Client.Network
         /// <param name="deliveryMethod"></param>
         private static void Listener_NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
         {
-            
+            Receive.Handle(reader);
         }
 
         /// <summary>

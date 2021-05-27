@@ -1,4 +1,5 @@
 using LiteNetLib;
+using Nero.Server.Player;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,10 +20,12 @@ namespace Nero.Server.Network
         /// </summary>
         public static void Initialize()
         {
+            Console.WriteLine("Inicializando conexão...");
             listener = new EventBasedNetListener();
             Device = new NetManager(listener);
             Device.AutoRecycle = true;
             Device.Start(PORT);
+            Console.WriteLine($"Servidor aberto na porta {PORT}.");
 
             listener.ConnectionRequestEvent += Listener_ConnectionRequestEvent;
             listener.PeerConnectedEvent += Listener_PeerConnectedEvent;
@@ -49,6 +52,13 @@ namespace Nero.Server.Network
         private static void Listener_PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
             Console.WriteLine($"A entrada de conexão <{peer.EndPoint.Address.ToString()}> se desconectou!");
+
+            var findAcc = Account.Find(peer);
+            if (findAcc != null)
+            {
+                Account.Save(findAcc);
+                Account.Items.Remove(findAcc);
+            }
         }
 
         /// <summary>

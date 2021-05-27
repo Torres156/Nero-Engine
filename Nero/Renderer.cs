@@ -42,7 +42,7 @@ namespace Nero
 
                 _sprite.Texture = texture.GetTexture();
                 _sprite.Position = destination.position.Round();
-                _sprite.Scale = scale.Round();
+                _sprite.Scale = scale;
                 _sprite.TextureRect = (IntRect)source;
                 _sprite.Color = color;
                 _sprite.Origin = origin;
@@ -55,7 +55,7 @@ namespace Nero
 
                 _spritelarge.Texture = texture.GetLargeTexture();
                 _spritelarge.Position = destination.position.Round();
-                _spritelarge.Scale = scale.Round();
+                _spritelarge.Scale = scale;
                 _spritelarge.Color = color;
                 _spritelarge.Origin = origin;
                 _spritelarge.Rotation = rotation;

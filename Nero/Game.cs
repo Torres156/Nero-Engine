@@ -236,6 +236,18 @@ namespace Nero
 
         private static void Window_Resized(object sender, SizeEventArgs e)
         {
+            bool isUpdate = false;
+            if (e.Width < MinSize.x || e.Height < MinSize.y)
+                isUpdate = true;
+
+            if (isUpdate)
+            {
+                Window.Close();
+                Window = null;
+                Size = MinSize;
+                CreateWindow();
+            }
+
             Size = (Vector2)Window.Size;            
             DefaultView = new View(new FloatRect(0, 0, Size.x, Size.y));
             Window.SetView(DefaultView);

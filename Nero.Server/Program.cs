@@ -1,4 +1,5 @@
-using Nero.Server.Helpers;
+using Nero.Server.Core;
+using Nero.Server.Player;
 using System;
 
 namespace Nero.Server
@@ -8,10 +9,15 @@ namespace Nero.Server
         static void Main(string[] args)
         {
             Console.Title = "Servidor Nero Engine";
+            
+            // Inicializa o dispositivo de conexão
             Network.Socket.Initialize();
 
-            System.Threading.Tasks.Task.Run(new Action(ConsoleHelper.ConsoleLoop));
-            ServerHelper.ServerLoop();
+            // Verifica os diretórios
+            Account.CheckDirectory();
+
+            System.Threading.Tasks.Task.Run(new Action(ConsoleCore.ConsoleLoop));
+            ServerCore.ServerLoop();
             
         }
     }
