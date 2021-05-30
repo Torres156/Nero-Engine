@@ -246,7 +246,7 @@ namespace Nero
         /// <param name="outlineColor"></param>
         public static void DrawRectangle(RenderTarget target, Vector2 position, Vector2 size, Color fillColor, float outlineThickness, Color outlineColor)
         {
-            rec.Position = position;
+            rec.Position = position.Floor();
             rec.Size = size;
             rec.FillColor = fillColor;
             rec.OutlineThickness = outlineThickness;
@@ -275,7 +275,7 @@ namespace Nero
         /// <param name="outlineColor"></param>
         public static void DrawRoundedRectangle(RenderTarget target, Vector2 position, Vector2 size, Color fillColor, float radius, uint pointcount, float outlineThickness, Color outlineColor)
         {
-            roundrec.Position = position;
+            roundrec.Position = position.Floor();
             roundrec.Size = size;
             roundrec.FillColor = fillColor;
             roundrec.Radius = radius;
@@ -309,7 +309,7 @@ namespace Nero
         public static void DrawCircle(RenderTarget target, Vector2 position, float radius, Color fillColor, float outlineThickness, Color outlineColor)
         {
             cir.SetPointCount(360);
-            cir.Position = position;
+            cir.Position = position.Floor();
             cir.Radius = radius;
             cir.Origin = new Vector2(radius);
             cir.FillColor = fillColor;

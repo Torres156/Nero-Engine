@@ -1,0 +1,22 @@
+{
+  "Name": [
+    "Guerreiro",
+    "Warrior"
+  ],
+  "StatPrimary": [
+    15,
+    2,
+    12,
+    8
+  ],
+  "Description": [
+    "Especialista em combate corpo-a-corpo!",
+    "Hand-to-hand combat specialist!"
+  ],
+  "MaleSprite": [
+	1	
+	],
+  "FemaleSprite": [
+	4
+	],
+}

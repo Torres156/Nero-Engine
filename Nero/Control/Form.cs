@@ -30,15 +30,20 @@ namespace Nero.Control
         public bool Button_Exit = true;
         bool hover_exit = false;
 
-        /// <summary>
-        /// Transparência da borda
-        /// </summary>
-        public byte Border_Opacity = 255;
-
-        /// <summary>
+          /// <summary>
         /// Arredondamento
         /// </summary>
         public int Border_Rounded = 4;
+
+        /// <summary>
+        /// Cor da borda
+        /// </summary>
+        public Color OutlineColor = new Color(80, 80, 80, 220);
+
+        /// <summary>
+        /// Espessura da borda
+        /// </summary>
+        public int OutlineThickness = 0;
 
         /// <summary>
         /// Pode ser arrastado
@@ -75,9 +80,9 @@ namespace Nero.Control
 
             // Fundo
             if (Border_Rounded > 0)
-                DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16);
+                DrawRoundedRectangle(target, gp, Size, FillColor, Border_Rounded, 16, OutlineThickness,OutlineColor);
             else
-                DrawRectangle(target, gp, Size, FillColor);
+                DrawRectangle(target, gp, Size, FillColor, OutlineThickness, OutlineColor);
 
             var currentTitle = UseMultipleLanguage ? Title[(int)Game.CurrentLanguage] : Title[0];
             DrawText(target, currentTitle, 20, gp + new Vector2((Size.x - GetTextWidth(currentTitle, 20)) / 2, 5), Color.White);

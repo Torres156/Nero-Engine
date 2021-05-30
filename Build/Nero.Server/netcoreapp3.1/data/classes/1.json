@@ -1,0 +1,22 @@
+{
+  "Name": [
+    "Mago",
+    "Mage"
+  ],
+  "StatPrimary": [
+    4,
+    20,
+    8,
+    12
+  ],
+  "Description": [
+    "Especialista em combate a longa distância!",
+    "Long distance combat specialist!"
+  ],
+  "MaleSprite": [
+	2	
+	],
+  "FemaleSprite": [
+	3
+	],
+}

@@ -1,0 +1,35 @@
+{
+  "Title": [
+    "Seleção de personagem",
+    "Character selection"
+  ],
+  "FillColor": {
+    "R": 0,
+    "G": 0,
+    "B": 0,
+    "A": 220
+  },
+  "Button_Exit": true,
+  "Border_Rounded": 4,
+  "OutlineColor": {
+    "R": 80,
+    "G": 80,
+    "B": 80,
+    "A": 220
+  },
+  "OutlineThickness": 0,
+  "canDragged": false,
+  "UseMultipleLanguage": true,
+  "Name": "frmSelect",
+  "Anchor": 4,
+  "BondName": "Scene",
+  "Position": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "Size": {
+    "x": 400.0,
+    "y": 240.0
+  },
+  "Visible": true
+}

@@ -74,6 +74,7 @@ namespace Nero.Server.Network
 
             // Troca a cena
             Sender.ChangeToSelectCharacter(peer);
+            Sender.UpdateClass(peer);
         }
 
         /// <summary>

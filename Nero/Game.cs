@@ -246,6 +246,7 @@ namespace Nero
                 Window = null;
                 Size = MinSize;
                 CreateWindow();
+                HandleEvents();
             }
 
             Size = (Vector2)Window.Size;            

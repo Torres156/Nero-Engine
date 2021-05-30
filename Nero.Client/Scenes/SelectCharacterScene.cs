@@ -30,34 +30,28 @@ namespace Nero.Client.Scenes
         {
             background = new Texture("res/ui/background-selectchar.jpg", true);
 
-            frmSelect = new Form(this)
-            {
-                Size = new Vector2(400, 240),
-                Anchor = Anchors.Center,
-                canDragged = false,                
-            };
-            frmSelect.SetTitle(Languages.PT_BR, "Seleção de personagem");
-            frmSelect.SetTitle(Languages.EN_USA, "Character selection");
+            LoadJson("data/ui/select_character/form_select.json", out frmSelect);
             frmSelect.OnDraw += FrmSelect_OnDraw;
             frmSelect.OnMouseMove += FrmSelect_OnMouseMove;
             frmSelect.OnMouseReleased += FrmSelect_OnMouseReleased;
             frmSelect.OnVisibleChanged += (sender) => { if (!frmSelect.Visible) { Network.Socket.Device.FirstPeer.Disconnect(); Game.SetScene<MenuScene>(); } };
-
-            words.AddText("Novo personagem", "New character");
-            words.AddText("Usar personagem", "Use character");
-            words.AddText("Slot vazio", "Empty slot");
-
-            btnUseCreate = new Button(frmSelect)
-            {
-                Anchor = Anchors.BottomLeft,
-                Size = new Vector2(120, 25),
-                Position = new Vector2(4 + (190 - 120) / 2, 4),
-                Border_Rounded = 12,
-                UseMultipleLanguage = false
-            };
             
+            LoadJson("data/ui/select_character/button_usecreate.json", out btnUseCreate);
+            btnUseCreate.OnMouseReleased += BtnUseCreate_OnMouseReleased;
+
+            JsonHelper.Load("data/ui/select_character/words.json", out words);
 
             Sound.PlayMusic("res/music/select.ogg");
+        }
+
+        /// <summary>
+        /// Cria ou usa um personagem
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnUseCreate_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            Game.SetScene<CreateCharacterScene>(currentSlot);
         }
 
         /// <summary>

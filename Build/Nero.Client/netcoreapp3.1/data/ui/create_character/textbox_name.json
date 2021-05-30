@@ -1,0 +1,53 @@
+{
+  "pre_Text": "",
+  "MaxLength": 15,
+  "FillColor": {
+    "R": 255,
+    "G": 255,
+    "B": 255,
+    "A": 255
+  },
+  "TextColor": {
+    "R": 30,
+    "G": 30,
+    "B": 30,
+    "A": 255
+  },
+  "OutlineThickness": 0.0,
+  "OutlineColor": {
+    "R": 100,
+    "G": 100,
+    "B": 100,
+    "A": 255
+  },
+  "Password": false,
+  "Multiple_Lines": false,
+  "Next": null,
+  "Align": 0,
+  "Border_Radius": 4.0,
+  "Blocked": false,
+  "isNumeric": false,
+  "Minimum": -2147483648,
+  "Maximum": 2147483647,
+  "Lines": [
+    ""
+  ],
+  "Line_SelectIndex": 0,
+  "Character_CurrentIndex": 0,
+  "Suggestion": {},
+  "Rounded": true,
+  "Name": "",
+  "Anchor": 1,
+  "BondName": "frmCreate",
+  "Text": "",
+  "Value": -2147483648,
+  "Position": {
+    "x": 0.0,
+    "y": 40.0
+  },
+  "Size": {
+    "x": 260.0,
+    "y": 20.0
+  },
+  "Visible": true
+}

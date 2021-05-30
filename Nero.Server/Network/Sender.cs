@@ -1,5 +1,6 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Nero.Server.Player;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,26 @@ namespace Nero.Server.Network
     {
         enum Packets
         {
-            Alert, ChangeToSelectCharacter,
+            Alert, ChangeToSelectCharacter, UpdateClass,
+        }
+
+        /// <summary>
+        /// Atualiza as classes
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void UpdateClass(NetPeer peer)
+        {
+            var buffer = Create(Packets.UpdateClass);
+            buffer.Put(CharacterClass.Items.Count);
+            foreach(var i in CharacterClass.Items)
+            {
+                buffer.PutArray(i.Name);
+                buffer.PutArray(i.Description);
+                buffer.PutArray(i.StatPrimary);
+                buffer.PutArray(i.MaleSprite);
+                buffer.PutArray(i.FemaleSprite);
+            }
+            SendTo(peer, buffer);
         }
 
         /// <summary>

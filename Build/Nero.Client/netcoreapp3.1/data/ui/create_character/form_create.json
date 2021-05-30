@@ -1,0 +1,35 @@
+{
+  "Title": [
+    "Novo personagem",
+    "New character"
+  ],
+  "FillColor": {
+    "R": 0,
+    "G": 0,
+    "B": 0,
+    "A": 220
+  },
+  "Button_Exit": true,
+  "Border_Rounded": 4,
+  "OutlineColor": {
+    "R": 30,
+    "G": 30,
+    "B": 30,
+    "A": 200
+  },
+  "OutlineThickness": 1,
+  "canDragged": false,
+  "UseMultipleLanguage": true,
+  "Name": "frmCreate",
+  "Anchor": 4,
+  "BondName": "Scene",
+  "Position": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "Size": {
+    "x": 300.0,
+    "y": 350.0
+  },
+  "Visible": true
+}

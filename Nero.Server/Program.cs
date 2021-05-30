@@ -15,7 +15,16 @@ namespace Nero.Server
 
             // Verifica os diretórios
             Account.CheckDirectory();
+            CharacterClass.CheckDirectory();
 
+            Console.WriteLine("");
+
+            // Inicializa
+            CharacterClass.Initialize();
+            
+            Console.WriteLine("");
+            Console.WriteLine("Servidor iniciado!");
+            Console.WriteLine("");
             System.Threading.Tasks.Task.Run(new Action(ConsoleCore.ConsoleLoop));
             ServerCore.ServerLoop();
             
