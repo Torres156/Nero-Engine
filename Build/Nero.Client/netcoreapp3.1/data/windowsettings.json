@@ -7,8 +7,8 @@
   "IP": "localhost",
   "PORT": 4000,
   "Language": 1,
-  "WindowMaximize": false,
-  "Volume_Music": 45,
+  "WindowMaximize": true,
+  "Volume_Music": 0,
   "Volume_Sound": 100,
   "Account_Save": "lol"
 }

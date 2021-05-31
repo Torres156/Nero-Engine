@@ -11,6 +11,7 @@ namespace Nero.Client.Network
         enum Packets
         {
             Alert, ChangeToSelectCharacter, UpdateClass,
+            UpdateCharacters, ChangeToGameplay
         }
 
         /// <summary>
@@ -26,6 +27,43 @@ namespace Nero.Client.Network
                 case Packets.Alert: Alert(buffer); break;
                 case Packets.ChangeToSelectCharacter: ChangeToSelectCharacter(buffer); break;
                 case Packets.UpdateClass: UpdateClass(buffer); break;
+                case Packets.UpdateCharacters: UpdateCharacters(buffer); break;
+                case Packets.ChangeToGameplay: ChangeToGameplay(buffer); break;
+            }
+        }
+
+        /// <summary>
+        /// Muda para a cena de gameplay
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void ChangeToGameplay(NetDataReader buffer)
+        {
+            Game.SetScene<Scenes.GameplayScene>();
+        }
+
+        /// <summary>
+        /// Atualiza os personagens
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void UpdateCharacters(NetDataReader buffer)
+        {
+            if (CharacterPreview.Items == null)
+                CharacterPreview.Items = new List<CharacterPreview>();
+            else
+                CharacterPreview.Items.Clear();
+
+            for(int i = 0; i < Constants.MAX_CHARACTERS; i++)
+            {
+                var name = buffer.GetString();
+                if (name.Length > 0)
+                {
+                    var c = new CharacterPreview();
+                    c.Name = name;
+                    c.SpriteID = buffer.GetInt();
+                    CharacterPreview.Items.Add(c);
+                }
+                else
+                    CharacterPreview.Items.Add(null);
             }
         }
 
@@ -69,7 +107,8 @@ namespace Nero.Client.Network
         /// <param name="buffer"></param>
         static void Alert(NetDataReader buffer)
         {
-            Game.GetScene().Alert(buffer.GetString());
+            var text = buffer.GetStringArray();
+            Game.GetScene().Alert(text[(int)Game.CurrentLanguage]);
         }
 
     }

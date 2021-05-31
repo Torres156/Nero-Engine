@@ -19,4 +19,15 @@ namespace Nero.Client
         /// </summary>
         count,
     }
+
+    enum Directions
+    {
+        Up,
+
+        Down,
+
+        Left,
+
+        Right,
+    }
 }

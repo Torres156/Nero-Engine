@@ -5,7 +5,7 @@ using System.Text;
 namespace Nero.Server
 {
     enum StatPrimaries
-    {        
+    {
         Strenght,
 
         Intelligency,
@@ -20,4 +20,14 @@ namespace Nero.Server
         count,
     }
 
+    enum Directions
+    {
+        Up,
+
+        Down,
+
+        Left,
+
+        Right,
+    }
 }

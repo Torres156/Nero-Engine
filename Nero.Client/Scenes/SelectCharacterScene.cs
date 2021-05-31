@@ -1,3 +1,5 @@
+using Nero.Client.Player;
+using Nero.Client.World;
 using Nero.Control;
 using System;
 using System.Collections.Generic;
@@ -29,13 +31,14 @@ namespace Nero.Client.Scenes
         public override void LoadContent()
         {
             background = new Texture("res/ui/background-selectchar.jpg", true);
+            GlobalResources.LoadCharacters();
 
             LoadJson("data/ui/select_character/form_select.json", out frmSelect);
             frmSelect.OnDraw += FrmSelect_OnDraw;
             frmSelect.OnMouseMove += FrmSelect_OnMouseMove;
             frmSelect.OnMouseReleased += FrmSelect_OnMouseReleased;
             frmSelect.OnVisibleChanged += (sender) => { if (!frmSelect.Visible) { Network.Socket.Device.FirstPeer.Disconnect(); Game.SetScene<MenuScene>(); } };
-            
+
             LoadJson("data/ui/select_character/button_usecreate.json", out btnUseCreate);
             btnUseCreate.OnMouseReleased += BtnUseCreate_OnMouseReleased;
 
@@ -51,7 +54,10 @@ namespace Nero.Client.Scenes
         /// <param name="e"></param>
         private void BtnUseCreate_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
-            Game.SetScene<CreateCharacterScene>(currentSlot);
+            if (btnUseCreate.Text[0] == words.GetText(0))
+                Game.SetScene<CreateCharacterScene>(currentSlot);
+            else
+                Network.Sender.UseCharacter(currentSlot);
         }
 
         /// <summary>
@@ -102,7 +108,7 @@ namespace Nero.Client.Scenes
                 var pos = gp + new Vector2(sender.Size.x - 200, 40 + 40 * i);
 
                 if (i > 0)
-                    DrawLine(target, pos, pos + new Vector2(180,0), new Color(60, 60, 60));
+                    DrawLine(target, pos, pos + new Vector2(180, 0), new Color(60, 60, 60));
 
                 // Hover
                 if (i != currentSlot && i == hoverSlot)
@@ -110,9 +116,9 @@ namespace Nero.Client.Scenes
                     var c1 = new Color(255, 255, 255, 0);
                     var c2 = new Color(255, 255, 255, 20);
 
-                    DrawGradient(target, pos + new Vector2(0, 39), c1, pos + new Vector2(0,1), c1, pos + new Vector2(90, 1), c2,
+                    DrawGradient(target, pos + new Vector2(0, 39), c1, pos + new Vector2(0, 1), c1, pos + new Vector2(90, 1), c2,
                         pos + new Vector2(90, 39), c2);
-                    DrawGradient(target, pos + new Vector2(90, 39), c2, pos + new Vector2(90,1), c2, pos + new Vector2(180, 1), c1,
+                    DrawGradient(target, pos + new Vector2(90, 39), c2, pos + new Vector2(90, 1), c2, pos + new Vector2(180, 1), c1,
                         pos + new Vector2(180, 39), c1);
                 }
 
@@ -122,19 +128,31 @@ namespace Nero.Client.Scenes
                     var c1 = new Color(93, 162, 251, 0);
                     var c2 = new Color(93, 162, 251, 80);
 
-                    DrawGradient(target, pos + new Vector2(0, 39), c1, pos + new Vector2(0,1), c1, pos + new Vector2(90, 1), c2,
+                    DrawGradient(target, pos + new Vector2(0, 39), c1, pos + new Vector2(0, 1), c1, pos + new Vector2(90, 1), c2,
                         pos + new Vector2(90, 39), c2);
                     DrawGradient(target, pos + new Vector2(90, 39), c2, pos + new Vector2(90, 1), c2, pos + new Vector2(180, 1), c1,
                         pos + new Vector2(180, 39), c1);
                 }
 
-                text = words.GetText(2);
+                var cpreview = CharacterPreview.Items[i];
+                text = cpreview == null ? words.GetText(2) : cpreview.Name;
                 DrawText(target, text, 16, pos + new Vector2((180 - GetTextWidth(text, 16)) / 2, (20 - 8)), Color.White);
             }
 
             // Current
+            var ccurrent = CharacterPreview.Items[currentSlot];
             DrawRoundedRectangle(target, gp + new Vector2(4, 40), new Vector2(sender.Size.x - 210, sender.Size.y - 80), new Color(255, 255, 255, 15), 4, 8);
-            btnUseCreate.Text[0] =  words.GetText(0); 
+            btnUseCreate.Text[0] = ccurrent == null ? words.GetText(0) : words.GetText(1);
+
+            if (ccurrent != null)
+            {
+                var tex = GlobalResources.Character[ccurrent.SpriteID];
+                var size = tex.size / 4;
+                var posrec= gp + new Vector2(4, 40);
+                var sizerec = new Vector2(sender.Size.x - 210, sender.Size.y - 80);
+
+                DrawTexture(target, tex, new Rectangle(posrec + sizerec / 2, size), new Rectangle(Vector2.Zero, size), Color.White, size / 2);
+            }
         }
 
         /// <summary>

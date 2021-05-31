@@ -12,7 +12,7 @@ namespace Nero.Server.Network
     {
         enum Packets
         {
-            Register, Login,
+            Register, Login, CreateCharacter, UseCharacter,
         }
 
         /// <summary>
@@ -28,7 +28,66 @@ namespace Nero.Server.Network
             {
                 case Packets.Register: Register(peer, buffer); break;
                 case Packets.Login: Login(peer, buffer); break;
+                case Packets.CreateCharacter: CreateCharacter(peer, buffer); break;
+                case Packets.UseCharacter: UseCharacter(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Usa um personagem
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void UseCharacter(NetPeer peer, NetDataReader buffer)
+        {
+            var slot = buffer.GetInt();
+            var acc = Account.Find(peer);
+
+            // Carrega o personagem
+            var controller = Character.Load(acc.Characters[slot]);
+            controller.peer = peer;
+            controller.account = acc;
+            Character.Items.Add(controller);
+
+            Sender.ChangeToGameplay(peer);
+        }
+
+        /// <summary>
+        /// Cria um novo personagem
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void CreateCharacter(NetPeer peer, NetDataReader buffer)
+        {
+            var slot = buffer.GetInt();
+            var name = buffer.GetString();
+            var classID = buffer.GetInt();
+            var spriteID = buffer.GetInt();
+
+            // Verifica se já está em uso
+            if (Character.Exist(name))
+            {
+                Sender.Alert(peer, $"O nome {name} não está disponivel!", $"The name {name} is not available!");
+                return;
+            }
+
+            // Cria o personagem
+            var c = new Character();
+            c.Name = name;
+            c.ClassID = classID;
+            c.MapID = CharacterClass.Items[classID].MapID;
+            c.Position = CharacterClass.Items[classID].StartPosition;
+            c.StatPrimary = CharacterClass.Items[classID].StatPrimary;
+            c.SpriteID = spriteID;
+            Character.Save(c);
+
+            var acc = Account.Find(peer);
+            acc.Characters[slot] = name;
+            Account.Save(acc);
+
+            Sender.Alert(peer, "Personagem criado com sucesso!", "Character created successfully!");
+            Sender.UpdateCharacters(peer);
+            Sender.ChangeToSelectCharacter(peer);
         }
 
         /// <summary>
@@ -54,7 +113,7 @@ namespace Nero.Server.Network
             // Verifica as senhas
             if (password != acc.Password)
             {
-                Sender.Alert(peer, "Senha incorreta!");
+                Sender.Alert(peer, "Senha incorreta!", "Incorrect password!");
                 return;
             }
 
@@ -62,7 +121,7 @@ namespace Nero.Server.Network
             if (Account.Items.Any(i => i.Name.ToLower().Equals(accName.ToLower())))
             {
                 var fAcc = Account.Items.Find(i => i.Name.ToLower().Equals(accName.ToLower()));
-                Sender.Alert(peer, "A conta já está em uso, reporte caso não seja você!");
+                Sender.Alert(peer, "A conta já está em uso, reporte caso não seja você!", "The account is already in use, report if it's not you!");
                 fAcc.peer?.Disconnect();
                 return;
             }
@@ -70,11 +129,23 @@ namespace Nero.Server.Network
             acc.peer = peer;            
             Account.Items.Add(acc);
 
-            // Verifica se os personagens existem
+            // Verifica se os personagens ainda existem
+            bool isUpdate = false;
+            for(int i = 0; i < Constants.MAX_CHARACTERS; i++)
+                if (acc.Characters[i].Length > 0 && !Character.Exist(acc.Characters[i]))
+                {
+                    acc.Characters[i] = "";
+                    isUpdate = true;
+                }
 
-            // Troca a cena
-            Sender.ChangeToSelectCharacter(peer);
+            // Salva a conta atualizada!
+            if (isUpdate)
+                Account.Save(acc);
+
+            // Troca a cena            
             Sender.UpdateClass(peer);
+            Sender.UpdateCharacters(peer);
+            Sender.ChangeToSelectCharacter(peer);
         }
 
         /// <summary>
@@ -90,7 +161,7 @@ namespace Nero.Server.Network
             // Verifica se já existe a conta
             if (Account.Exist(accName))
             {
-                Sender.Alert(peer, $"O nome {accName} não está disponivel!");
+                Sender.Alert(peer, $"O nome {accName} não está disponivel!", $"The name {accName} is not available!");
                 return;
             }
 
@@ -100,7 +171,7 @@ namespace Nero.Server.Network
             acc.Password = accPwd;
             Account.Save(acc);
 
-            Sender.Alert(peer, $"A conta {accName} foi criada com sucesso!");
+            Sender.Alert(peer, $"A conta {accName} foi criada com sucesso!", $"The account {accName} has been successfully created!");
         }
     }
 }

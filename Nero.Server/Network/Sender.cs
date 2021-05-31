@@ -12,6 +12,38 @@ namespace Nero.Server.Network
         enum Packets
         {
             Alert, ChangeToSelectCharacter, UpdateClass,
+            UpdateCharacters, ChangeToGameplay,
+        }
+
+        /// <summary>
+        /// Muda a cena para gameplay
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void ChangeToGameplay(NetPeer peer)
+        {
+            SendTo(peer, Create(Packets.ChangeToGameplay));
+        }
+
+        /// <summary>
+        /// Envia os personagens da conta
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void UpdateCharacters(NetPeer peer)
+        {
+            var acc = Account.Find(peer);
+            var buffer = Create(Packets.UpdateCharacters);
+
+            foreach(var i in acc.Characters)
+            {
+                buffer.Put(i);
+                if (i.Length > 0)
+                {
+                    var c = Character.Load(i);
+                    buffer.Put(c.SpriteID);                    
+                }
+            }
+
+            SendTo(peer, buffer);
         }
 
         /// <summary>
@@ -47,10 +79,10 @@ namespace Nero.Server.Network
         /// </summary>
         /// <param name="peer"></param>
         /// <param name="text"></param>
-        public static void Alert(NetPeer peer, string text)
+        public static void Alert(NetPeer peer, params string[] text)
         {
             var buffer = Create(Packets.Alert);
-            buffer.Put(text);
+            buffer.PutArray(text);
             SendTo(peer, buffer);
         }
 

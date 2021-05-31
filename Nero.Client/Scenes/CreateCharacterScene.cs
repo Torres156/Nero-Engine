@@ -62,14 +62,34 @@ namespace Nero.Client.Scenes
             btnSRight.OnMouseReleased += BtnSRight_OnMouseReleased;
             frmCreate.OnMouseMove += FrmCreate_OnMouseMove;
             frmCreate.OnMouseReleased += FrmCreate_OnMouseReleased;
+            btnCreate.OnMouseReleased += BtnCreate_OnMouseReleased;
 
             // Palavras
             JsonHelper.Load("data/ui/create_character/words.json", out words);
+            words.AddText("Mínimo 3 letras para o nome do personagem!", "Minimum 3 letters for character name!");            
 
             // Toca o som
             Sound.PlayMusic("res/music/create.ogg");
         }
-        
+
+        /// <summary>
+        /// Cria um personagem
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnCreate_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            var text = txtName.Text.Trim();
+
+            if (text.Length < 3)
+            {
+                Alert(words.GetText(2));
+                return;
+            }
+            var c = currentGender == 0 ? CharacterClass.Items[currentClass].MaleSprite[currentSprite] : CharacterClass.Items[currentClass].FemaleSprite[currentSprite];
+            Network.Sender.CreateCharacter(currentSlot, text, currentClass, c);
+        }
+
         /// <summary>
         /// Clique do mouse
         /// </summary>

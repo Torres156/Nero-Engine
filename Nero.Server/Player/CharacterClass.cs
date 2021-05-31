@@ -23,7 +23,7 @@ namespace Nero.Server.Player
             while (File.Exists(dirpath + $"{i}.json"))
             {
                 CharacterClass c;
-                JsonHelper.Load(dirpath + $"{i}.json", out c);
+                JsonHelper.Load(dirpath + $"{i}.json", out c);                
                 Items.Add(c);
                 Console.WriteLine($"-> {c.Name[0]} carregado!");
                 i++;
@@ -47,5 +47,7 @@ namespace Nero.Server.Player
         public int[] StatPrimary = new int[(int)StatPrimaries.count];   // Atributos primarios
         public string[] Description = { "", "" };                       // Descrição da classe
         public int[] MaleSprite, FemaleSprite;                          // Sprites masculinas e femininas
+        public int MapID = 0;                                           // ID do mapa inicial
+        public Vector2 StartPosition;                                   // Posição inicial
     }
 }

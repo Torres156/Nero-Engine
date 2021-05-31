@@ -9,7 +9,36 @@ namespace Nero.Client.Network
     {
         enum Packets
         {
-            Register, Login,
+            Register, Login, CreateCharacter, UseCharacter,
+        }
+
+        /// <summary>
+        /// Usa um personagem
+        /// </summary>
+        /// <param name="slot"></param>
+        public static void UseCharacter(int slot)
+        {
+            var buffer = Create(Packets.UseCharacter);
+            buffer.Put(slot);
+            SendTo(buffer);
+        }
+
+        /// <summary>
+        /// Cria um novo personagem
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <param name="name"></param>
+        /// <param name="classID"></param>
+        /// <param name="sprite"></param>
+        public static void CreateCharacter(int slot, string name, int classID, int sprite)
+        {
+            var buffer = Create(Packets.CreateCharacter);
+            buffer.Put(slot);
+            buffer.Put(name);
+            buffer.Put(classID);
+            buffer.Put(sprite);
+
+            SendTo(buffer);
         }
 
         /// <summary>

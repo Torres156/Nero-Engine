@@ -59,6 +59,13 @@ namespace Nero.Server.Network
                 Account.Save(findAcc);
                 Account.Items.Remove(findAcc);
             }
+
+            var findChar = Character.Find(peer);
+            if (findChar != null)
+            {
+                Character.Save(findChar);
+                Character.Items.Remove(findChar);
+            }
         }
 
         /// <summary>

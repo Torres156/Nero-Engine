@@ -15,6 +15,7 @@ namespace Nero.Server
 
             // Verifica os diretórios
             Account.CheckDirectory();
+            Character.CheckDirectory();
             CharacterClass.CheckDirectory();
 
             Console.WriteLine("");

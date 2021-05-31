@@ -14,9 +14,14 @@
     "Long distance combat specialist!"
   ],
   "MaleSprite": [
-	2	
-	],
+    2
+  ],
   "FemaleSprite": [
-	3
-	],
+    3
+  ],
+  "MapID": 1,
+  "StartPosition": {
+    "x": 4.0,
+    "y": 4.0
+  }
 }
