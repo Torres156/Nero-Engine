@@ -50,6 +50,7 @@ namespace Nero.Server.Network
             Character.Items.Add(controller);
 
             Sender.ChangeToGameplay(peer);
+            Sender.UpdateMyCharacter(peer);
         }
 
         /// <summary>

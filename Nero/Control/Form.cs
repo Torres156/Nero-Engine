@@ -85,7 +85,20 @@ namespace Nero.Control
                 DrawRectangle(target, gp, Size, FillColor, OutlineThickness, OutlineColor);
 
             var currentTitle = UseMultipleLanguage ? Title[(int)Game.CurrentLanguage] : Title[0];
-            DrawText(target, currentTitle, 20, gp + new Vector2((Size.x - GetTextWidth(currentTitle, 20)) / 2, 5), Color.White);
+            string realDisplay = currentTitle;
+            float maxWidth = Size.x - 20 - (Button_Exit ? 30 : 4);
+            if (GetTextWidth(currentTitle, 20) > maxWidth)
+            {
+                realDisplay = "";
+                for(int i = currentTitle.Length -1; i > 0; i--)
+                    if (GetTextWidth(currentTitle.Substring(0,i), 20) < maxWidth)
+                    {
+                        realDisplay = currentTitle.Substring(0,i);
+                        break;
+                    }
+            }
+
+            DrawText(target, realDisplay, 20, gp + new Vector2(20, 5), Color.White);
 
             //var cline = new Color(80, 80, 80,80);
             //DrawLine(target, gp + new Vector2(20, BAR_HEIGHT), gp + new Vector2(Size.x - 20, BAR_HEIGHT), cline);

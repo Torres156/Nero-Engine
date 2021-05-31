@@ -97,6 +97,7 @@ namespace Nero.Server.Player
         public int Points = 0;                                          // Pontos de atributos
         public int MapID = 0;                                           // Id do mapa
         public Vector2 Position = Vector2.Zero;                         // Posição
+        public AccessLevels AccessLevel = AccessLevels.Player;          // Acesso de administrador
 
 
         [JsonIgnore]

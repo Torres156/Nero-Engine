@@ -1,4 +1,5 @@
 using LiteNetLib;
+using LiteNetLib.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -59,6 +60,15 @@ namespace Nero.Client.Network
         public static void Connect()
         {
             Device.Connect("localhost", 4000, "");
+        }
+
+        public static Vector2 GetVector2(this NetDataReader obj)
+            => new Vector2(obj.GetFloat(), obj.GetFloat());
+
+        public static void Put(this NetDataWriter obj, Vector2 value)
+        {
+            obj.Put(value.x);
+            obj.Put(value.y);
         }
     }
 }

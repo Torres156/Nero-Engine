@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Nero
 {
@@ -31,5 +32,17 @@ namespace Nero
         /// <param name="min"></param>
         /// <returns></returns>
         public static int Min(int value, int min) => (value < min ? min : value);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="nameSpace"></param>
+        /// <returns></returns>
+        public static Type[] GetTypesInNamespace<T>(Assembly assembly, string nameSpace)
+        {
+            var types = assembly.GetTypes();
+            return types.Where(i => i.IsClass && i.Namespace == nameSpace && typeof(T).IsAssignableFrom(i)).ToArray();
+        }
     }
 }

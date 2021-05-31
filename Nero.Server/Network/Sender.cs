@@ -12,7 +12,37 @@ namespace Nero.Server.Network
         enum Packets
         {
             Alert, ChangeToSelectCharacter, UpdateClass,
-            UpdateCharacters, ChangeToGameplay,
+            UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
+
+        }
+
+        /// <summary>
+        /// Dados de personagem
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="buffer"></param>
+        static void UpdateCharacterPacket(Character c, NetDataWriter buffer)
+        {
+            buffer.Put(c.Name);
+            buffer.Put(c.ClassID);            
+            buffer.Put(c.SpriteID);
+            buffer.Put(c.Level);
+            buffer.Put(c.Position);
+            buffer.Put((byte)c.AccessLevel);
+        }
+
+        /// <summary>
+        /// Atualiza meu personagem
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void UpdateMyCharacter(NetPeer peer)
+        {
+            var buffer = Create(Packets.UpdateMyCharacter);
+            var c = Character.Find(peer);
+
+            UpdateCharacterPacket(c, buffer);
+
+            SendTo(peer, buffer);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace Nero.Client.Network
         enum Packets
         {
             Alert, ChangeToSelectCharacter, UpdateClass,
-            UpdateCharacters, ChangeToGameplay
+            UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
         }
 
         /// <summary>
@@ -29,7 +29,26 @@ namespace Nero.Client.Network
                 case Packets.UpdateClass: UpdateClass(buffer); break;
                 case Packets.UpdateCharacters: UpdateCharacters(buffer); break;
                 case Packets.ChangeToGameplay: ChangeToGameplay(buffer); break;
+                case Packets.UpdateMyCharacter: UpdateMyCharacter(buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Atualiza meu personagem
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void UpdateMyCharacter(NetDataReader buffer)
+        {
+            if (Character.My == null)
+                Character.My = new Character();
+
+            ref var c = ref Character.My;
+            c.Name = buffer.GetString();
+            c.ClassID = buffer.GetInt();
+            c.SpriteID = buffer.GetInt();
+            c.Level = buffer.GetInt();
+            c.Position = buffer.GetVector2();
+            c.AccessLevel = (AccessLevels)buffer.GetByte();
         }
 
         /// <summary>

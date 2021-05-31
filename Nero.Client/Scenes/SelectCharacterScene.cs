@@ -162,6 +162,8 @@ namespace Nero.Client.Scenes
         {
             Sound.StopMusic();
             background.Destroy();
+            CharacterPreview.Items.Clear();
+            CharacterPreview.Items = null;
             base.UnloadContent();
         }
 

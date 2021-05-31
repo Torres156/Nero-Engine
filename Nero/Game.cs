@@ -19,7 +19,7 @@ namespace Nero
         public static Vector2 MousePosition;                                                // Posição do Mouse
         public static readonly string Path = AppDomain.CurrentDomain.BaseDirectory + "/";   // Diretório do jogo
         public static RenderWindow Window;                                                  // Dispositivo gráfico para janela
-        
+
 
         // Configurações
         public static Vector2 Size = new Vector2(1024, 600);        // Tamanho da janela
@@ -35,7 +35,7 @@ namespace Nero
         public static bool Fullscreen = false;                      // Modo tela cheia
         public static bool UseCompactTexture = false;               // Usar modo compacto para texturas
         public static Languages CurrentLanguage = Languages.PT_BR;  // Lingua atual
-                
+
 
         // Cena
         static SceneBase scene = null;      // Cena atual
@@ -55,14 +55,14 @@ namespace Nero
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         #endregion
 
-        
+
         // Action delegates
         public static Action OnUpdate = delegate { };       // Evento para atualizar o jogo
         public static Action OnResources = delegate { };    // Evento para carregar os recursos
         public static Action OnResize = delegate { };       // Evento de redimensionar a janela
         public static Action OnClosed = delegate { };       // Evento de fechar o jogo
-                        
-           
+
+
         /// <summary>
         /// Roda o jogo
         /// </summary>
@@ -70,7 +70,7 @@ namespace Nero
         {
             OnResources.Invoke();
             CreateWindow();
-            
+
             if (WindowMaximized)
             {
                 var i = Window.SystemHandle;
@@ -86,7 +86,7 @@ namespace Nero
                 scene.LoadContent();
             }
 
-            Running = true;            
+            Running = true;
             GameLoop();
         }
 
@@ -96,13 +96,13 @@ namespace Nero
         static void GameLoop()
         {
             long timer_delay = 0;
-            long timer_animation = 0;
+
             var clock = new Clock();
             var pressed = new MouseButtonEvent();
             bool ispressed = false;
             long timer_fps = 0;
             int count_fps = 0;
-            
+            long timer_animation = 0;
 
             while (Running)
             {
@@ -174,7 +174,7 @@ namespace Nero
                         Window.SetMouseCursor(currentCursor);
                     }
                     Window.Clear(BackgroundColor);
-                    
+
 
                     // Desenha a cena
                     scene?.Draw(Window, RenderStates.Default);
@@ -184,7 +184,7 @@ namespace Nero
 
 
                     Window.Display();
-             
+
 
                     count_fps++;
                     if (Environment.TickCount64 > timer_fps)
@@ -209,7 +209,7 @@ namespace Nero
         {
             var video = new VideoMode((uint)Size.x, (uint)Size.y);
             if (!Fullscreen)
-                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8));            
+                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8));
             else
                 Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 8, 8));
 
@@ -231,7 +231,7 @@ namespace Nero
             Window.KeyPressed += Window_KeyPressed;
             Window.KeyReleased += Window_KeyReleased;
             Window.Resized += Window_Resized;
-                        
+
         }
 
         private static void Window_Resized(object sender, SizeEventArgs e)
@@ -249,10 +249,10 @@ namespace Nero
                 HandleEvents();
             }
 
-            Size = (Vector2)Window.Size;            
+            Size = (Vector2)Window.Size;
             DefaultView = new View(new FloatRect(0, 0, Size.x, Size.y));
             Window.SetView(DefaultView);
-            
+
             OnResize?.Invoke();
 
             if (scene != null)
@@ -377,11 +377,11 @@ namespace Nero
                 Window = new RenderWindow(VideoMode.DesktopMode, Title, Styles.Fullscreen);
                 Window.SetVerticalSyncEnabled(VSync);
                 HandleEvents();
-                Fullscreen = true;                
+                Fullscreen = true;
                 Size = (Vector2)Window.Size;
             }
             else
-            {                
+            {
                 Window.Close();
                 CreateWindow();
                 HandleEvents();
@@ -396,6 +396,6 @@ namespace Nero
         {
             newCursor = type == Cursor.CursorType.Arrow ? cursor_arrow : cursor_hand;
         }
-                
+
     }
 }

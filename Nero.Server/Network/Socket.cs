@@ -1,4 +1,5 @@
 using LiteNetLib;
+using LiteNetLib.Utils;
 using Nero.Server.Player;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,15 @@ namespace Nero.Server.Network
         public static void PollEvents()
         {
             Device.PollEvents();
+        }
+
+        public static Vector2 GetVector2(this NetDataReader obj)
+            => new Vector2(obj.GetFloat(), obj.GetFloat());
+
+        public static void Put(this NetDataWriter obj, Vector2 value)
+        {
+            obj.Put(value.x);
+            obj.Put(value.y);
         }
     }
 }

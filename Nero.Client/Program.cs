@@ -9,6 +9,7 @@ namespace Nero.Client
         {
             WindowSettings.Load();
 
+            Game.BackgroundColor = Color.Black;
             Game.Title = "Nero Engine";
             Game.Size = WindowSettings.Instance.WindowSize;
             Game.MinSize = new Vector2(600, 320);
