@@ -23,6 +23,7 @@ namespace Nero.Client.Scenes
         byte currentSlot = 0;
         int hoverSlot = -1;
         LanguageWords words = new LanguageWords();
+        bool clearCharacters = false;
 
 
         /// <summary>
@@ -57,7 +58,10 @@ namespace Nero.Client.Scenes
             if (btnUseCreate.Text[0] == words.GetText(0))
                 Game.SetScene<CreateCharacterScene>(currentSlot);
             else
+            {
                 Network.Sender.UseCharacter(currentSlot);
+                clearCharacters = true;
+            }
         }
 
         /// <summary>
@@ -160,10 +164,13 @@ namespace Nero.Client.Scenes
         /// </summary>
         public override void UnloadContent()
         {
+            if (clearCharacters)
+            {
+                CharacterPreview.Items.Clear();
+                CharacterPreview.Items = null;
+            }
             Sound.StopMusic();
-            background.Destroy();
-            CharacterPreview.Items.Clear();
-            CharacterPreview.Items = null;
+            background.Destroy();            
             base.UnloadContent();
         }
 

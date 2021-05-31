@@ -1,5 +1,6 @@
 using LiteNetLib.Utils;
 using Nero.Client.Player;
+using Nero.Client.World;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -57,7 +58,8 @@ namespace Nero.Client.Network
         /// <param name="buffer"></param>
         static void ChangeToGameplay(NetDataReader buffer)
         {
-            Game.SetScene<Scenes.GameplayScene>();
+            GlobalResources.LoadAllResources();
+            Game.SetScene<Scenes.GameplayScene>();            
         }
 
         /// <summary>
