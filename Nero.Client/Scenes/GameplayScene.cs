@@ -20,7 +20,7 @@ namespace Nero.Client.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            Map.Map.Current = new Map.Map();
+            Map.Map.Current = Map.Map.Create();
             Camera.Initialize();
 
             // Controles
@@ -50,8 +50,12 @@ namespace Nero.Client.Scenes
 
             Camera.Begin();
 
+            Map.Map.Current?.DrawGround(target);
+
             Character.My?.Draw(target);
             Character.My?.DrawTexts(target);
+
+            Map.Map.Current?.DrawFringe(target);
 
             // Editor de mapa
             if (FindControl<frmEditor_Map>().Visible)
@@ -112,12 +116,17 @@ namespace Nero.Client.Scenes
             breakMove:;
             }
 
-            base.Update();
+            // Personagem
             if (Character.My != null)
             {
                 Character.My.Update();
                 Camera.Position = Character.My.Position * 32 + Character.My.OffSet + new Vector2(16);
             }
+
+            // Mapa
+            Map.Map.Current?.Update();
+
+            base.Update();
         }
 
         /// <summary>
@@ -148,6 +157,10 @@ namespace Nero.Client.Scenes
             Camera.Resize();
         }
 
+        /// <summary>
+        /// Seta o editor
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public void SetEditor<T>() where T : Form
         {
             foreach (var i in forms)
@@ -155,6 +168,56 @@ namespace Nero.Client.Scenes
 
             var find = forms.Find(i => i is T);
             find?.Show();
+        }
+
+        /// <summary>
+        /// Quando sai do editor
+        /// </summary>
+        public void ExitEditor()
+        {
+
+        }
+
+        /// <summary>
+        /// Mouse pressionado
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public override bool MousePressed(MouseButtonEvent e)
+        {
+            var result = base.MousePressed(e);
+
+            if (!result)
+            {
+                var mp = Camera.GetMousePosition() / 32;
+                var form_MapEditor = FindControl<frmEditor_Map>();
+
+
+                // Modo desenho
+                if (form_MapEditor.Visible)
+                    if (form_MapEditor.Visible)
+                    {
+                        if (e.Button == Mouse.Button.Left)
+                        {
+                            if (form_MapEditor.cmbTileType.SelectIndex == 0)
+                            {
+                                for (int x2 = 0; x2 < form_MapEditor.SelectTile.size.x; x2++)
+                                    for (int y2 = 0; y2 < form_MapEditor.SelectTile.size.y; y2++)
+                                        Map.Map.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex, form_MapEditor.txtTileID.Value,
+                                            form_MapEditor.SelectTile.position + new Vector2(x2, y2), mp.ToVector2() + new Vector2(x2, y2));
+                            }
+                            else
+                                Map.Map.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
+                                    form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
+                        }
+                        else if (e.Button == Mouse.Button.Right)
+                            Map.Map.Current.RemoveChunk(form_MapEditor.CurrentLayer, mp.ToVector2());
+
+
+                    }
+            }
+
+            return result;
         }
     }
 }

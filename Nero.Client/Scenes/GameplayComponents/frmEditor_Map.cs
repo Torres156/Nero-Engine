@@ -31,19 +31,19 @@ namespace Nero.Client.Scenes.GameplayComponents
 
 
         // Controls
-        Panel pTile;                // Painel de tile
-        Panel pAttribute;           // Painel de atributos
-        TextBox txtTileID;          // ID do Tile
-        ComboBox cmbTileType;       // Tipo de tile
-        Button btnSave;             // Botão de salvar
-        Button btnProperties;       // Botão de propriedades
-        public Button btnGrid;      // Botão de grid
-        public Button btnLight;     // Botão de luz
-        Button btnFill;             // Pinta tudo
-        public Button btnTile;      // Botão de tileset
-        public Button btnAttribute; // Botão de atributos
-        HScroll hsLeft;             // Scroll horizontal
-        VScroll vsTop;              // Scroll vertical
+        public Panel pTile;             // Painel de tile
+        public Panel pAttribute;        // Painel de atributos
+        public TextBox txtTileID;       // ID do Tile
+        public ComboBox cmbTileType;    // Tipo de tile
+        Button btnSave;                 // Botão de salvar
+        Button btnProperties;           // Botão de propriedades
+        public Button btnGrid;          // Botão de grid
+        public Button btnLight;         // Botão de luz
+        Button btnFill;                 // Pinta tudo
+        public Button btnTile;          // Botão de tileset
+        public Button btnAttribute;     // Botão de atributos
+        HScroll hsLeft;                 // Scroll horizontal
+        VScroll vsTop;                  // Scroll vertical
 
 
         /// <summary>
@@ -190,9 +190,20 @@ namespace Nero.Client.Scenes.GameplayComponents
             pTile.OnMouseReleased += PTile_OnMouseReleased;
             pTile.OnMousePressed += PTile_OnMousePressed;
             txtTileID.OnValidate += TxtTileID_OnValidate;
+            OnVisibleChanged += FrmEditor_Map_OnVisibleChanged;
 
             // Words
             words.AddText("Camadas", "Layers");
+        }
+
+        /// <summary>
+        /// Visibilidade
+        /// </summary>
+        /// <param name="sender"></param>
+        private void FrmEditor_Map_OnVisibleChanged(ControlBase sender)
+        {
+            if (!Visible)
+                Game.GetScene<GameplayScene>().ExitEditor();
         }
 
         /// <summary>
