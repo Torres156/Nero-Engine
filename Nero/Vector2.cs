@@ -137,7 +137,5 @@ namespace Nero
             => new Vector2(v.X, v.Y);
         #endregion
 
-
-
     }
 }

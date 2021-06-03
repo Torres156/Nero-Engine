@@ -35,6 +35,7 @@ namespace Nero
         public static bool Fullscreen = false;                      // Modo tela cheia
         public static bool UseCompactTexture = false;               // Usar modo compacto para texturas
         public static Languages CurrentLanguage = Languages.PT_BR;  // Lingua atual
+        public static bool MouseCursorVisible = true;               // Mouse Cursor visible
 
 
         // Cena
@@ -42,9 +43,11 @@ namespace Nero
         static SceneBase nextscene = null;  // Proxima cena
         static Type StartScene = null;      // Cena inicial
 
+
         // Cursores
         static Cursor cursor_hand = new Cursor(Cursor.CursorType.Hand);     // Cursor: Mão
         static Cursor cursor_arrow = new Cursor(Cursor.CursorType.Arrow);   // Cursor: Arrow
+        static Cursor cursor_cross = new Cursor(Cursor.CursorType.Cross);   // Cursor: Cross
         static Cursor currentCursor = cursor_arrow;                         // Cursor atual
         static Cursor newCursor = currentCursor;                            // Novo Cursor
 
@@ -110,6 +113,8 @@ namespace Nero
                 {
                     // Delta Time
                     DeltaTime = clock.Restart().AsSeconds();
+
+                    Window.SetMouseCursorVisible(MouseCursorVisible);
 
                     if (Environment.TickCount64 > timer_animation)
                     {
@@ -209,9 +214,9 @@ namespace Nero
         {
             var video = new VideoMode((uint)Size.x, (uint)Size.y);
             if (!Fullscreen)
-                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8));
+                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8,4,6, ContextSettings.Attribute.Default, false));
             else
-                Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 8, 8));
+                Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 8, 8, 4, 6, ContextSettings.Attribute.Default, false));
 
             DefaultView = Window.DefaultView;
             Window.SetActive(false);
@@ -394,7 +399,20 @@ namespace Nero
 
         public static void SetCursor(Cursor.CursorType type)
         {
-            newCursor = type == Cursor.CursorType.Arrow ? cursor_arrow : cursor_hand;
+            switch(type)
+            {
+                case Cursor.CursorType.Arrow:
+                    newCursor = cursor_arrow;
+                    break;
+
+                case Cursor.CursorType.Hand:
+                    newCursor = cursor_hand;
+                    break;
+
+                case Cursor.CursorType.Cross:
+                    newCursor = cursor_cross;
+                    break;
+            }
         }
 
     }

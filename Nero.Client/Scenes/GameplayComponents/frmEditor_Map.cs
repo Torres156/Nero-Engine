@@ -14,10 +14,6 @@ namespace Nero.Client.Scenes.GameplayComponents
         const int MODE_TILE = 0;        // Modo tileset
         const int MODE_ATTRIBUTES = 1;  // Modo atributo
 
-
-        // Texturas
-
-
         // Publics
         public Rectangle SelectTile = new Rectangle(Vector2.Zero, Vector2.One); // Seleção do tile
         public int CurrentLayer = 0;                                            // Camada usada
@@ -53,7 +49,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         public frmEditor_Map(Bond bond) : base(bond)
         {
             Name = "frmEditor_Map";
-            Size = new Vector2(400, 370);
+            Size = new Vector2(404, 374);
             Anchor = Anchors.Center;
             SetTitle(Languages.PT_BR, "Editor de mapa");
             SetTitle(Languages.EN_USA, "Map Editor");
@@ -65,7 +61,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             pTile = new Panel(this)
             {
                 Name = "pTile",
-                Size = new Vector2(Size.x - 10, Size.y - 65),
+                Size = new Vector2(Size.x - 10, Size.y - 70),
                 Position = new Vector2(5, 25),
                 OutlineThickness = 1,
                 OutlineColor = new Color(90, 90, 90),
@@ -191,9 +187,35 @@ namespace Nero.Client.Scenes.GameplayComponents
             pTile.OnMousePressed += PTile_OnMousePressed;
             txtTileID.OnValidate += TxtTileID_OnValidate;
             OnVisibleChanged += FrmEditor_Map_OnVisibleChanged;
+            btnFill.OnMouseReleased += BtnFill_OnMouseReleased;
 
             // Words
             words.AddText("Camadas", "Layers");
+        }
+
+        /// <summary>
+        /// Pinta o mapa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnFill_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            if (pTile.Visible)
+            {
+                var size = cmbTileType.SelectIndex == 0 ? SelectTile.size : Vector2.One;
+                var m = Map.Map.Current;
+                int countX = m.Size.x / (int)size.x + 1;
+                int countY = m.Size.y / (int)size.y + 1;
+
+                for(int x = 0; x < countX; x++)                
+                    for(int y = 0; y < countY; y++)
+                    {
+                        for (int x2 = 0; x2 < size.x; x2++)
+                            for (int y2 = 0; y2 < size.y; y2++)
+                                m.AddChunk(CurrentLayer, (Map.ChunkTypes)cmbTileType.SelectIndex, txtTileID.Value, SelectTile.position + new Vector2(x2, y2),
+                                    new Vector2(x * size.x + x2, y * size.y + y2));
+                    }
+            }
         }
 
         /// <summary>
