@@ -98,14 +98,13 @@ namespace Nero
         /// </summary>
         static void GameLoop()
         {
-            long timer_delay = 0;
-
             var clock = new Clock();
             var pressed = new MouseButtonEvent();
             bool ispressed = false;
             long timer_fps = 0;
             int count_fps = 0;
             long timer_animation = 0;
+            long timer_delay = 0;
 
             while (Running)
             {
@@ -126,6 +125,7 @@ namespace Nero
                     scene?.Update();
                     OnUpdate.Invoke();
                     Sound.ProcessSounds();
+
 
                     // Dispara os eventos da janela                    
                     Window.DispatchEvents();
@@ -178,8 +178,9 @@ namespace Nero
                         currentCursor = newCursor;
                         Window.SetMouseCursor(currentCursor);
                     }
-                    Window.Clear(BackgroundColor);
 
+
+                    Window.Clear(BackgroundColor);
 
                     // Desenha a cena
                     scene?.Draw(Window, RenderStates.Default);
@@ -187,9 +188,7 @@ namespace Nero
                     if (FPS_visible)
                         Renderer.DrawText(Window, $"FPS: {FPS}  Delta: {DeltaTime}", 12, FPS_position, Color.White, 1, new Color(0, 0, 0, 100));
 
-
                     Window.Display();
-
 
                     count_fps++;
                     if (Environment.TickCount64 > timer_fps)
@@ -201,8 +200,6 @@ namespace Nero
 
                     timer_delay = Environment.TickCount64 + 1;
                 }
-
-
             }
             scene?.UnloadContent();
         }
@@ -214,15 +211,16 @@ namespace Nero
         {
             var video = new VideoMode((uint)Size.x, (uint)Size.y);
             if (!Fullscreen)
-                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8,4,6, ContextSettings.Attribute.Default, false));
+                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8, 4, 6, ContextSettings.Attribute.Default, false));
             else
-                Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 8, 8, 4, 6, ContextSettings.Attribute.Default, false));
+                Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 0, 8));
 
             DefaultView = Window.DefaultView;
             Window.SetActive(false);
             Window.SetFramerateLimit(0);
             Window.SetVerticalSyncEnabled(VSync);
             Window.SetMouseCursor(currentCursor);
+            
         }
 
         /// <summary>
@@ -283,6 +281,7 @@ namespace Nero
         public static void LoadFont(string filename)
         {
             var f = new Font(filename);
+            
             Renderer.gameFont = f;
             Renderer._text = new Text("", Renderer.gameFont);
         }
@@ -399,7 +398,7 @@ namespace Nero
 
         public static void SetCursor(Cursor.CursorType type)
         {
-            switch(type)
+            switch (type)
             {
                 case Cursor.CursorType.Arrow:
                     newCursor = cursor_arrow;

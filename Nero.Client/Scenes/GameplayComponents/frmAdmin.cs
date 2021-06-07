@@ -31,7 +31,8 @@ namespace Nero.Client.Scenes.GameplayComponents
             btnEditMap = new Button(this)
             {
                 Size = new Vector2(100,20),
-                Position = new Vector2(20),                
+                Position = new Vector2(20),  
+                Border_Rounded = 8,
             };
             btnEditMap.SetText(Languages.PT_BR, "Editar mapa");
             btnEditMap.SetText(Languages.EN_USA, "Edit map");

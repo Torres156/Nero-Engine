@@ -11,7 +11,7 @@ namespace Nero.Client.Map
         public Chunk[,] chunks;
 
         [JsonIgnore]
-        public Map Map { get; private set; }
+        public MapInstance Map { get; private set; }
 
         /// <summary>
         /// Construtor
@@ -24,10 +24,11 @@ namespace Nero.Client.Map
         /// Seta o mapa
         /// </summary>
         /// <param name="map"></param>
-        public void SetMap(Map map)
+        public void SetMap(MapInstance map, bool updateChunk = true)
         {
             this.Map = map;
-            chunks = new Chunk[map.Size.x + 1, map.Size.y + 1];
+            if (updateChunk)
+                chunks = new Chunk[map.Size.x + 1, map.Size.y + 1];
         }
 
         /// <summary>

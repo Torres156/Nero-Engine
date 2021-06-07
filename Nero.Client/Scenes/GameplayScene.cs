@@ -20,7 +20,7 @@ namespace Nero.Client.Scenes
         /// </summary>
         public override void LoadContent()
         {
-            Map.Map.Current = Map.Map.Create();
+            Map.MapInstance.Current = Map.MapInstance.Load(0);
             Camera.Initialize();
 
             // Controles
@@ -47,36 +47,39 @@ namespace Nero.Client.Scenes
         /// <param name="states"></param>
         public override void Draw(RenderTarget target, RenderStates states)
         {
-
-            Camera.Begin();
-
-            Map.Map.Current?.DrawGround(target);
-
-            Character.My?.Draw(target);
-            Character.My?.DrawTexts(target);
-
-            Map.Map.Current?.DrawFringe(target);
-
-            // Editor de mapa
-            if (FindControl<frmEditor_Map>().Visible)
+            if (Map.MapInstance.Current != null)
             {
-                if (FindControl<frmEditor_Map>().btnGrid.Checked)
+                Camera.Begin();
+
+                Map.MapInstance.Current?.DrawGround(target);
+
+                Character.My?.Draw(target);
+                Character.My?.DrawTexts(target);
+
+
+                Map.MapInstance.Current?.DrawFringe(target);
+
+                // Editor de mapa
+                if (FindControl<frmEditor_Map>().Visible)
                 {
-                    var end = (Vector2)Camera.End(Map.Map.Current);
-                    var start = (Vector2)Camera.Start();
-                    var size = (end - start + Vector2.One) * 32;
+                    if (FindControl<frmEditor_Map>().btnGrid.Checked)
+                    {
+                        var end = (Vector2)Camera.End(Map.MapInstance.Current);
+                        var start = (Vector2)Camera.Start();
+                        var size = (end - start + Vector2.One) * 32;
 
-                    // Y Grid
-                    for (int i = (int)start.y; i <= end.y + 1; i++)
-                        DrawLine(target, new Vector2(start.x * 32, i * 32), new Vector2(start.x * 32 + size.x, i * 32), Color.White);
+                        // Y Grid
+                        for (int i = (int)start.y; i <= end.y + 1; i++)
+                            DrawLine(target, new Vector2(start.x * 32, i * 32), new Vector2(start.x * 32 + size.x, i * 32), Color.White);
 
-                    // X Grid
-                    for (int i = (int)start.x; i <= end.x + 1; i++)
-                        DrawLine(target, new Vector2(i * 32, start.y * 32), new Vector2(i * 32, start.y * 32 + size.y), Color.White);
+                        // X Grid
+                        for (int i = (int)start.x; i <= end.x + 1; i++)
+                            DrawLine(target, new Vector2(i * 32, start.y * 32), new Vector2(i * 32, start.y * 32 + size.y), Color.White);
+                    }
                 }
-            }
 
-            Camera.End();
+                Camera.End();
+            }
 
             if (FindControl<frmEditor_Map>().Visible)
             {
@@ -124,7 +127,7 @@ namespace Nero.Client.Scenes
             }
 
             // Mapa
-            Map.Map.Current?.Update();
+            Map.MapInstance.Current?.Update();
 
             base.Update();
         }
@@ -203,15 +206,15 @@ namespace Nero.Client.Scenes
                             {
                                 for (int x2 = 0; x2 < form_MapEditor.SelectTile.size.x; x2++)
                                     for (int y2 = 0; y2 < form_MapEditor.SelectTile.size.y; y2++)
-                                        Map.Map.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex, form_MapEditor.txtTileID.Value,
+                                        Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex, form_MapEditor.txtTileID.Value,
                                             form_MapEditor.SelectTile.position + new Vector2(x2, y2), mp.ToVector2() + new Vector2(x2, y2));
                             }
                             else
-                                Map.Map.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
+                                Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
                                     form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
                         }
                         else if (e.Button == Mouse.Button.Right)
-                            Map.Map.Current.RemoveChunk(form_MapEditor.CurrentLayer, mp.ToVector2());
+                            Map.MapInstance.Current.RemoveChunk(form_MapEditor.CurrentLayer, mp.ToVector2());
 
 
                     }

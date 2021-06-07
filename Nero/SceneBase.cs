@@ -18,7 +18,7 @@ namespace Nero
 
         public bool FadeActive = true;
 
-        int fade_opacity = 0;
+        float fade_opacity = 0;
         byte fade_state = 0;
         #endregion
 
@@ -95,7 +95,7 @@ namespace Nero
             {
                 if (fade_state == 1 && fade_opacity < 255)
                 {
-                    fade_opacity += (int)(400 * Game.DeltaTime);
+                    fade_opacity += (400 * Game.DeltaTime);
                     if (fade_opacity >= 255)
                     {
                         fade_opacity = 255;
@@ -105,7 +105,7 @@ namespace Nero
                 }
                 else if (fade_state == 2 && fade_opacity > 0)
                 {
-                    fade_opacity -= (int)(400 * Game.DeltaTime);
+                    fade_opacity -= (400 * Game.DeltaTime);
                     if (fade_opacity <= 0)
                     {
                         fade_state = 0;

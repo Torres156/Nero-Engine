@@ -9,7 +9,18 @@ namespace Nero.Client.Network
     {
         enum Packets
         {
-            Register, Login, CreateCharacter, UseCharacter,
+            Register, Login, CreateCharacter, UseCharacter, MapAnswer,
+        }
+
+        /// <summary>
+        /// Resposta da revisão de mapa
+        /// </summary>
+        /// <param name="answer"></param>
+        public static void MapAnswer(bool answer)
+        {
+            var buffer = Create(Packets.MapAnswer);
+            buffer.Put(answer);
+            SendTo(buffer);
         }
 
         /// <summary>

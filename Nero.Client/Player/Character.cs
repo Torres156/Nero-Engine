@@ -11,6 +11,19 @@ namespace Nero.Client.Player
         #region Static
         public static Character My;
         public static List<Character> Items = new List<Character>();
+
+        /// <summary>
+        /// Encontra um personagem
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static Character Find(string name)
+        {
+            if (My.Name.Trim().ToLower() == name.Trim().ToLower())
+                return My;
+
+            return Items.Find(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+        }
         #endregion
 
         // Publics
@@ -82,16 +95,16 @@ namespace Nero.Client.Player
         {
             var tex = GlobalResources.Character[SpriteID];
             var size = tex.size / 4;
-            var pos = Position * 32 + OffSet + new Vector2(16);
+            var pos = Position * 32 + OffSet.Floor() + new Vector2(16);
             var colorName = Color.White;
 
             switch(AccessLevel)
             {
                 case AccessLevels.GameMaster: colorName = new Color(254, 131, 65); break;
-                case AccessLevels.Administrator: colorName = new Color(188, 101, 233); break;
+                case AccessLevels.Administrator: colorName = new Color(108, 181, 246, 255); break;
             }
 
-            DrawText(target, Name, 12, pos - new Vector2(GetTextWidth(Name) / 2, size.y + 20), colorName, 1, new Color(30, 30, 30));
+            DrawText(target, Name, 14, pos - new Vector2(GetTextWidth(Name,14) / 2, size.y + 20), colorName, 1, new Color(30,30,30));            
         }
 
         /// <summary>
@@ -111,7 +124,7 @@ namespace Nero.Client.Player
                 return;
 
             // Velocidade
-            float speed = MathF.Round(2.5f);
+            float speed = 400 * Game.DeltaTime;
             
 
             if (OffSet.x > 0)            

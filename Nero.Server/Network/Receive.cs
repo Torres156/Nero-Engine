@@ -1,5 +1,6 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Nero.Server.Helpers;
 using Nero.Server.Player;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace Nero.Server.Network
     {
         enum Packets
         {
-            Register, Login, CreateCharacter, UseCharacter,
+            Register, Login, CreateCharacter, UseCharacter, MapAnswer,
+
         }
 
         /// <summary>
@@ -30,6 +32,26 @@ namespace Nero.Server.Network
                 case Packets.Login: Login(peer, buffer); break;
                 case Packets.CreateCharacter: CreateCharacter(peer, buffer); break;
                 case Packets.UseCharacter: UseCharacter(peer, buffer); break;
+                case Packets.MapAnswer: MapAnswer(peer, buffer); break;
+            }
+        }
+
+        /// <summary>
+        /// Resposta da revisão de mapa
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void MapAnswer(NetPeer peer, NetDataReader buffer)
+        {
+            var result = buffer.GetBool();
+
+            if (result)
+            {
+                Sender.MapData(peer);
+            }
+            else
+            {
+                // DATA PLAYERS
             }
         }
 
@@ -49,8 +71,7 @@ namespace Nero.Server.Network
             controller.account = acc;
             Character.Items.Add(controller);
 
-            Sender.ChangeToGameplay(peer);
-            Sender.UpdateMyCharacter(peer);
+            PlayerHelper.Join(controller);
         }
 
         /// <summary>

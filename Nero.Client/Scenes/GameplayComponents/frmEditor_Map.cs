@@ -24,6 +24,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         LanguageWords words = new LanguageWords();
         bool _press;
         RenderTexture render;
+        bool _close;
 
 
         // Controls
@@ -36,6 +37,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         public Button btnGrid;          // Botão de grid
         public Button btnLight;         // Botão de luz
         Button btnFill;                 // Pinta tudo
+        Button btnClear;                // Limpa tudo
         public Button btnTile;          // Botão de tileset
         public Button btnAttribute;     // Botão de atributos
         HScroll hsLeft;                 // Scroll horizontal
@@ -143,11 +145,20 @@ namespace Nero.Client.Scenes.GameplayComponents
                 FillColor = Color.Transparent,
             };
 
+
+            btnClear = new Button(this)
+            {
+                Texture = new Texture("res/ui/mapeditor/clear.png"),
+                Size = new Vector2(20),
+                Position = new Vector2(4 + 22 * 6, 0),
+                FillColor = Color.Transparent,
+            };
+
             btnTile = new Button(this)
             {
                 Texture = new Texture("res/ui/mapeditor/tile.png"),
                 Size = new Vector2(20),
-                Position = new Vector2(4 + 22 * 7, 0),
+                Position = new Vector2(4 + 22 * 8, 0),
                 FillColor = Color.Transparent,
                 isChecked = true,
                 Checked = true,
@@ -157,7 +168,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             {
                 Texture = new Texture("res/ui/mapeditor/attribute.png"),
                 Size = new Vector2(20),
-                Position = new Vector2(4 + 22 * 8, 0),
+                Position = new Vector2(4 + 22 * 9, 0),
                 FillColor = Color.Transparent,
                 isChecked = true,
             };
@@ -188,9 +199,52 @@ namespace Nero.Client.Scenes.GameplayComponents
             txtTileID.OnValidate += TxtTileID_OnValidate;
             OnVisibleChanged += FrmEditor_Map_OnVisibleChanged;
             btnFill.OnMouseReleased += BtnFill_OnMouseReleased;
+            btnClear.OnMouseReleased += BtnClear_OnMouseReleased;
+            btnSave.OnMouseReleased += BtnSave_OnMouseReleased;
+            OnVisibleChanged += FrmEditor_Map_OnVisibleChanged1;
 
             // Words
             words.AddText("Camadas", "Layers");
+        }
+
+        private void FrmEditor_Map_OnVisibleChanged1(ControlBase sender)
+        {
+            if (Visible)            
+                _close = false;
+            else
+            {
+                if (!_close)
+                    Map.MapInstance.Current = Map.MapInstance.Create();
+            }
+            
+        }
+
+        /// <summary>
+        /// Salva o mapa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSave_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            _close = true;
+            Map.MapInstance.Save();
+            Hide();
+        }
+
+        /// <summary>
+        /// Limpa o mapa
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnClear_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            if (pTile.Visible)
+            {
+                var m = Map.MapInstance.Current;
+                for (int x = 0; x <= m.Size.x; x++)
+                    for (int y = 0; y <= m.Size.y; y++)
+                        m.RemoveChunk(CurrentLayer, new Vector2(x, y));
+            }
         }
 
         /// <summary>
@@ -203,12 +257,12 @@ namespace Nero.Client.Scenes.GameplayComponents
             if (pTile.Visible)
             {
                 var size = cmbTileType.SelectIndex == 0 ? SelectTile.size : Vector2.One;
-                var m = Map.Map.Current;
+                var m = Map.MapInstance.Current;
                 int countX = m.Size.x / (int)size.x + 1;
                 int countY = m.Size.y / (int)size.y + 1;
 
-                for(int x = 0; x < countX; x++)                
-                    for(int y = 0; y < countY; y++)
+                for (int x = 0; x < countX; x++)
+                    for (int y = 0; y < countY; y++)
                     {
                         for (int x2 = 0; x2 < size.x; x2++)
                             for (int y2 = 0; y2 < size.y; y2++)
@@ -251,7 +305,7 @@ namespace Nero.Client.Scenes.GameplayComponents
                 }
                 else
                 {
-                    var size = Vector2.Max(Vector2.One, Vector2.One + cur -  SelectTile.position);
+                    var size = Vector2.Max(Vector2.One, Vector2.One + cur - SelectTile.position);
                     SelectTile.size = size;
                 }
             }
@@ -323,9 +377,9 @@ namespace Nero.Client.Scenes.GameplayComponents
 
                 var select_pos = SelectTile.position * 16 - off;
                 DrawRectangle(render, select_pos, SelectTile.size * 16, Color.Transparent, 1, Color.Red);
-                
+
                 render.Display();
-                using(var spr = new Sprite(render.Texture))
+                using (var spr = new Sprite(render.Texture))
                 {
                     spr.Position = rec_pos;
                     target.Draw(spr);

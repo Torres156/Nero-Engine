@@ -1,29 +1,78 @@
+using Nero.Client.Player;
 using Nero.Client.World;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Nero.Client.Map
 {
-    class Map
+    class MapInstance
     {
-        #region Static
-        public static Map Current = null;
+        #region Static        
+        public static MapInstance Current = null;
 
-        public static Map Create()
+        /// <summary>
+        /// Cria o mapa
+        /// </summary>
+        /// <returns></returns>
+        public static MapInstance Create()
         {
-            var m = new Map();
+            var m = new MapInstance();
             for (int i = 0; i < (int)Layers.count; i++)
                 m.Layer[i].SetMap(m);
 
             return m;
         }
+
+        /// <summary>
+        /// Salva o mapa
+        /// </summary>
+        public static void Save()
+        {
+            var path = Environment.CurrentDirectory + "/data/map/";
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            var filePath = path + $"{Character.My.MapID}.map";
+            var json = JsonConvert.SerializeObject(Current);
+            File.WriteAllBytes(filePath, MemoryService.Compress(Encoding.UTF8.GetBytes(json)));
+        }
+
+        /// <summary>
+        /// Carrega o mapa
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public static MapInstance Load(int ID)
+        {
+            var path = Environment.CurrentDirectory + "/data/map/";
+            var filePath = path + $"{Character.My.MapID}.map";
+
+            if (!File.Exists(filePath))
+                return Create();
+
+            var data = MemoryService.Decompress( File.ReadAllBytes(filePath));
+            var json = Encoding.UTF8.GetString(data);
+            var m = JsonConvert.DeserializeObject<MapInstance>(json);
+            for (int i = 0; i < (int)Layers.count; i++)
+            {
+                m.Layer[i].SetMap(m, false);
+                for (int x = 0; x <= m.Size.x; x++)
+                    for (int y = 0; y <= m.Size.y; y++)
+                        m.Layer[i].chunks[x, y]?.SetLayer(m.Layer[i]);
+            }
+
+            return m;
+        }
+
         #endregion
 
-
+        public int Revision = 0;                // Revisão do mapa
         public string Name = "";                // Nome do mapa
-        public Int2 Size = new Int2(60, 33);    // Tamanho do mapa
+        public Int2 Size = new Int2(59, 31);    // Tamanho do mapa
         public Layer[] Layer;                   // Camadas
 
 
@@ -35,7 +84,7 @@ namespace Nero.Client.Map
         /// <summary>
         /// Construtor
         /// </summary>
-        private Map()
+        private MapInstance()
         {
             Layer = new Layer[(int)Layers.count];
             for (int i = 0; i < Layer.Length; i++)            

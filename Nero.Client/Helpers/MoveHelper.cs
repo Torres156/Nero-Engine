@@ -77,7 +77,7 @@ namespace Nero.Client.Helpers
                     break;
             }
 
-            var m = Map.Map.Current;
+            var m = Map.MapInstance.Current;
             if (nextPos.x < 0 || nextPos.y < 0) return false;
             if (nextPos.x > m.Size.x || nextPos.y > m.Size.y) return false;
 

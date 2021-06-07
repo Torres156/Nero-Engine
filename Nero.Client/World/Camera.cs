@@ -18,7 +18,7 @@ namespace Nero.Client.World
             set
             {
                 var v = Vector2.Max(value, Game.Size / 2);
-                v = Vector2.Min(v, (Vector2)(Map.Map.Current.Size + Int2.One) * 32 - Game.Size / 2);
+                v = Vector2.Min(v, (Vector2)(Map.MapInstance.Current.Size + Int2.One) * 32 - Game.Size / 2);
                 view.Center = v.Floor();
             }
         }
@@ -35,7 +35,7 @@ namespace Nero.Client.World
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        public static Int2 End(Map.Map m)
+        public static Int2 End(Map.MapInstance m)
             => Int2.Min((Int2)(view.Center + Game.Size) / 32 + Int2.One, m.Size);
 
         /// <summary>
@@ -101,7 +101,9 @@ namespace Nero.Client.World
         
         public static void Resize()
         {
-            view.Size = Game.Size;
+            var ratio = Game.Size.y / Game.Size.x;
+            view.Size = new Vector2(Game.Size.x , Game.Size.x * ratio).Round();
+            
         }
     }
 }

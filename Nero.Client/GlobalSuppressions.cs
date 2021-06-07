@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE1006:Estilos de Nomenclatura", Justification = "<Pendente>", Scope = "member", Target = "~P:Nero.Client.Map.Map.offWater")]
+[assembly: SuppressMessage("Style", "IDE1006:Estilos de Nomenclatura", Justification = "<Pendente>", Scope = "member", Target = "~P:Nero.Client.Map.MapInstance.offWater")]

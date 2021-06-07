@@ -163,7 +163,7 @@ namespace Nero
 
             _text.DisplayedString = text;
             _text.CharacterSize = (uint)charactersize;
-            _text.Position = position.Floor();
+            _text.Position = position.ToInt();
             _text.FillColor = color;
             _text.OutlineThickness = outlineThickness;
             _text.OutlineColor = outlineColor;

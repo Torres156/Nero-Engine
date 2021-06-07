@@ -1,6 +1,8 @@
 using LiteNetLib.Utils;
+using Nero.Client.Map;
 using Nero.Client.Player;
 using Nero.Client.World;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +15,7 @@ namespace Nero.Client.Network
         {
             Alert, ChangeToSelectCharacter, UpdateClass,
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
+            UpdateCharacterPosition, CheckMapRevision, MapData,
         }
 
         /// <summary>
@@ -31,7 +34,62 @@ namespace Nero.Client.Network
                 case Packets.UpdateCharacters: UpdateCharacters(buffer); break;
                 case Packets.ChangeToGameplay: ChangeToGameplay(buffer); break;
                 case Packets.UpdateMyCharacter: UpdateMyCharacter(buffer); break;
+                case Packets.UpdateCharacterPosition: UpdateCharacterPosition(buffer); break;
+                case Packets.CheckMapRevision: CheckMapRevision(buffer); break;
+                case Packets.MapData: MapData(buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Dados do mapa
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void MapData(NetDataReader buffer)
+        {
+            var mapID = buffer.GetInt();
+            Character.My.MapID = mapID;
+
+            MapInstance.Current = JsonConvert.DeserializeObject<MapInstance>(buffer.GetString());
+            MapInstance.Save();
+        }
+
+        /// <summary>
+        /// Checa a revisão do mapa
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void CheckMapRevision(NetDataReader buffer)
+        {
+            var id = buffer.GetInt();
+            var rev = buffer.GetInt();
+
+            var m = MapInstance.Load(id);
+            if (m.Revision != rev)
+            {
+                m = null;
+                Sender.MapAnswer(true);
+            }
+            else
+            {
+                MapInstance.Current = m;
+                Character.Items.Clear();
+                Sender.MapAnswer(false);
+            }
+        }
+
+        /// <summary>
+        /// Atualiza a posição
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void UpdateCharacterPosition(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+            var pos = buffer.GetVector2();
+
+            var player = Character.Find(name);
+            if (player == null) return;
+
+            player.Position = pos;
+            player.OffSet = Vector2.Zero;
         }
 
         /// <summary>
@@ -43,7 +101,7 @@ namespace Nero.Client.Network
             if (Character.My == null)
                 Character.My = new Character();
 
-            ref var c = ref Character.My;
+            var c = Character.My;
             c.Name = buffer.GetString();
             c.ClassID = buffer.GetInt();
             c.SpriteID = buffer.GetInt();

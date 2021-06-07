@@ -1,4 +1,5 @@
 using LiteNetLib;
+using Nero.Server.Map;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -113,6 +114,7 @@ namespace Nero.Server.Player
         {
         }
 
-        
+        public IInstance GetInstance()
+            => MapInstance.Items[MapID];
     }
 }
