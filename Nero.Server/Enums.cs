@@ -30,4 +30,13 @@ namespace Nero.Server
 
         Right,
     }
+
+    enum Vitals
+    {
+        HP,
+
+        MP,
+
+        count,
+    }
 }

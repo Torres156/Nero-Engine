@@ -1,7 +1,9 @@
+using Nero.Client.Network;
 using Nero.Client.Player;
 using Nero.Client.World;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Nero.Client.Helpers
@@ -15,7 +17,7 @@ namespace Nero.Client.Helpers
         public static void Request(Directions direction)
         {
             var c = Character.My;
-            if (c.Direction != direction)
+            if (!c.Moving && c.Direction != direction)
             {
                 c.Direction = direction;
                 // SEND UPDATE DIR
@@ -23,6 +25,7 @@ namespace Nero.Client.Helpers
             if (CanMove(direction))
             {                
                 c.Moving = true;
+                Sender.MoveCharacter(direction);
                 switch (direction)
                 {
                     case Directions.Up:
@@ -41,9 +44,7 @@ namespace Nero.Client.Helpers
                         c.Position.x++;
                         c.OffSet.x = -32;
                         break;
-                }
-                // SEND MOVEMENT
-                
+                }                
             }
         }
 
@@ -80,6 +81,9 @@ namespace Nero.Client.Helpers
             var m = Map.MapInstance.Current;
             if (nextPos.x < 0 || nextPos.y < 0) return false;
             if (nextPos.x > m.Size.x || nextPos.y > m.Size.y) return false;
+
+            if (Character.Items.Any(i => i.Position.Equals(nextPos)))
+                return false;
 
             return true;
         }

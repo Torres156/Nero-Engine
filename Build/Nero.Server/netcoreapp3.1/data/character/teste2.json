@@ -10,12 +10,16 @@
     12,
     8
   ],
-  "Direction": 1,
+  "Direction": 3,
   "Points": 0,
+  "AccessLevel": 0,
   "MapID": 1,
   "Position": {
-    "x": 4.0,
-    "y": 4.0
+    "x": 13.0,
+    "y": 7.0
   },
-  "AccessLevel": 0
+  "Vital": [
+    0,
+    0
+  ]
 }

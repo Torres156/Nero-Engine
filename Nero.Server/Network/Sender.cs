@@ -17,7 +17,20 @@ namespace Nero.Server.Network
             Alert, ChangeToSelectCharacter, UpdateClass,
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
-            CharacterData, RemoveCharacter,
+            CharacterData, RemoveCharacter, MoveCharacter,
+        }
+
+        /// <summary>
+        /// Movimenta o jogador
+        /// </summary>
+        /// <param name="player"></param>
+        public static void MoveCharacter(Character player)
+        {
+            var buffer = Create(Packets.MoveCharacter);
+            buffer.Put(player.Name);
+            buffer.Put((byte)player.Direction);
+            buffer.Put(player.Position);
+            SendToInstanceBut(player, buffer);
         }
 
         /// <summary>
@@ -107,6 +120,7 @@ namespace Nero.Server.Network
             buffer.Put(player.Name);
             buffer.Put(player.MapID);
             buffer.Put(player.Position);
+            buffer.Put((byte)player.Direction);
             SendToInstance(player, buffer);
         }
 

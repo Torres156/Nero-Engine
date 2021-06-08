@@ -121,7 +121,7 @@ namespace Nero.Client.Scenes
         public override void Update()
         {
             // Movimentos
-            if (TextBox.Focus == null)
+            if (Game.Window.HasFocus() && TextBox.Focus == null)
             {
                 // Up
                 if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))

@@ -36,7 +36,7 @@ namespace Nero.Client.World
         /// <param name="m"></param>
         /// <returns></returns>
         public static Int2 End(Map.MapInstance m)
-            => Int2.Min((Int2)(view.Center + Game.Size) / 32 + Int2.One, m.Size);
+            => m != null ? Int2.Min((Int2)(view.Center + Game.Size) / 32 + Int2.One, m.Size) : Int2.Zero;
 
         /// <summary>
         /// Inicia a camera

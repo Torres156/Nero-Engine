@@ -1,5 +1,6 @@
 using LiteNetLib.Utils;
 using Nero.Client.Map;
+using Nero.Client.Player;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,19 @@ namespace Nero.Client.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
+            MoveCharacter,
+        }
+
+        /// <summary>
+        /// Movimenta o personagem
+        /// </summary>
+        /// <param name="direction"></param>
+        public static void MoveCharacter(Directions direction)
+        {
+            var buffer = Create(Packets.MoveCharacter);
+            buffer.Put((byte)direction);
+            buffer.Put(Character.My.Position);            
+            SendTo(buffer);
         }
 
         /// <summary>

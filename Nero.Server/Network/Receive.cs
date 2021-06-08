@@ -16,7 +16,7 @@ namespace Nero.Server.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-
+            MoveCharacter,
         }
 
         /// <summary>
@@ -36,7 +36,28 @@ namespace Nero.Server.Network
                 case Packets.UseCharacter: UseCharacter(peer, buffer); break;
                 case Packets.MapAnswer: MapAnswer(peer, buffer); break;
                 case Packets.MapSave: MapSave(peer, buffer); break;
+                case Packets.MoveCharacter: MoveCharacter(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Movimento do personagem
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void MoveCharacter(NetPeer peer, NetDataReader buffer)
+        {
+            var direction = (Directions)buffer.GetByte();
+            var pos = buffer.GetVector2();
+            var player = Character.Find(peer);
+
+            if (!player.Position.Equals(pos))
+            {
+                Sender.UpdateCharacterPosition(player);
+                return;
+            }
+
+            MoveHelper.Move(player, direction);
         }
 
         /// <summary>

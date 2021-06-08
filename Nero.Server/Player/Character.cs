@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Nero.Server.Player
 {
-    class Character
+    class Character : Entity
     {
         #region 
         public static List<Character> Items = new List<Character>();
@@ -95,9 +95,7 @@ namespace Nero.Server.Player
         public long Experience = 0;                                     // Experiência
         public int[] StatPrimary = new int[(int)StatPrimaries.count];   // Atributos primários
         public Directions Direction = Directions.Down;                  // Direção do personagem
-        public int Points = 0;                                          // Pontos de atributos
-        public int MapID = 0;                                           // Id do mapa
-        public Vector2 Position = Vector2.Zero;                         // Posição
+        public int Points = 0;                                          // Pontos de atributos        
         public AccessLevels AccessLevel = AccessLevels.Player;          // Acesso de administrador
 
 
@@ -114,7 +112,34 @@ namespace Nero.Server.Player
         {
         }
 
+        /// <summary>
+        /// Instancia no qual o jogador está
+        /// </summary>
+        /// <returns></returns>
         public IInstance GetInstance()
             => MapInstance.Items[MapID];
+
+        /// <summary>
+        /// Atributos vitals máximo
+        /// </summary>
+        /// <param name="vital"></param>
+        /// <returns></returns>
+        public override int VitalMaximum(Vitals vital)
+        {
+            if (vital == Vitals.HP)
+            {
+                int value = 150 + 50 * Level;
+                value += StatPrimary[(int)StatPrimaries.Constitution] * 5; 
+                return value;
+            }
+            else if(vital == Vitals.MP)
+            {
+                int value = 50 + 20 * Level;
+                value += StatPrimary[(int)StatPrimaries.Mental] * 2;
+                return value;
+            }
+
+            return 0;
+        }
     }
 }

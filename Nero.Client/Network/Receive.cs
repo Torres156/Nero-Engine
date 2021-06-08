@@ -16,7 +16,7 @@ namespace Nero.Client.Network
             Alert, ChangeToSelectCharacter, UpdateClass,
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
-            CharacterData, RemoveCharacter,
+            CharacterData, RemoveCharacter, MoveCharacter,
         }
 
         /// <summary>
@@ -40,6 +40,41 @@ namespace Nero.Client.Network
                 case Packets.MapData: MapData(buffer); break;
                 case Packets.CharacterData: CharacterData(buffer); break;
                 case Packets.RemoveCharacter: RemoveCharacter(buffer); break;
+                case Packets.MoveCharacter: MoveCharacter(buffer); break;
+            }
+        }
+
+        /// <summary>
+        /// Movimento do personagem
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void MoveCharacter(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+            var dir = (Directions)buffer.GetByte();
+            var pos = buffer.GetVector2();
+
+            var find = Character.Find(name);
+            if (find.Equals(null)) 
+                return;
+
+            find.Direction = dir;
+            find.Position = pos;
+            find.Moving = true;
+            switch(dir)
+            {
+                case Directions.Up:
+                    find.OffSet.y += 32;
+                    break;
+                case Directions.Down:
+                    find.OffSet.y -= 32;
+                    break;
+                case Directions.Left:
+                    find.OffSet.x += 32;
+                    break;
+                case Directions.Right:
+                    find.OffSet.x -= 32;
+                    break;
             }
         }
 
@@ -88,7 +123,15 @@ namespace Nero.Client.Network
             var mapID = buffer.GetInt();
             Character.My.MapID = mapID;
 
-            MapInstance.Current = JsonConvert.DeserializeObject<MapInstance>(buffer.GetString());
+            var m = JsonConvert.DeserializeObject<MapInstance>(buffer.GetString());
+            for (int i = 0; i < (int)Layers.count; i++)
+            {
+                m.Layer[i].SetMap(m, false);
+                for (int x = 0; x <= m.Size.x; x++)
+                    for (int y = 0; y <= m.Size.y; y++)
+                        m.Layer[i].chunks[x, y]?.SetLayer(m.Layer[i]);
+            }
+            MapInstance.Current = m;
             MapInstance.Save();
         }
 
@@ -126,6 +169,7 @@ namespace Nero.Client.Network
             var name = buffer.GetString();
             var mapID = buffer.GetInt();
             var pos = buffer.GetVector2();
+            var dir = (Directions)buffer.GetByte();
 
             var player = Character.Find(name);
             if (player == null) return;
@@ -133,6 +177,7 @@ namespace Nero.Client.Network
             player.MapID = mapID;
             player.Position = pos;
             player.OffSet = Vector2.Zero;
+            player.Direction = dir;
         }
 
         /// <summary>
