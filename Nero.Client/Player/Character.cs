@@ -124,7 +124,7 @@ namespace Nero.Client.Player
                 return;
 
             // Velocidade
-            float speed = 400 * Game.DeltaTime;
+            float speed = 200 * Game.DeltaTime;
             
 
             if (OffSet.x > 0)            

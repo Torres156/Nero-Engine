@@ -108,10 +108,14 @@ namespace Nero
 
             while (Running)
             {
-                if (Environment.TickCount64 > timer_delay)
+                if (Environment.TickCount64 > timer_delay) // 60 FPS
                 {
                     // Delta Time
                     DeltaTime = clock.Restart().AsSeconds();
+
+                    // Atualizações
+                    scene?.Update();
+                    OnUpdate.Invoke();
 
                     Window.SetMouseCursorVisible(MouseCursorVisible);
 
@@ -121,9 +125,7 @@ namespace Nero
                         timer_animation = Environment.TickCount64 + 250;
                     }
 
-                    // Atualizações
-                    scene?.Update();
-                    OnUpdate.Invoke();
+
                     Sound.ProcessSounds();
 
 
@@ -188,18 +190,20 @@ namespace Nero
                     if (FPS_visible)
                         Renderer.DrawText(Window, $"FPS: {FPS}  Delta: {DeltaTime}", 12, FPS_position, Color.White, 1, new Color(0, 0, 0, 100));
 
-                    Window.Display();
-
-                    count_fps++;
-                    if (Environment.TickCount64 > timer_fps)
-                    {
-                        FPS = count_fps;
-                        count_fps = 0;
-                        timer_fps = Environment.TickCount64 + 1000;
-                    }
 
                     timer_delay = Environment.TickCount64 + 1;
                 }
+                Window.Display();
+
+                count_fps++;
+                if (Environment.TickCount64 > timer_fps)
+                {
+                    FPS = count_fps;
+                    count_fps = 0;
+                    timer_fps = Environment.TickCount64 + 1000;
+                }
+
+
             }
             scene?.UnloadContent();
         }
@@ -211,7 +215,7 @@ namespace Nero
         {
             var video = new VideoMode((uint)Size.x, (uint)Size.y);
             if (!Fullscreen)
-                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 8, 8, 4, 6, ContextSettings.Attribute.Default, false));
+                Window = new RenderWindow(video, Title, WindowResized ? Styles.Close | Styles.Resize : Styles.Close, new ContextSettings(32, 0, 8));
             else
                 Window = new RenderWindow(video, Title, Styles.Fullscreen, new ContextSettings(32, 0, 8));
 
@@ -220,7 +224,6 @@ namespace Nero
             Window.SetFramerateLimit(0);
             Window.SetVerticalSyncEnabled(VSync);
             Window.SetMouseCursor(currentCursor);
-            
         }
 
         /// <summary>
@@ -281,7 +284,7 @@ namespace Nero
         public static void LoadFont(string filename)
         {
             var f = new Font(filename);
-            
+
             Renderer.gameFont = f;
             Renderer._text = new Text("", Renderer.gameFont);
         }

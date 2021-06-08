@@ -1,7 +1,9 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Nero.Server.Helpers;
+using Nero.Server.Map;
 using Nero.Server.Player;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace Nero.Server.Network
     {
         enum Packets
         {
-            Register, Login, CreateCharacter, UseCharacter, MapAnswer,
+            Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
 
         }
 
@@ -33,7 +35,23 @@ namespace Nero.Server.Network
                 case Packets.CreateCharacter: CreateCharacter(peer, buffer); break;
                 case Packets.UseCharacter: UseCharacter(peer, buffer); break;
                 case Packets.MapAnswer: MapAnswer(peer, buffer); break;
+                case Packets.MapSave: MapSave(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Salva o mapa
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void MapSave(NetPeer peer, NetDataReader buffer)
+        {
+            var json = buffer.GetString();
+
+            var player = Character.Find(peer);
+            MapInstance.Items[player.MapID] = JsonConvert.DeserializeObject<MapInstance>(json);
+            MapInstance.Save(player.MapID);
+            Sender.MapDataBut(peer);
         }
 
         /// <summary>
@@ -45,14 +63,12 @@ namespace Nero.Server.Network
         {
             var result = buffer.GetBool();
 
-            if (result)
-            {
+            if (result)            
                 Sender.MapData(peer);
-            }
-            else
-            {
-                // DATA PLAYERS
-            }
+
+            // Envia dados
+            Sender.CharacterDataToInstance(Character.Find(peer));
+            Sender.CharacterDataAllForMe(peer);
         }
 
         /// <summary>

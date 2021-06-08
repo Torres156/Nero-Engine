@@ -64,6 +64,7 @@ namespace Nero.Server.Network
             var findChar = Character.Find(peer);
             if (findChar != null)
             {
+                Sender.RemoveCharacter(findChar);
                 Character.Save(findChar);
                 Character.Items.Remove(findChar);
             }

@@ -20,9 +20,10 @@ namespace Nero.Server.Core
                 {
                     Network.Socket.PollEvents();
 
-                    Thread.Sleep(1);
+                    
                     timerDelay = Environment.TickCount64 + 1;
                 }
+                Thread.Sleep(1);
             }
         }
     }

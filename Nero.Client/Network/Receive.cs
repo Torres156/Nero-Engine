@@ -16,6 +16,7 @@ namespace Nero.Client.Network
             Alert, ChangeToSelectCharacter, UpdateClass,
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
+            CharacterData, RemoveCharacter,
         }
 
         /// <summary>
@@ -37,7 +38,45 @@ namespace Nero.Client.Network
                 case Packets.UpdateCharacterPosition: UpdateCharacterPosition(buffer); break;
                 case Packets.CheckMapRevision: CheckMapRevision(buffer); break;
                 case Packets.MapData: MapData(buffer); break;
+                case Packets.CharacterData: CharacterData(buffer); break;
+                case Packets.RemoveCharacter: RemoveCharacter(buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Remove um personagem do mapa
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void RemoveCharacter(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+
+            var find = Character.Find(name);
+            if (find != null && find != Character.My)
+                Character.Items.Remove(find);
+        }
+
+        /// <summary>
+        /// Dados de personagem
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void CharacterData(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+
+            var find = Character.Find(name);
+            if (find == null)
+            {
+                find = new Character();
+                Character.Items.Add(find);
+            }
+
+            find.Name = name;
+            find.ClassID = buffer.GetInt();
+            find.SpriteID = buffer.GetInt();
+            find.Level = buffer.GetInt();
+            find.Position = buffer.GetVector2();
+            find.AccessLevel = (AccessLevels)buffer.GetByte();
         }
 
         /// <summary>
@@ -70,10 +109,12 @@ namespace Nero.Client.Network
             }
             else
             {
-                MapInstance.Current = m;
-                Character.Items.Clear();
+                MapInstance.Current = m;                
                 Sender.MapAnswer(false);
             }
+
+            // Clear Player cache
+            Character.Items.Clear();
         }
 
         /// <summary>
@@ -83,11 +124,13 @@ namespace Nero.Client.Network
         static void UpdateCharacterPosition(NetDataReader buffer)
         {
             var name = buffer.GetString();
+            var mapID = buffer.GetInt();
             var pos = buffer.GetVector2();
 
             var player = Character.Find(name);
             if (player == null) return;
 
+            player.MapID = mapID;
             player.Position = pos;
             player.OffSet = Vector2.Zero;
         }

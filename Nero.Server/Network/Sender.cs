@@ -17,6 +17,59 @@ namespace Nero.Server.Network
             Alert, ChangeToSelectCharacter, UpdateClass,
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
+            CharacterData, RemoveCharacter,
+        }
+
+        /// <summary>
+        /// Remove o personagem da instância
+        /// </summary>
+        /// <param name="player"></param>
+        public static void RemoveCharacter(Character player)
+        {
+            var buffer = Create(Packets.RemoveCharacter);
+            buffer.Put(player.Name);
+            SendToInstanceBut(player, buffer);
+        }
+
+        /// <summary>
+        /// Envia dados de todos os personagens para mim
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void CharacterDataAllForMe(NetPeer peer)
+        {
+            var player = Character.Find(peer);
+
+            foreach(var i in Character.Items)
+                if (i != player && i.GetInstance().Equals(player.GetInstance()))
+                {
+                    var buffer = Create(Packets.CharacterData);
+                    UpdateCharacterPacket(i, buffer);
+                    SendTo(peer, buffer);
+                }
+        }
+
+        /// <summary>
+        /// Envia meu dados para todos os personagens na instancia
+        /// </summary>
+        /// <param name="player"></param>
+        public static void CharacterDataToInstance(Character player)
+        {
+            var buffer = Create(Packets.CharacterData);            
+            UpdateCharacterPacket(player, buffer);
+            SendToInstanceBut(player, buffer);
+        }
+
+        /// <summary>
+        /// Envia o mapa para todos presentes no mesmo
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void MapDataBut(NetPeer peer)
+        {
+            var player = Character.Find(peer);
+            var buffer = Create(Packets.MapData);
+            buffer.Put(player.MapID);
+            buffer.Put(JsonConvert.SerializeObject(MapInstance.Items[player.MapID]));
+            SendToInstanceBut(player, buffer);
         }
 
         /// <summary>
@@ -52,6 +105,7 @@ namespace Nero.Server.Network
         {
             var buffer = Create(Packets.UpdateCharacterPosition);
             buffer.Put(player.Name);
+            buffer.Put(player.MapID);
             buffer.Put(player.Position);
             SendToInstance(player, buffer);
         }

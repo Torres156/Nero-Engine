@@ -1,14 +1,17 @@
 using Nero.Client.Player;
+using Nero.Client.Scenes.GameplayComponents;
 using Nero.Client.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Nero.Client.Map
 {
+    using static Renderer;
     class MapInstance
     {
         #region Static        
@@ -70,15 +73,19 @@ namespace Nero.Client.Map
 
         #endregion
 
-        public int Revision = 0;                // Revisão do mapa
-        public string Name = "";                // Nome do mapa
-        public Int2 Size = new Int2(59, 31);    // Tamanho do mapa
-        public Layer[] Layer;                   // Camadas
+        public int Revision = 0;                    // Revisão do mapa
+        public string Name = "";                    // Nome do mapa
+        public Int2 Size = new Int2(59, 31);        // Tamanho do mapa
+        public Layer[] Layer;                       // Camadas
+        public List<AttributeInfo>[,] Attributes;   // Atributos
 
 
         // Client Only
+        [JsonIgnore]
         public int offWater { get; private set; }   // Animação de frame para Água
+        [JsonIgnore]
         bool Animation = false;                     // Animação de camada
+        [JsonIgnore]
         long timerAnimation;
 
         /// <summary>
@@ -89,9 +96,12 @@ namespace Nero.Client.Map
             Layer = new Layer[(int)Layers.count];
             for (int i = 0; i < Layer.Length; i++)            
                 Layer[i] = new Layer();
+
+            Attributes = new List<AttributeInfo>[Size.x + 1, Size.y + 1];
+            for (int x = 0; x <= Size.x; x++)
+                for (int y = 0; y <= Size.y; y++)
+                    Attributes[x, y] = new List<AttributeInfo>();
         }
-
-
 
         /// <summary>
         /// Desenha o chão
@@ -124,6 +134,37 @@ namespace Nero.Client.Map
                 else
                     Layer[(int)i].Draw(target);
         }
+
+        /// <summary>
+        /// Desenha os atributos :: EDITOR ONLY
+        /// </summary>
+        /// <param name="target"></param>
+        public void DrawAttributes(RenderTarget target)
+        {
+            var ed = Game.GetScene().FindControl<frmEditor_Map>();
+            var start = Camera.Start();
+            var end = Camera.End(this);
+
+            for (int x = start.x; x <= end.x; x++)
+                for (int y = start.y; y <= end.y; y++)
+                {
+                    if (Attributes[x,y].Count > 0 && Attributes[x,y].Any(i => i.Type == ed.CurrentAttribute))
+                    {
+                        var text = "B";
+                        var c = Color.Red;
+                        switch(ed.CurrentAttribute)
+                        {
+                            case AttributeTypes.Warp:
+                                text = "W";
+                                c = Color.Blue;
+                                break;
+                        }
+
+                        DrawText(target, text, 14, new Vector2(x, y) * 32 + new Vector2((32 - GetTextWidth(text, 14)) / 2, 2), c,1, new Color(30,30,30));
+                    }
+                }
+        }
+
 
         /// <summary>
         /// Atualiza o mapa
@@ -200,6 +241,44 @@ namespace Nero.Client.Map
             foreach (var i in chk_pos)
                 if (i.x >= 0 && i.x <= Size.x && i.y >= 0 && i.y <= Size.y)
                     l.chunks[(int)i.x, (int)i.y]?.VerifyAutotile();
+        }
+
+        /// <summary>
+        /// Adiciona um atributo
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="type"></param>
+        /// <param name="args"></param>
+        public void AddAttribute(Vector2 position, AttributeTypes type, string[] args)
+        {
+            if (position.x < 0 || position.x > Size.x) return;
+            if (position.y < 0 || position.y > Size.y) return;
+
+            var pos = position.ToInt2();
+            if (!Attributes[pos.x, pos.y].Any(i => i.Type == type))
+                Attributes[pos.x, pos.y].Add(new AttributeInfo(type, args));
+            else
+            {
+                var find = Attributes[pos.x, pos.y].FindLast(i => i.Type == type);
+                find.Type = type;
+                find.args = args;
+            }
+        }
+
+        /// <summary>
+        /// Remove um atributo
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="type"></param>
+        public void RemoveAttribute(Vector2 position, AttributeTypes type)
+        {
+            if (position.x < 0 || position.x > Size.x) return;
+            if (position.y < 0 || position.y > Size.y) return;
+
+            var pos = position.ToInt2();
+            var find = Attributes[pos.x, pos.y].FindLast(i => i.Type == type);
+            if (find != null)
+                Attributes[pos.x, pos.y].Remove(find);
         }
     }
 }

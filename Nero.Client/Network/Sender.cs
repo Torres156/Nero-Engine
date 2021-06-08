@@ -1,4 +1,6 @@
 using LiteNetLib.Utils;
+using Nero.Client.Map;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +11,17 @@ namespace Nero.Client.Network
     {
         enum Packets
         {
-            Register, Login, CreateCharacter, UseCharacter, MapAnswer,
+            Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
+        }
+
+        /// <summary>
+        /// Salva o mapa
+        /// </summary>
+        public static void MapSave()
+        {
+            var buffer = Create(Packets.MapSave);
+            buffer.Put(JsonConvert.SerializeObject(MapInstance.Current));
+            SendTo(buffer);
         }
 
         /// <summary>

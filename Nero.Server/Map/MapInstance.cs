@@ -70,10 +70,11 @@ namespace Nero.Server.Map
         #endregion
 
 
-        public int Revision = 0;                // Revisão do mapa
-        public string Name = "";                // Nome do mapa
-        public Int2 Size = new Int2(59, 31);    // Tamanho do mapa
-        public Layer[] Layer;                   // Camadas
+        public int Revision = 0;                    // Revisão do mapa
+        public string Name = "";                    // Nome do mapa
+        public Int2 Size = new Int2(59, 31);        // Tamanho do mapa
+        public Layer[] Layer;                       // Camadas
+        public List<AttributeInfo>[,] Attributes;   // Atributos
 
 
         // Client Only
@@ -89,6 +90,11 @@ namespace Nero.Server.Map
             Layer = new Layer[(int)Layers.count];
             for (int i = 0; i < Layer.Length; i++)
                 Layer[i] = new Layer();
+
+            Attributes = new List<AttributeInfo>[Size.x + 1, Size.y + 1];
+            for (int x = 0; x <= Size.x; x++)
+                for (int y = 0; y <= Size.y; y++)
+                    Attributes[x, y] = new List<AttributeInfo>();
         }
 
         /// <summary>

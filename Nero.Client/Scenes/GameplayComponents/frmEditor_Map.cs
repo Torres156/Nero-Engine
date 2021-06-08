@@ -1,3 +1,6 @@
+using Nero.Client.Map;
+using Nero.Client.Network;
+using Nero.Client.Player;
 using Nero.Client.World;
 using Nero.Control;
 using Nero.SFML.Graphics;
@@ -17,11 +20,14 @@ namespace Nero.Client.Scenes.GameplayComponents
         // Publics
         public Rectangle SelectTile = new Rectangle(Vector2.Zero, Vector2.One); // Seleção do tile
         public int CurrentLayer = 0;                                            // Camada usada
+        public AttributeTypes CurrentAttribute = AttributeTypes.Block;          // Atributo atual
 
 
         // Privates
         int hoverLayer = -1;
+        int hoverAttr = -1;
         LanguageWords words = new LanguageWords();
+        LanguageWords attrwords = new LanguageWords();
         bool _press;
         RenderTexture render;
         bool _close;
@@ -59,7 +65,6 @@ namespace Nero.Client.Scenes.GameplayComponents
             OutlineThickness = 1;
             Visible = false;
 
-
             pTile = new Panel(this)
             {
                 Name = "pTile",
@@ -72,7 +77,7 @@ namespace Nero.Client.Scenes.GameplayComponents
 
             pAttribute = new Panel(this)
             {
-                Size = new Vector2(Size.x - 10, Size.y - 65),
+                Size = new Vector2(Size.x - 10, Size.y - 70),
                 Position = new Vector2(5, 25),
                 OutlineThickness = 1,
                 OutlineColor = new Color(90, 90, 90),
@@ -145,7 +150,6 @@ namespace Nero.Client.Scenes.GameplayComponents
                 FillColor = Color.Transparent,
             };
 
-
             btnClear = new Button(this)
             {
                 Texture = new Texture("res/ui/mapeditor/clear.png"),
@@ -162,6 +166,7 @@ namespace Nero.Client.Scenes.GameplayComponents
                 FillColor = Color.Transparent,
                 isChecked = true,
                 Checked = true,
+                CanAutoCheck = false,
             };
 
             btnAttribute = new Button(this)
@@ -171,6 +176,7 @@ namespace Nero.Client.Scenes.GameplayComponents
                 Position = new Vector2(4 + 22 * 9, 0),
                 FillColor = Color.Transparent,
                 isChecked = true,
+                CanAutoCheck = false,
             };
 
             vsTop = new VScroll(pTile)
@@ -202,21 +208,116 @@ namespace Nero.Client.Scenes.GameplayComponents
             btnClear.OnMouseReleased += BtnClear_OnMouseReleased;
             btnSave.OnMouseReleased += BtnSave_OnMouseReleased;
             OnVisibleChanged += FrmEditor_Map_OnVisibleChanged1;
+            btnTile.OnMouseReleased += BtnTile_OnMouseReleased;
+            btnAttribute.OnMouseReleased += BtnAttribute_OnMouseReleased;
+            pAttribute.OnDraw += PAttribute_OnDraw;
+            pAttribute.OnMouseMove += PAttribute_OnMouseMove;
+            pAttribute.OnMouseReleased += PAttribute_OnMouseReleased;
 
             // Words
             words.AddText("Camadas", "Layers");
+
+            // Atributos
+            attrwords.AddText("Bloqueio", "Block");
+            attrwords.AddText("Teleporte", "Warp");
+        }
+
+        /// <summary>
+        /// Clique do mouse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PAttribute_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            if (hoverAttr > -1)
+                CurrentAttribute = (AttributeTypes)hoverAttr;
+        }
+
+        /// <summary>
+        /// Movimento do mouse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PAttribute_OnMouseMove(ControlBase sender, Vector2 e)
+        {
+            var gp = sender.GlobalPosition();
+            hoverAttr = -1;
+
+            int yMax = 12;
+            var distW = (sender.Size.x - 10) / 3;
+            for (int i = 0; i < attrwords.item.Count; i++)
+            {
+                var pos = gp + new Vector2(13 + distW * (i / yMax), 5 + 24 * (i % yMax));
+                if (new Rectangle(pos, new Vector2(110, 20)).Contains(e))
+                {
+                    hoverAttr = i;
+                    Game.SetCursor(SFML.Window.Cursor.CursorType.Hand);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Painel de atributo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="target"></param>
+        private void PAttribute_OnDraw(ControlBase sender, RenderTarget target)
+        {
+            var gp = sender.GlobalPosition();
+
+            // Camadas
+            var distW = (sender.Size.x - 10) / 3;
+            int yMax = 12;
+            for (int i = 0; i < attrwords.item.Count; i++)
+            {
+                if (i == (int)CurrentAttribute)
+                    DrawRoundedRectangle(target, gp + new Vector2(13 + distW * (i / yMax), 5 + 24 * (i % yMax)), new Vector2(110, 20), new Color(255, 255, 255, 10), 8, 8, 1, new Color(93, 162, 251));
+                else if (i == hoverAttr)
+                    DrawRoundedRectangle(target, gp + new Vector2(13 + distW * (i / yMax), 5 + 24 * (i % yMax)), new Vector2(110, 20), new Color(255, 255, 255, 10), 8, 8);
+
+                DrawText(target, attrwords.GetText(i), 12, gp + new Vector2(13 + distW * (i / yMax) + (110 - GetTextWidth(attrwords.GetText(i))) / 2, 5 + 24 * (i % yMax) + 2), Color.White);
+            }
+        }
+
+        /// <summary>
+        /// Atributos
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnAttribute_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            btnTile.Checked = false;
+            btnAttribute.Checked = true;
+
+            pTile.Hide();
+            pAttribute.Show();
+        }
+
+        /// <summary>
+        /// Tileset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnTile_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
+        {
+            btnTile.Checked = true;
+            btnAttribute.Checked = false;
+
+            pTile.Show();
+            pAttribute.Hide();
         }
 
         private void FrmEditor_Map_OnVisibleChanged1(ControlBase sender)
         {
-            if (Visible)            
+            if (Visible)
                 _close = false;
             else
             {
                 if (!_close)
-                    Map.MapInstance.Current = Map.MapInstance.Create();
+                    Map.MapInstance.Current = MapInstance.Load(Character.My.MapID);
             }
-            
+
         }
 
         /// <summary>
@@ -227,7 +328,10 @@ namespace Nero.Client.Scenes.GameplayComponents
         private void BtnSave_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
             _close = true;
-            Map.MapInstance.Save();
+            MapInstance.Current.Revision++;
+            MapInstance.Save();
+            Sender.MapSave();
+
             Hide();
         }
 
@@ -238,12 +342,18 @@ namespace Nero.Client.Scenes.GameplayComponents
         /// <param name="e"></param>
         private void BtnClear_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
+            var m = Map.MapInstance.Current;
             if (pTile.Visible)
-            {
-                var m = Map.MapInstance.Current;
+            {                
                 for (int x = 0; x <= m.Size.x; x++)
                     for (int y = 0; y <= m.Size.y; y++)
                         m.RemoveChunk(CurrentLayer, new Vector2(x, y));
+            }
+            else if(pAttribute.Visible)
+            {
+                for (int x = 0; x <= m.Size.x; x++)
+                    for (int y = 0; y <= m.Size.y; y++)
+                        m.RemoveAttribute(new Vector2(x, y), CurrentAttribute);
             }
         }
 
@@ -254,10 +364,10 @@ namespace Nero.Client.Scenes.GameplayComponents
         /// <param name="e"></param>
         private void BtnFill_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
+            var m = Map.MapInstance.Current;
             if (pTile.Visible)
             {
                 var size = cmbTileType.SelectIndex == 0 ? SelectTile.size : Vector2.One;
-                var m = Map.MapInstance.Current;
                 int countX = m.Size.x / (int)size.x + 1;
                 int countY = m.Size.y / (int)size.y + 1;
 
@@ -269,6 +379,22 @@ namespace Nero.Client.Scenes.GameplayComponents
                                 m.AddChunk(CurrentLayer, (Map.ChunkTypes)cmbTileType.SelectIndex, txtTileID.Value, SelectTile.position + new Vector2(x2, y2),
                                     new Vector2(x * size.x + x2, y * size.y + y2));
                     }
+            }
+            else if (pAttribute.Visible)
+            {
+                var args = new string[] { };
+
+                switch(CurrentAttribute)
+                {
+                    case AttributeTypes.Warp:
+                        
+                        break;
+                }
+
+                for (int x = 0; x <= m.Size.x; x++)
+                    for (int y = 0; y <= m.Size.y; y++)                    
+                        m.AddAttribute(new Vector2(x, y), CurrentAttribute, args);
+                    
             }
         }
 

@@ -35,10 +35,9 @@ namespace Nero.Server.Helpers
         /// <param name="position"></param>
         public static void GoMap(Character player, int mapID, Vector2 position, bool startingGame = false)
         {
+            // Remove o personagem do mapa anterior
             if (startingGame)
-            {
-                // Remover o personagem
-            }
+                Sender.RemoveCharacter(player);
 
             // Posição
             player.MapID = mapID;

@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Nero.Client.Helpers;
+using Nero.Client.Map;
 using Nero.Client.Player;
 using Nero.Client.Scenes.GameplayComponents;
 using Nero.Client.World;
@@ -51,17 +52,39 @@ namespace Nero.Client.Scenes
             {
                 Camera.Begin();
 
+                // Ground
                 Map.MapInstance.Current?.DrawGround(target);
 
-                Character.My?.Draw(target);
+                for (int y = Camera.Start().y; y <= Camera.End(MapInstance.Current).y; y++)
+                {
+                    // Players
+                    foreach (var i in Character.Items)
+                        if ((int)i.Position.y == y)
+                            i.Draw(target);
+
+                    // Me
+                    if ((int)Character.My.Position.y == y)
+                        Character.My?.Draw(target);
+                }
+                
+                // Fringe
+                Map.MapInstance.Current?.DrawFringe(target);
+
+
+                // # Textos #
+
+                // Players
+                foreach (var i in Character.Items)
+                    i.DrawTexts(target);
                 Character.My?.DrawTexts(target);
 
-
-                Map.MapInstance.Current?.DrawFringe(target);
 
                 // Editor de mapa
                 if (FindControl<frmEditor_Map>().Visible)
                 {
+                    if (FindControl<frmEditor_Map>().pAttribute.Visible)
+                        MapInstance.Current.DrawAttributes(target);
+
                     if (FindControl<frmEditor_Map>().btnGrid.Checked)
                     {
                         var end = (Vector2)Camera.End(Map.MapInstance.Current);
@@ -120,6 +143,8 @@ namespace Nero.Client.Scenes
             }
 
             // Personagem
+            foreach (var i in Character.Items)
+                i.Update();
             if (Character.My != null)
             {
                 Character.My.Update();
