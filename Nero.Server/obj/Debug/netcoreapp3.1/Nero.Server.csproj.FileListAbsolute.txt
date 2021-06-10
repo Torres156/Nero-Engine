@@ -80,3 +80,17 @@ D:\Projetos\Nero\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.runtime
 D:\Projetos\Nero\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.runtimeconfig.dev.json
 D:\Projetos\Nero\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.dll
 D:\Projetos\Nero\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.pdb
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.exe
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.deps.json
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.runtimeconfig.json
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.runtimeconfig.dev.json
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.dll
+D:\Projeto\Nero-Engine\Build\Nero.Server\netcoreapp3.1\Nero.Server.pdb
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.csprojAssemblyReference.cache
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.AssemblyInfoInputs.cache
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.AssemblyInfo.cs
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.csproj.CoreCompileInputs.cache
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.csproj.CopyComplete
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.dll
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.pdb
+D:\Projeto\Nero-Engine\Nero.Server\obj\Debug\netcoreapp3.1\Nero.Server.genruntimeconfig.cache

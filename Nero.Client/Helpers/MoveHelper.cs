@@ -1,3 +1,4 @@
+using Nero.Client.Map;
 using Nero.Client.Network;
 using Nero.Client.Player;
 using Nero.Client.World;
@@ -81,6 +82,10 @@ namespace Nero.Client.Helpers
             var m = Map.MapInstance.Current;
             if (nextPos.x < 0 || nextPos.y < 0) return false;
             if (nextPos.x > m.Size.x || nextPos.y > m.Size.y) return false;
+
+            var attr = m.Attributes[(int)nextPos.x, (int)nextPos.y];
+            if (attr.Any(i => i.Type == AttributeTypes.Block)) // Bloqueios
+                return false;
 
             if (Character.Items.Any(i => i.Position.Equals(nextPos)))
                 return false;

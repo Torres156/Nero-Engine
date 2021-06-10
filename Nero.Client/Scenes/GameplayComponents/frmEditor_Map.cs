@@ -21,6 +21,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         public Rectangle SelectTile = new Rectangle(Vector2.Zero, Vector2.One); // Seleção do tile
         public int CurrentLayer = 0;                                            // Camada usada
         public AttributeTypes CurrentAttribute = AttributeTypes.Block;          // Atributo atual
+        public string[] args = { };                                             // Variaveis
 
 
         // Privates
@@ -230,7 +231,16 @@ namespace Nero.Client.Scenes.GameplayComponents
         private void PAttribute_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
         {
             if (hoverAttr > -1)
+            {
+                args = new string[] { };
+                switch((AttributeTypes) hoverAttr)
+                {
+                    case AttributeTypes.Warp:
+                        Game.GetScene().FindControl<frmEditor_Map_Warp>().ShowDialog();
+                        break;
+                }
                 CurrentAttribute = (AttributeTypes)hoverAttr;
+            }
         }
 
         /// <summary>

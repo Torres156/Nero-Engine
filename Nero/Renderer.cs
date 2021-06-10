@@ -222,7 +222,7 @@ namespace Nero
         {
             lines[0] = new Vertex(pos1, color1);
             lines[1] = new Vertex(pos2, color2);
-            target.Draw(lines, PrimitiveType.Lines);
+            target.Draw(lines,0,2, PrimitiveType.Lines);
         }
 
         /// <summary>

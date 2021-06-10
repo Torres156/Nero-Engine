@@ -66,7 +66,7 @@ namespace Nero.Client.Scenes
                     if ((int)Character.My.Position.y == y)
                         Character.My?.Draw(target);
                 }
-                
+
                 // Fringe
                 Map.MapInstance.Current?.DrawFringe(target);
 
@@ -223,10 +223,10 @@ namespace Nero.Client.Scenes
 
                 // Modo desenho
                 if (form_MapEditor.Visible)
-                    if (form_MapEditor.Visible)
+                {
+                    if (e.Button == Mouse.Button.Left)
                     {
-                        if (e.Button == Mouse.Button.Left)
-                        {
+                        if (form_MapEditor.pTile.Visible)
                             if (form_MapEditor.cmbTileType.SelectIndex == 0)
                             {
                                 for (int x2 = 0; x2 < form_MapEditor.SelectTile.size.x; x2++)
@@ -237,12 +237,18 @@ namespace Nero.Client.Scenes
                             else
                                 Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
                                     form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
+                        else if (form_MapEditor.pAttribute.Visible)
+                        {                           
+                            MapInstance.Current.AddAttribute(mp.ToVector2(), form_MapEditor.CurrentAttribute, form_MapEditor.args);
                         }
-                        else if (e.Button == Mouse.Button.Right)
-                            Map.MapInstance.Current.RemoveChunk(form_MapEditor.CurrentLayer, mp.ToVector2());
-
-
                     }
+                    else if (e.Button == Mouse.Button.Right)
+                        if (form_MapEditor.pTile.Visible)
+                            Map.MapInstance.Current.RemoveChunk(form_MapEditor.CurrentLayer, mp.ToVector2());
+                        else if (form_MapEditor.pAttribute.Visible)
+                            MapInstance.Current.RemoveAttribute(mp.ToVector2(), form_MapEditor.CurrentAttribute);
+
+                }
             }
 
             return result;

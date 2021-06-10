@@ -10,6 +10,7 @@ namespace Nero.Client.World
         const string Ext = "png";
         public static List<Texture> Character;
         public static List<Texture> Tileset;
+        public static List<Texture> Fog;
 
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace Nero.Client.World
         {
             LoadCharacters();
             LoadTileset();
+            LoadFog();
         }
 
         /// <summary>
@@ -59,6 +61,23 @@ namespace Nero.Client.World
             }
         }
 
+        /// <summary>
+        /// Carrega os tileset
+        /// </summary>
+        public static void LoadFog()
+        {
+            if (Fog != null)
+                return;
 
+            var path = Environment.CurrentDirectory + "/res/fog/";
+            int i = 1;
+            Fog = new List<Texture>();
+            Fog.Add(null);
+            while (File.Exists(path + $"{i}.{Ext}"))
+            {
+                Fog.Add(new Texture(path + $"{i}.{Ext}"));
+                i++;
+            }
+        }
     }
 }
