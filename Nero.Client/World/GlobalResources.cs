@@ -11,6 +11,7 @@ namespace Nero.Client.World
         public static List<Texture> Character;
         public static List<Texture> Tileset;
         public static List<Texture> Fog;
+        public static List<Texture> Panorama;
 
 
         /// <summary>
@@ -21,6 +22,7 @@ namespace Nero.Client.World
             LoadCharacters();
             LoadTileset();
             LoadFog();
+            LoadPanorama();
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace Nero.Client.World
         }
 
         /// <summary>
-        /// Carrega os tileset
+        /// Carrega os fogs
         /// </summary>
         public static void LoadFog()
         {
@@ -76,6 +78,25 @@ namespace Nero.Client.World
             while (File.Exists(path + $"{i}.{Ext}"))
             {
                 Fog.Add(new Texture(path + $"{i}.{Ext}"));
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Carrega os panoramas
+        /// </summary>
+        public static void LoadPanorama()
+        {
+            if (Panorama != null)
+                return;
+
+            var path = Environment.CurrentDirectory + "/res/panorama/";
+            int i = 1;
+            Panorama = new List<Texture>();
+            Panorama.Add(null);
+            while (File.Exists(path + $"{i}.{Ext}"))
+            {
+                Panorama.Add(new Texture(path + $"{i}.{Ext}", true) { Smooth = true }); 
                 i++;
             }
         }

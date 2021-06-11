@@ -50,13 +50,16 @@ namespace Nero.Client.Scenes
         /// <param name="states"></param>
         public override void Draw(RenderTarget target, RenderStates states)
         {
-            if (Map.MapInstance.Current != null)
+            if (MapInstance.Current != null)
             {
+                // Panorama
+                MapInstance.Current.DrawPanorama(target);
+
                 Camera.Begin();
 
                 // Ground
                 if (Environment.TickCount64 > tmrMapDelay)
-                    Map.MapInstance.Current?.DrawGround(target);
+                    MapInstance.Current.DrawGround(target);
 
                 for (int y = Camera.Start().y; y <= Camera.End(MapInstance.Current).y; y++)
                 {
@@ -73,13 +76,16 @@ namespace Nero.Client.Scenes
                 // Fringe
                 if (Environment.TickCount64 > tmrMapDelay)
                 {
-                    Map.MapInstance.Current?.DrawFringe(target);
+                    Map.MapInstance.Current.DrawFringe(target);
                     tmrMapDelay = Environment.TickCount64 + 10;
                 }
 
+                Camera.End();
+                // Fog
+                MapInstance.Current.DrawFog(target);
+                Camera.Begin();
 
                 // # Textos #
-
                 // Players
                 foreach (var i in Character.Items)
                     i.DrawTexts(target);

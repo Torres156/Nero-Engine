@@ -214,6 +214,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             pAttribute.OnDraw += PAttribute_OnDraw;
             pAttribute.OnMouseMove += PAttribute_OnMouseMove;
             pAttribute.OnMouseReleased += PAttribute_OnMouseReleased;
+            btnProperties.OnMouseReleased += (sender, e) => Game.GetScene().FindControl<frmEditor_Map_Properties>().ShowDialog();
 
             // Words
             words.AddText("Camadas", "Layers");

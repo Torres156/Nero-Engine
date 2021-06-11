@@ -57,7 +57,7 @@ namespace Nero.Client.Map
             if (!File.Exists(filePath))
                 return Create();
 
-            var data = MemoryService.Decompress( File.ReadAllBytes(filePath));
+            var data = MemoryService.Decompress(File.ReadAllBytes(filePath));
             var json = Encoding.UTF8.GetString(data);
             var m = JsonConvert.DeserializeObject<MapInstance>(json);
             for (int i = 0; i < (int)Layers.count; i++)
@@ -78,15 +78,21 @@ namespace Nero.Client.Map
         public Int2 Size = new Int2(59, 31);        // Tamanho do mapa
         public Layer[] Layer;                       // Camadas
         public List<AttributeInfo>[,] Attributes;   // Atributos
-
+        public ZoneTypes Zone = ZoneTypes.Normal;   // Zona de mapa
+        public string MusicName = "None";           // Nome da Musica
+        public int FogSpeed = 80;                   // Velocidade do fog
+        public byte FogOpacity = 20;                // Opacidade do fog
+        public int FogID = 0;                       // ID do gráfico do fog
+        public bool FogBlend = false;               // Blend Add no Fog
+        public int PanoramaID = 0;                  // Gráfico do panorama
+        public int[] Warps = new int[4];            // Teleportes
 
         // Client Only
         [JsonIgnore]
-        public int offWater { get; private set; }   // Animação de frame para Água
-        [JsonIgnore]
-        bool Animation = false;                     // Animação de camada
-        [JsonIgnore]
-        long timerAnimation;
+        public int offWater { get; private set; }   // Animação de frame para Água        
+        bool Animation = false;                     // Animação de camada        
+        long timerAnimation;                        // Tempo para animação
+        float offFog;                               // Fog move
 
         /// <summary>
         /// Construtor
@@ -94,13 +100,26 @@ namespace Nero.Client.Map
         private MapInstance()
         {
             Layer = new Layer[(int)Layers.count];
-            for (int i = 0; i < Layer.Length; i++)            
+            for (int i = 0; i < Layer.Length; i++)
                 Layer[i] = new Layer();
 
             Attributes = new List<AttributeInfo>[Size.x + 1, Size.y + 1];
             for (int x = 0; x <= Size.x; x++)
                 for (int y = 0; y <= Size.y; y++)
                     Attributes[x, y] = new List<AttributeInfo>();
+        }
+
+        /// <summary>
+        /// Desenha o panorama
+        /// </summary>
+        /// <param name="target"></param>
+        public void DrawPanorama(RenderTarget target)
+        {
+            if (PanoramaID == 0)
+                return;
+
+            var tex = GlobalResources.Panorama[PanoramaID];
+            DrawTexture(target, tex, new Rectangle(Vector2.Zero, Game.Size));
         }
 
         /// <summary>
@@ -136,6 +155,29 @@ namespace Nero.Client.Map
         }
 
         /// <summary>
+        /// Desenha o fog
+        /// </summary>
+        /// <param name="target"></param>
+        public void DrawFog(RenderTarget target)
+        {
+            if (FogID == 0)
+                return;
+
+            var tex = GlobalResources.Fog[FogID];
+            var countX = (int)(Game.Size.x / 256) + 1;
+            var countY = (int)(Game.Size.y / 256) + 1;
+
+            for (int x = 0; x <= countX; x++)
+                for (int y = 0; y <= countY; y++)
+                    DrawTexture(target, tex, new Rectangle(new Vector2(x, y) * 256 - new Vector2(offFog), new Vector2(256)),
+                        new Rectangle(Vector2.Zero, tex.size), new Color(255, 255, 255, FogOpacity), Vector2.Zero, 0,
+                        FogBlend ? new RenderStates(BlendMode.Add) : RenderStates.Default);
+
+            offFog += FogSpeed * Game.DeltaTime;
+            if (offFog > 256) offFog = 0;
+        }
+
+        /// <summary>
         /// Desenha os atributos :: EDITOR ONLY
         /// </summary>
         /// <param name="target"></param>
@@ -148,11 +190,11 @@ namespace Nero.Client.Map
             for (int x = start.x; x <= end.x; x++)
                 for (int y = start.y; y <= end.y; y++)
                 {
-                    if (Attributes[x,y].Count > 0 && Attributes[x,y].Any(i => i.Type == ed.CurrentAttribute))
+                    if (Attributes[x, y].Count > 0 && Attributes[x, y].Any(i => i.Type == ed.CurrentAttribute))
                     {
                         var text = "B";
                         var c = Color.Red;
-                        switch(ed.CurrentAttribute)
+                        switch (ed.CurrentAttribute)
                         {
                             case AttributeTypes.Warp:
                                 text = "W";
@@ -160,7 +202,7 @@ namespace Nero.Client.Map
                                 break;
                         }
 
-                        DrawText(target, text, 14, new Vector2(x, y) * 32 + new Vector2((32 - GetTextWidth(text, 14)) / 2, 2), c,1, new Color(30,30,30));
+                        DrawText(target, text, 14, new Vector2(x, y) * 32 + new Vector2((32 - GetTextWidth(text, 14)) / 2, 2), c, 1, new Color(30, 30, 30));
                     }
                 }
         }
@@ -212,10 +254,10 @@ namespace Nero.Client.Map
             Position + new Vector2(-1,0), Position + new Vector2(1,0),
             Position + new Vector2(-1,1), Position + new Vector2(0,1), Position + new Vector2(1,1)};
 
-            foreach(var i in chk_pos)            
-                if (i.x >= 0 && i.x <= Size.x && i.y >= 0 && i.y <= Size.y)                    
+            foreach (var i in chk_pos)
+                if (i.x >= 0 && i.x <= Size.x && i.y >= 0 && i.y <= Size.y)
                     l.chunks[(int)i.x, (int)i.y]?.VerifyAutotile();
-             
+
         }
 
         /// <summary>
@@ -231,8 +273,8 @@ namespace Nero.Client.Map
             if (Position.x < 0 || Position.x > Size.x) return;
             if (Position.y < 0 || Position.y > Size.y) return;
             var l = Layer[currentlayer];
-                        
-            l.chunks[(int)Position.x, (int)Position.y] = null;   
+
+            l.chunks[(int)Position.x, (int)Position.y] = null;
 
             Vector2[] chk_pos = { Position + new Vector2(-1,-1), Position + new Vector2(0, -1), Position + new Vector2(1, -1),
             Position + new Vector2(-1,0), Position + new Vector2(1,0),
@@ -279,6 +321,32 @@ namespace Nero.Client.Map
             var find = Attributes[pos.x, pos.y].FindLast(i => i.Type == type);
             if (find != null)
                 Attributes[pos.x, pos.y].Remove(find);
+        }
+
+        /// <summary>
+        /// Altera o tamanho do mapa
+        /// </summary>
+        /// <param name="valueX"></param>
+        /// <param name="valueY"></param>
+        public void SetSize(int valueX, int valueY)
+        {
+            foreach (var i in Layer)
+                i.SetSize(valueX, valueY);
+
+            var copyAttr = new List<AttributeInfo>[valueX + 1, valueY + 1];
+            for (int x = 0; x <= valueX; x++)
+                for (int y = 0; y <= valueY; y++)
+                    copyAttr[x, y] = new List<AttributeInfo>();
+
+            int copyX = Math.Min(valueX, Size.x);
+            int copyY = Math.Min(valueY, Size.y);
+            for (int x = 0; x <= copyX; x++)
+                for (int y = 0; y <= copyY; y++)
+                    copyAttr[x, y] = Attributes[x, y];
+
+            Attributes = copyAttr;
+
+            Size = new Int2(valueX, valueY);
         }
     }
 }

@@ -75,12 +75,14 @@ namespace Nero.Server.Map
         public Int2 Size = new Int2(59, 31);        // Tamanho do mapa
         public Layer[] Layer;                       // Camadas
         public List<AttributeInfo>[,] Attributes;   // Atributos
-
-
-        // Client Only
-        public int offWater { get; private set; }   // Animação de frame para Água
-        bool Animation = false;                     // Animação de camada
-        long timerAnimation;
+        public ZoneTypes Zone = ZoneTypes.Normal;   // Zona de mapa
+        public string MusicName = "None";           // Nome da Musica
+        public int FogSpeed = 80;                   // Velocidade do fog
+        public byte FogOpacity = 20;                // Opacidade do fog
+        public int FogID = 0;                       // ID do gráfico do fog
+        public bool FogBlend = false;               // Blend Add no Fog
+        public int PanoramaID = 0;                  // Gráfico do panorama
+        public int[] Warps = new int[4];            // Teleportes
 
         /// <summary>
         /// Construtor

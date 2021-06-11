@@ -74,5 +74,22 @@ namespace Nero.Client.Map
             var c = chunks[(int)position.x,(int)position.y];
             return c != null && c.type == ChunkTypes.Water && c.TileID == chunk.TileID && c.Source.Equals(chunk.Source);
         }
+
+        /// <summary>
+        /// Altera a quantidade de chunks
+        /// </summary>
+        /// <param name="valueX"></param>
+        /// <param name="valueY"></param>
+        public void SetSize(int valueX, int valueY)
+        {
+            var copyChunks = new Chunk[valueX + 1, valueY + 1];
+            int copyX = Math.Min(valueX, Map.Size.x);
+            int copyY = Math.Min(valueY, Map.Size.y);
+            for (int x = 0; x <= copyX; x++)
+                for (int y = 0; y <= copyY; y++)
+                    copyChunks[x, y] = chunks[x, y];
+
+            chunks = copyChunks;
+        }
     }
 }

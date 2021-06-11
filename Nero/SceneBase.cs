@@ -235,13 +235,13 @@ namespace Nero
 
             if (formDragged.form != null) return true;
 
+            if (priority != null && priority.MousePressed(e)) return true;
+
             if (form_Priority != null)
             {
                 form_Priority.MousePressed(e);
                 return true;
             }
-
-            if (priority != null && priority.MousePressed(e)) return true;
 
             if (forms.Count > 0)
                 for (int i = forms.Count - 1; i >= 0; i--)
@@ -272,14 +272,14 @@ namespace Nero
                 return true;
             }
 
+            if (priority != null && priority.Visible && priority.MouseMoved(e)) return true;
+
             if (form_Priority != null)
             {
                 form_Priority.MouseMoved(e);
                 return true;
             }
-
-            if (priority != null && priority.Visible && priority.MouseMoved(e)) return true;
-
+                        
             if (forms.Count > 0)
                 for (int i = forms.Count - 1; i >= 0; i--)
                     if (forms[i] != null && forms[i].Visible && forms[i].MouseMoved(e)) return true;
@@ -314,14 +314,14 @@ namespace Nero
                 return true;
             }
 
+            if (priority != null && priority.Visible && priority.MouseReleased(e)) return true;
+
             if (form_Priority != null)
             {
                 form_Priority.MouseReleased(e);
                 return true;
             }
-
-            if (priority != null && priority.Visible && priority.MouseReleased(e)) return true;
-
+                        
             if (forms.Count > 0)
                 for (int i = forms.Count - 1; i >= 0; i--)
                     if (forms[i] != null && forms[i].Visible && forms[i].MouseReleased(e)) return true;
