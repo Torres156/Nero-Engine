@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <StartupObject>Nero.Client.Program</StartupObject>
     <AssemblyName>Nero.Client</AssemblyName>
     <RootNamespace>Nero.Client</RootNamespace>

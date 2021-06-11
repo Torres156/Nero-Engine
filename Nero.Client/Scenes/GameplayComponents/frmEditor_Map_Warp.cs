@@ -1,4 +1,4 @@
-﻿using Nero.Control;
+using Nero.Control;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -81,7 +81,11 @@ namespace Nero.Client.Scenes.GameplayComponents
 
             OnDraw += FrmEditor_Map_Warp_OnDraw;
             OnVisibleChanged += FrmEditor_Map_Warp_OnVisibleChanged;
-            btnSave.OnMouseReleased += (sender, e) => Hide();
+            btnSave.OnMouseReleased += (sender, e) =>
+            {
+                save = true;
+                Hide();
+            };
         }
 
         private void FrmEditor_Map_Warp_OnVisibleChanged(ControlBase sender)

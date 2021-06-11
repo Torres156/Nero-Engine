@@ -162,7 +162,7 @@ namespace Nero.Server.Network
             // Verifica se existe a conta
             if (!Account.Exist(accName))
             {
-                Sender.Alert(peer, $"A conta {accName} não foi encontrada!");
+                Sender.Alert(peer, $"A conta {accName} não foi encontrada!", $"The account {accName} is not found!");
                 return;
             }
 

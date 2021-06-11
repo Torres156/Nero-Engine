@@ -1,0 +1,17 @@
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.exe
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.deps.json
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.runtimeconfig.json
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.runtimeconfig.dev.json
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.dll
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\ref\Nero.Client.dll
+D:\Projetos\Nero\Nero-Engine\Build\Nero.Client\net5.0\Nero.Client.pdb
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.csprojAssemblyReference.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.AssemblyInfoInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.AssemblyInfo.cs
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.csproj.CoreCompileInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.csproj.CopyComplete
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.dll
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\ref\Nero.Client.dll
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.pdb
+D:\Projetos\Nero\Nero-Engine\Nero.Client\obj\Debug\net5.0\Nero.Client.genruntimeconfig.cache

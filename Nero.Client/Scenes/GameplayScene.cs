@@ -16,6 +16,8 @@ namespace Nero.Client.Scenes
     using static Renderer;
     class GameplayScene : SceneBase
     {
+        long tmrMapDelay = 0;
+
         /// <summary>
         /// Carrega os recursos
         /// </summary>
@@ -53,7 +55,8 @@ namespace Nero.Client.Scenes
                 Camera.Begin();
 
                 // Ground
-                Map.MapInstance.Current?.DrawGround(target);
+                if (Environment.TickCount64 > tmrMapDelay)
+                    Map.MapInstance.Current?.DrawGround(target);
 
                 for (int y = Camera.Start().y; y <= Camera.End(MapInstance.Current).y; y++)
                 {
@@ -68,7 +71,11 @@ namespace Nero.Client.Scenes
                 }
 
                 // Fringe
-                Map.MapInstance.Current?.DrawFringe(target);
+                if (Environment.TickCount64 > tmrMapDelay)
+                {
+                    Map.MapInstance.Current?.DrawFringe(target);
+                    tmrMapDelay = Environment.TickCount64 + 10;
+                }
 
 
                 // # Textos #
@@ -80,6 +87,7 @@ namespace Nero.Client.Scenes
 
 
                 // Editor de mapa
+
                 if (FindControl<frmEditor_Map>().Visible)
                 {
                     if (FindControl<frmEditor_Map>().pAttribute.Visible)
@@ -238,7 +246,7 @@ namespace Nero.Client.Scenes
                                 Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
                                     form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
                         else if (form_MapEditor.pAttribute.Visible)
-                        {                           
+                        {
                             MapInstance.Current.AddAttribute(mp.ToVector2(), form_MapEditor.CurrentAttribute, form_MapEditor.args);
                         }
                     }

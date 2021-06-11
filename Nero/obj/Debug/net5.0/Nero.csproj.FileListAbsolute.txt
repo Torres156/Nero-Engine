@@ -1,0 +1,12 @@
+D:\Projetos\Nero\Nero-Engine\Build\Nero\net5.0\Nero.deps.json
+D:\Projetos\Nero\Nero-Engine\Build\Nero\net5.0\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Build\Nero\net5.0\ref\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Build\Nero\net5.0\Nero.pdb
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.csprojAssemblyReference.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.AssemblyInfoInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.AssemblyInfo.cs
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.csproj.CoreCompileInputs.cache
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\ref\Nero.dll
+D:\Projetos\Nero\Nero-Engine\Nero\obj\Debug\net5.0\Nero.pdb

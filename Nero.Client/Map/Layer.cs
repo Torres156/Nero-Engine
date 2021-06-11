@@ -27,7 +27,7 @@ namespace Nero.Client.Map
         public void SetMap(MapInstance map, bool updateChunk = true)
         {
             this.Map = map;
-            if (updateChunk)
+            if (chunks == null)
                 chunks = new Chunk[map.Size.x + 1, map.Size.y + 1];
         }
 
