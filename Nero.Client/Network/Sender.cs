@@ -13,7 +13,26 @@ namespace Nero.Client.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter,
+            MoveCharacter, ChatSpeak, OnGame,
+        }
+
+        /// <summary>
+        /// Estou no game
+        /// </summary>
+        public static void OnGame()
+        {
+            SendTo(Create(Packets.OnGame));
+        }
+
+        /// <summary>
+        /// Fala no chat
+        /// </summary>
+        /// <param name="text"></param>
+        public static void ChatSpeak(string text)
+        {
+            var buffer = Create(Packets.ChatSpeak);
+            buffer.Put(text);
+            SendTo(buffer);
         }
 
         /// <summary>

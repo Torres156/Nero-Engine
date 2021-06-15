@@ -21,9 +21,7 @@ namespace Nero.Server.Helpers
 
             // Muda para cena de Gameplay
             Sender.ChangeToGameplay(player.peer);
-
-            // MENSAGEM PARA TODOS
-
+            
             // Entra no mapa
             GoMap(player, player.MapID, player.Position, true); 
         }

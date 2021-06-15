@@ -418,5 +418,34 @@ namespace Nero
             }
             return collection.ToArray();
         }
+
+        /// <summary>
+        /// Word Wrap
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="width"></param>
+        /// <param name="characterSize"></param>
+        /// <returns></returns>
+        public static string[] GetTextWrap(string text, int width, uint characterSize = 12)
+        {
+            var collection = new List<string>();
+            if (text.Length > 0)
+            {                
+                string line = "";
+                foreach (var i in text)
+                {                    
+
+                    if (GetTextWidth(line + i, characterSize) > width)
+                    {
+                        collection.Add(line.Trim());
+                        line = i.ToString();
+                    }
+                    else
+                        line += i;
+                }
+                if (line.Length > 0) collection.Add(line.Trim());
+            }
+            return collection.ToArray();
+        }
     }
 }

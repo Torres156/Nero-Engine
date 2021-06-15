@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Nero\Nero.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="World\" />
+  </ItemGroup>
+
 </Project>

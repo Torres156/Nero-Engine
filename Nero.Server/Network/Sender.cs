@@ -18,6 +18,71 @@ namespace Nero.Server.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
+            ChatText, ChatTextSystem
+        }
+
+        /// <summary>
+        /// Envia a mensagem ao jogador
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void ChatTextSystem(Character player, string text, Color color)
+        {
+            var buffer = Create(Packets.ChatTextSystem);
+            buffer.Put(text);
+            buffer.Put(color.ToInteger());
+            SendTo(player, buffer);
+        }
+
+        /// <summary>
+        /// Envia mensagem para todos
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void ChatTextToAll(string text, Color color)
+        {
+            var buffer = Create(Packets.ChatText);
+            buffer.Put(text);
+            buffer.Put(color.ToInteger());
+            SendToAll(buffer);
+        }
+
+        /// <summary>
+        /// Envia a mensagem aos jogadores na instancia
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void ChatTextToInstance(IInstance instance, string text, Color color)
+        {
+            var buffer = Create(Packets.ChatText);
+            buffer.Put(text);
+            buffer.Put(color.ToInteger());
+            SendToInstance(instance, buffer);
+        }
+
+        /// <summary>
+        /// Envia a mensagem aos jogadores na instancia
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void ChatTextToInstance(Character player, string text, Color color)
+            => ChatTextToInstance(player.GetInstance(), text, color);
+
+        /// <summary>
+        /// Envia a mensagem ao jogador
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void ChatText(Character player, string text, Color color)
+        {
+            var buffer = Create(Packets.ChatText);
+            buffer.Put(text);
+            buffer.Put(color.ToInteger());
+            SendTo(player, buffer);
         }
 
         /// <summary>

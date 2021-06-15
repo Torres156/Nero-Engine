@@ -16,7 +16,7 @@ namespace Nero.Server.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter,
+            MoveCharacter, ChatSpeak, OnGame
         }
 
         /// <summary>
@@ -37,7 +37,34 @@ namespace Nero.Server.Network
                 case Packets.MapAnswer: MapAnswer(peer, buffer); break;
                 case Packets.MapSave: MapSave(peer, buffer); break;
                 case Packets.MoveCharacter: MoveCharacter(peer, buffer); break;
+                case Packets.ChatSpeak: ChatSpeak(peer, buffer); break;
+                case Packets.OnGame: OnGame(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Entrou no jogo
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void OnGame(NetPeer peer, NetDataReader buffer)
+        {
+            var player = Character.Find(peer);
+
+            // Mensagens ao entrar
+            Sender.ChatText(player, $"Bem vindo ao {Constants.NAME}!", Color.White);
+            Sender.ChatTextToAll($"O jogador {player.Name} acabou de entrar!", Color.White);
+        }
+
+        /// <summary>
+        /// Fala no chat
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void ChatSpeak(NetPeer peer, NetDataReader buffer)
+        {
+            var text = buffer.GetString();
+            ChatHelper.ProcessSpeak(Character.Find(peer), text);
         }
 
         /// <summary>

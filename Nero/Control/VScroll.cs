@@ -42,6 +42,11 @@ namespace Nero.Control
         /// </summary>
         public bool Rounded = true;
 
+        /// <summary>
+        /// Bloqueia o scroll do mouse
+        /// </summary>
+        public bool BlockScrolled = false;
+
         public SceneBase scene;
 
         /// <summary>
@@ -107,9 +112,9 @@ namespace Nero.Control
         /// <param name="e"></param>
         /// <returns></returns>
         public override bool MouseScrolled(MouseWheelScrollEventArgs e)
-        {
+        {            
             var result = base.MouseScrolled(e);
-            if (Hover())
+            if (Hover() && !BlockScrolled)
             {
                 if (e.Wheel == Mouse.Wheel.VerticalWheel)
                 {

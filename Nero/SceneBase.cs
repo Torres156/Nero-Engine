@@ -145,7 +145,7 @@ namespace Nero
                     }
                     else
                     {
-                        tbox.Text = tbox.Text.Insert(TextBox.Focus.Character_CurrentIndex, e.Unicode);
+                        tbox.Text = tbox.Text.Insert(tbox.Text.Length > 0 ? TextBox.Focus.Character_CurrentIndex : 0, e.Unicode);
                         tbox.Character_CurrentIndex++;
                     }
 

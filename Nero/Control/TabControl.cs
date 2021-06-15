@@ -1,4 +1,4 @@
-﻿using Nero.SFML.Window;
+using Nero.SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,15 +17,19 @@ namespace Nero.Control
         public Color OutlineColor = new Color(60,60,60);
         public int OutlineThickness = 0;
         public int SelectIndex { get; set; } = 0;
+        public int TextOutlineThickness = 0;
+        public Color TextOutlineColor = new Color(0, 0, 0, 220);
 
         int hoverTab = -1;
 
         public event HandleDrawTabPanel OnDrawTabPanel;
         public event HandleMouseMoveTabPanel OnMouseMoveTabPanel;
         public event HandleMouseButtonTabPanel OnMousePressedTabPanel, OnMouseReleasedTabPanel;
+        public event HandleMouseScrolledTabPanel OnMouseScrolledTabPanel;
         public delegate void HandleDrawTabPanel(RenderTarget target, Panel panel, int Index);
         public delegate void HandleMouseMoveTabPanel(Panel panel, int Index, Vector2 e);
         public delegate void HandleMouseButtonTabPanel(Panel panel, int Index, MouseButtonEvent e);
+        public delegate void HandleMouseScrolledTabPanel(Panel panel, int Index, MouseWheelScrollEventArgs e);
 
         /// <summary>
         /// Construtor
@@ -104,7 +108,7 @@ namespace Nero.Control
                     DrawRoundedRectangle(target, gp + new Vector2(w, 0), new Vector2(GetTextWidth(name) + 20, TAB_HEIGHT - 4),
                         new Color(60,60,60), 8, 8);
 
-                DrawText(target, name, 12, gp + new Vector2(w + 8, 1), Color.White);
+                DrawText(target, name, 12, gp + new Vector2(w + 8, 1), Color.White,TextOutlineThickness, TextOutlineColor);
 
                 var cLine = new Color(90, 90, 90);
                 if (SelectIndex == i) cLine = new Color(93, 162, 251);
@@ -171,7 +175,7 @@ namespace Nero.Control
         /// <param name="e"></param>
         private void P_OnMouseScrolled(ControlBase sender, MouseWheelScrollEventArgs e)
         {
-            
+            OnMouseScrolledTabPanel?.Invoke((Panel)sender, TabPanels.IndexOf((Panel)sender), e);
         }
 
         /// <summary>

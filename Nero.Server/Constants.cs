@@ -8,5 +8,7 @@ namespace Nero.Server
     {
         public const int MAX_CHARACTERS = 5;
         public const int MAX_MAPS = 100;
+
+        public const string NAME = "Nero Game Engine";
     }
 }

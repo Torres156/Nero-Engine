@@ -39,7 +39,12 @@ namespace Nero.Control
         /// Modo arredondado
         /// </summary>
         public bool Rounded = true;
-                
+
+        /// <summary>
+        /// Bloquei o scroll
+        /// </summary>
+        public bool BlockScrolled = false;
+
 
         /// <summary>
         /// Construtor
@@ -103,7 +108,7 @@ namespace Nero.Control
         public override bool MouseScrolled(MouseWheelScrollEventArgs e)
         {
             var result = base.MouseScrolled(e);
-            if (Hover())
+            if (Hover() && !BlockScrolled)
             {
                 if (e.Wheel == Mouse.Wheel.VerticalWheel)
                 {

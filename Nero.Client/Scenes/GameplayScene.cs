@@ -25,6 +25,7 @@ namespace Nero.Client.Scenes
         {
             Map.MapInstance.Current = Map.MapInstance.Load(0);
             Camera.Initialize();
+            ChatHelper.Initialize();
 
             // Controles
             var controls = Utils.GetTypesInNamespace<ControlBase>(Assembly.GetExecutingAssembly(), "Nero.Client.Scenes.GameplayComponents");
@@ -33,6 +34,8 @@ namespace Nero.Client.Scenes
                 var control = (ControlBase)Activator.CreateInstance(c, this);
                 control.Name = c.Name;
             }
+
+            Network.Sender.OnGame();
         }
 
         /// <summary>
@@ -205,6 +208,11 @@ namespace Nero.Client.Scenes
         /// <typeparam name="T"></typeparam>
         public void SetEditor<T>() where T : Form
         {
+            ControlBase[] controlHide = { FindControl<pChat>() };
+
+            foreach (var i in controlHide)
+                i.Hide();
+
             foreach (var i in forms)
                 if (!(i is T)) i.Hide();
 
@@ -217,7 +225,10 @@ namespace Nero.Client.Scenes
         /// </summary>
         public void ExitEditor()
         {
+            ControlBase[] controlHide = { FindControl<pChat>() };
 
+            foreach (var i in controlHide)
+                i.Show();
         }
 
         /// <summary>

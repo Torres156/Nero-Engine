@@ -190,10 +190,11 @@ namespace Nero
                     if (FPS_visible)
                         Renderer.DrawText(Window, $"FPS: {FPS}  Delta: {DeltaTime}", 12, FPS_position, Color.White, 1, new Color(0, 0, 0, 100));
 
+                    Window.Display();
 
                     timer_delay = Environment.TickCount64 + 1;
                 }
-                Window.Display();
+                
 
                 count_fps++;
                 if (Environment.TickCount64 > timer_fps)

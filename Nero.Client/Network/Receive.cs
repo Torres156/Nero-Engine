@@ -1,7 +1,9 @@
 using LiteNetLib.Utils;
+using Nero.Client.Helpers;
 using Nero.Client.Map;
 using Nero.Client.Player;
 using Nero.Client.World;
+using Nero.Client.World.Chat;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,7 @@ namespace Nero.Client.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
+            ChatText, ChatTextSystem,
         }
 
         /// <summary>
@@ -41,7 +44,28 @@ namespace Nero.Client.Network
                 case Packets.CharacterData: CharacterData(buffer); break;
                 case Packets.RemoveCharacter: RemoveCharacter(buffer); break;
                 case Packets.MoveCharacter: MoveCharacter(buffer); break;
+                case Packets.ChatText: ChatText(buffer); break;
+                case Packets.ChatTextSystem: ChatTextSystem(buffer); break;
             }
+        }
+
+
+        /// <summary>
+        /// Mensagem para o chat
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void ChatTextSystem(NetDataReader buffer)
+        {
+            ChatHelper.Add(ChatTypes.System, buffer.GetString(), new Color(buffer.GetUInt()));
+        }
+
+        /// <summary>
+        /// Mensagem para o chat
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void ChatText(NetDataReader buffer)
+        {
+            ChatHelper.Add(ChatTypes.Normal, buffer.GetString(), new Color(buffer.GetUInt()));
         }
 
         /// <summary>
