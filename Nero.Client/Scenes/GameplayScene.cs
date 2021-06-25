@@ -256,12 +256,12 @@ namespace Nero.Client.Scenes
                             {
                                 for (int x2 = 0; x2 < form_MapEditor.SelectTile.size.x; x2++)
                                     for (int y2 = 0; y2 < form_MapEditor.SelectTile.size.y; y2++)
-                                        Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex, form_MapEditor.txtTileID.Value,
+                                        Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex, (int)form_MapEditor.txtTileID.Value,
                                             form_MapEditor.SelectTile.position + new Vector2(x2, y2), mp.ToVector2() + new Vector2(x2, y2));
                             }
                             else
                                 Map.MapInstance.Current.AddChunk(form_MapEditor.CurrentLayer, (Map.ChunkTypes)form_MapEditor.cmbTileType.SelectIndex,
-                                    form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
+                                    (int)form_MapEditor.txtTileID.Value, form_MapEditor.SelectTile.position, mp.ToVector2());
                         else if (form_MapEditor.pAttribute.Visible)
                         {
                             MapInstance.Current.AddAttribute(mp.ToVector2(), form_MapEditor.CurrentAttribute, form_MapEditor.args);

@@ -387,7 +387,7 @@ namespace Nero.Client.Scenes.GameplayComponents
                     {
                         for (int x2 = 0; x2 < size.x; x2++)
                             for (int y2 = 0; y2 < size.y; y2++)
-                                m.AddChunk(CurrentLayer, (Map.ChunkTypes)cmbTileType.SelectIndex, txtTileID.Value, SelectTile.position + new Vector2(x2, y2),
+                                m.AddChunk(CurrentLayer, (Map.ChunkTypes)cmbTileType.SelectIndex, (int)txtTileID.Value, SelectTile.position + new Vector2(x2, y2),
                                     new Vector2(x * size.x + x2, y * size.y + y2));
                     }
             }
@@ -455,7 +455,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         /// <param name="sender"></param>
         private void TxtTileID_OnValidate(ControlBase sender)
         {
-            var tex = GlobalResources.Tileset[txtTileID.Value];
+            var tex = GlobalResources.Tileset[(int)txtTileID.Value];
             vsTop.Maximum = Math.Max(0, (int)tex.size.y - 512) / 32;
             vsTop.Value = 0;
             hsLeft.Maximum = Math.Max(0, (int)tex.size.x - 512) / 32;
@@ -508,7 +508,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             {
                 render.Clear(Color.Transparent);
                 var off = new Vector2(hsLeft.Value, vsTop.Value) * 16;
-                var tex = GlobalResources.Tileset[txtTileID.Value];
+                var tex = GlobalResources.Tileset[(int)txtTileID.Value];
                 DrawTexture(render, tex, new Rectangle(Vector2.Zero, Vector2.Min(tex.size * .5f, new Vector2(256))),
                     new Rectangle(off * 2, Vector2.Min(tex.size, new Vector2(512))), Color.White);
 

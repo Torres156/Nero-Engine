@@ -134,7 +134,7 @@ namespace Nero.Control
         /// <summary>
         /// Valor máximo
         /// </summary>
-        public int Maximum = int.MaxValue;
+        public long Maximum = int.MaxValue;
 
         /// <summary>
         /// Linhas
@@ -164,9 +164,9 @@ namespace Nero.Control
         /// <summary>
         /// Valor
         /// </summary>
-        public int Value
+        public long Value
         {
-            get => ToInt32();
+            get => ToInt64();
             set
             {
                 if (isNumeric) Text = value.ToString();
@@ -493,9 +493,9 @@ namespace Nero.Control
             return result;
         }
 
-        public int ToInt32()
+        public long ToInt64()
         {
-            int value = _text.IsNumeric() ? _text.ToInt32() : Minimum;
+            long value = _text.IsNumeric() ? long.Parse(_text): Minimum;
             if (value < Minimum) value = Minimum;
             if (value > Maximum) value = Maximum;
             return value;

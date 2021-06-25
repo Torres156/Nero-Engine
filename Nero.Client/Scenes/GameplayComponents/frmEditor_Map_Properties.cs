@@ -337,13 +337,13 @@ namespace Nero.Client.Scenes.GameplayComponents
             m.Name = txtName.Text;
             m.Zone = (ZoneTypes)cmbZone.SelectIndex;
             m.MusicName = txtMusic.Text;
-            m.FogID = txtFogID.Value;
-            m.FogSpeed = txtFogVelocity.Value;
+            m.FogID = (int)txtFogID.Value;
+            m.FogSpeed = (int)txtFogVelocity.Value;
             m.FogOpacity = (byte)txtFogOpacity.Value;
             m.FogBlend = chkFogBlendAdd.Checked;
-            m.PanoramaID = txtPanoramaID.Value;
-            m.Warps = new[] { txtWarpUp.Value, txtWarpDown.Value, txtWarpLeft.Value, txtWarpRight.Value };
-            m.SetSize(txtSizeX.Value, txtSizeY.Value);
+            m.PanoramaID = (int)txtPanoramaID.Value;
+            m.Warps = new[] { (int)txtWarpUp.Value, (int)txtWarpDown.Value, (int)txtWarpLeft.Value, (int)txtWarpRight.Value };
+            m.SetSize((int)txtSizeX.Value, (int)txtSizeY.Value);
 
             Hide();
         }
@@ -399,7 +399,7 @@ namespace Nero.Client.Scenes.GameplayComponents
 
                 if (txtFogID.Value > 0 && txtFogID.Value < GlobalResources.Fog.Count)
                 {
-                    var tex = GlobalResources.Fog[txtFogID.Value];
+                    var tex = GlobalResources.Fog[(int)txtFogID.Value];
                     DrawTexture(target, tex, new Rectangle(rec_pos, new Vector2(100)));
                 }
 
@@ -416,7 +416,7 @@ namespace Nero.Client.Scenes.GameplayComponents
 
                 if (txtPanoramaID.Value > 0 && txtPanoramaID.Value < GlobalResources.Panorama.Count)
                 {
-                    var tex = GlobalResources.Panorama[txtPanoramaID.Value];
+                    var tex = GlobalResources.Panorama[(int)txtPanoramaID.Value];
                     DrawTexture(target, tex, new Rectangle(rec_pos, new Vector2(100)));
                 }
             }

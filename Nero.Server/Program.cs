@@ -1,6 +1,7 @@
 using Nero.Server.Core;
 using Nero.Server.Map;
 using Nero.Server.Player;
+using Nero.Server.World;
 using System;
 
 namespace Nero.Server
@@ -19,12 +20,14 @@ namespace Nero.Server
             Character.CheckDirectory();
             CharacterClass.CheckDirectory();
             MapInstance.CheckDirectory();
+            Npc.CheckDirectory();
 
             Console.WriteLine("");
 
             // Inicializa
             CharacterClass.Initialize();
             MapInstance.Initialize();
+            Npc.Initialize();
             
             Console.WriteLine("");
             Console.WriteLine("Servidor iniciado!");

@@ -42,6 +42,17 @@ namespace Nero.Control
         }
 
         /// <summary>
+        /// Indexador
+        /// </summary>
+        /// <param name="Index"></param>
+        /// <returns></returns>
+        public Panel this[int Index]
+        {
+            get => TabPanels[Index];
+            set => TabPanels[Index] = value;
+        }
+
+        /// <summary>
         /// Clique do mouse
         /// </summary>
         /// <param name="sender"></param>
@@ -97,6 +108,9 @@ namespace Nero.Control
                 return;
 
             var gp = GlobalPosition();
+
+            if (hoverTab > -1 && !Hover())
+                hoverTab = -1;
 
             // Header
             var countTab = TabNames.Count;
