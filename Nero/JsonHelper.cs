@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,6 +31,21 @@ namespace Nero
 
             var json = File.ReadAllText(filePath);
             obj = JsonConvert.DeserializeObject<T>(json);            
+        }
+
+        /// <summary>
+        /// Carrega um objeto em Json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static T Load<T>(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new Exception(filePath + "\nArquivo não encontrado!");
+
+            var json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

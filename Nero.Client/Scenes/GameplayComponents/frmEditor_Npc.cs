@@ -17,7 +17,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         TextBox txtName, txtLevel, txtExp, txtSpriteID, txtScale, txtHP, txtRegen, txtDamage, txtResistPhysic, txtResistMagic,
             txtAttackSpeed, txtMoveSpeed, txtFind;
         ComboBox cmbBehavior, cmbRange;
-        Button btnDelete, btnSave;
+        Button btnSave;
 
         LanguageWords words = new LanguageWords();
 
@@ -31,6 +31,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             Size = new Vector2(500, 500);
             SetTitle(Languages.PT_BR, "Editor de NPC");
             SetTitle(Languages.EN_USA, "Edit Npc");
+            Visible = false;
 
             txtFind = new TextBox(this)
             {
@@ -45,17 +46,6 @@ namespace Nero.Client.Scenes.GameplayComponents
                 Position = new Vector2(5,30),
                 Size = new Vector2(150,Size.y - BAR_HEIGHT - 15 - 40 - 30),
             };
-            lstIndex.Add("New npc");
-
-            btnDelete = new Button(this)
-            {
-                Size = new Vector2(100,25),
-                Anchor = Anchors.BottomLeft,
-                Position = new Vector2(5 + 25, 5),     
-                Border_Rounded = 12,
-            };
-            btnDelete.SetText(Languages.PT_BR, "Deletar");
-            btnDelete.SetText(Languages.EN_USA, "Delete");
 
             btnSave = new Button(this)
             {
@@ -320,12 +310,8 @@ namespace Nero.Client.Scenes.GameplayComponents
             n.AttackSpeed = (int)txtAttackSpeed.Value;
             n.MoveSpeed = (int)txtMoveSpeed.Value;
 
-            lstIndex.Item[Index] = n.Name;
-            if (Index == Npc.Items.Count)
-            {
-                Npc.Items.Add(n);                
-                lstIndex.Add("New npc");
-            }
+            lstIndex.Item[Index] = Array.IndexOf(Npc.Items, n) + " - " + n.Name;
+            Network.Sender.SaveNpc(Array.IndexOf(Npc.Items, n));
         }
 
         private void LstIndex_OnSelectIndex(ControlBase sender)
@@ -371,10 +357,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             var text = txtFind.Text.Trim();
             lstIndex.Clear();
             foreach (var i in GetNpcs())
-                lstIndex.Add(i.Name);
-
-            if (text.Length == 0)            
-                lstIndex.Add("New npc");
+                lstIndex.Add(Array.IndexOf(Npc.Items, i) + " - " + i.Name);    
 
             lstIndex.SelectIndex = 0;
         }

@@ -1,0 +1,16 @@
+{
+  "Name": "",
+  "Behavior": 0,
+  "Level": 1,
+  "Exp": 0,
+  "SpriteID": 0,
+  "Scale": 100,
+  "HP": 1,
+  "Regen": 0,
+  "Damage": 0,
+  "ResistPhysic": 0,
+  "ResistMagic": 0,
+  "Range": 0,
+  "AttackSpeed": 1000,
+  "MoveSpeed": 70
+}

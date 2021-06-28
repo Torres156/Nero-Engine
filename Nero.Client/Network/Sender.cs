@@ -1,6 +1,7 @@
 using LiteNetLib.Utils;
 using Nero.Client.Map;
 using Nero.Client.Player;
+using Nero.Client.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,20 @@ namespace Nero.Client.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter, ChatSpeak, OnGame,
+            MoveCharacter, ChatSpeak, OnGame, SaveNpc,
+        }
+
+        /// <summary>
+        /// Salva o npc
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="newNpc"></param>
+        public static void SaveNpc(int ID)
+        {
+            var buffer = Create(Packets.SaveNpc);
+            buffer.Put(ID);
+            buffer.Put(JsonConvert.SerializeObject(Npc.Items[ID]));
+            SendTo(buffer);
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace Nero.Server.Map
         /// </summary>
         public static void Initialize()
         {                                    
-            var dirpath = Environment.CurrentDirectory + "/data/classes/";
+            var dirpath = Environment.CurrentDirectory + "/data/map/";
             for (int i = 0; i < Constants.MAX_MAPS; i++)
             {
                 MapInstance.Items[i] = Load(i);

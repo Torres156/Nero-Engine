@@ -9,9 +9,9 @@ namespace Nero.Client.World
     class Npc
     {
         #region Static
-        public static List<Npc> Items = new List<Npc>();
-        #endregion
-                
+        public static Npc[] Items = new Npc[Constants.MAX_NPCS];
+        #endregion                
+        
         public string Name { get; set; } = "";                              // Nome
         public NpcBehavior Behavior { get; set; } = NpcBehavior.Passive;    // Comportamento
         public int Level { get; set; } = 1;                                 // Level

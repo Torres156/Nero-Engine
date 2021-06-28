@@ -19,7 +19,7 @@ namespace Nero.Client.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
-            ChatText, ChatTextSystem,
+            ChatText, ChatTextSystem, UpdateNpc,
         }
 
         /// <summary>
@@ -46,9 +46,20 @@ namespace Nero.Client.Network
                 case Packets.MoveCharacter: MoveCharacter(buffer); break;
                 case Packets.ChatText: ChatText(buffer); break;
                 case Packets.ChatTextSystem: ChatTextSystem(buffer); break;
+                case Packets.UpdateNpc: UpdateNpc(buffer); break;
             }
         }
 
+        /// <summary>
+        /// Atualiza o npc
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void UpdateNpc(NetDataReader buffer)
+        {
+            var id = buffer.GetInt();
+            var npc = JsonConvert.DeserializeObject<Npc>(buffer.GetString());
+            Npc.Items[id] = npc;
+        }
 
         /// <summary>
         /// Mensagem para o chat

@@ -17,7 +17,8 @@ namespace Nero.Server.Helpers
         public static void Join(Character player)
         {
             // Database
-            Sender.UpdateMyCharacter(player.peer);  // Envia meus dados            
+            Sender.UpdateMyCharacter(player.peer);  // Envia meus dados 
+            Sender.UpdateNpcAll(player.peer);
 
             // Muda para cena de Gameplay
             Sender.ChangeToGameplay(player.peer);

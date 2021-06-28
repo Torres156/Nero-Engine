@@ -10,22 +10,24 @@ namespace Nero.Server.World
     class Npc
     {
         #region Static
-        public static List<Npc> Items = new List<Npc>();
+        public static Npc[] Items = new Npc[Constants.MAX_NPCS];
         public static readonly string Path = "data/npc/";
 
         /// <summary>
         /// Inicializa as npcs
         /// </summary>
         public static void Initialize()
-        {
-            //Console.WriteLine("Carregando os npcs...");
-
-            var files = Directory.GetFiles(Path);
-            for (int i = 0; i < files.Length; i++)
+        {            
+            for (int i = 0; i < Constants.MAX_NPCS; i++)
             {
-                Items.Add(Load(files[i]));
-                Console.Write("\rCarregando os npcs...{0}", (int)(((i + 1) / (float)files.Length) * 100) + "%");
-            } 
+                if (!File.Exists(Path + $"{i}.json"))
+                {
+                    Items[i] = new Npc();
+                    Save(i);
+                } 
+                Items[i] = Load(i);
+                Console.Write("\rCarregando os npc...{0}", (int)(((i + 1) / (float)Constants.MAX_NPCS) * 100) + "%");
+            }
             Console.WriteLine("");
         }
 
@@ -41,28 +43,23 @@ namespace Nero.Server.World
         }
 
         /// <summary>
-        /// Carrega o item
+        /// Salva os npcs
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Npc Load(string name)
+        /// <param name="n"></param>
+        public static void Save(int ID)
         {
-            var filePath = Path + name.Trim().ToLower() + ".json";
-
-            Npc n;
-            JsonHelper.Load<Npc>(filePath, out n);
-            return n;
+            var filePath = Path + $"{ID}.json";
+            JsonHelper.Save(filePath, Items[ID]);
         }
 
         /// <summary>
-        /// Salva o npc
+        /// Carrega o npc
         /// </summary>
-        /// <param name="n"></param>
-        public static void Save(Npc n)
+        /// <param name="ID"></param>
+        public static Npc Load(int ID)
         {
-            if (n == null) return;
-            var filePath = Path + n.Name.Trim().ToLower() + ".json";
-            JsonHelper.Save(filePath, n);
+            var filePath = Path + ID + ".json";
+            return JsonHelper.Load<Npc>(filePath);
         }
         #endregion
 

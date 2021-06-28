@@ -3,6 +3,7 @@ using LiteNetLib.Utils;
 using Nero.Server.Helpers;
 using Nero.Server.Map;
 using Nero.Server.Player;
+using Nero.Server.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Nero.Server.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter, ChatSpeak, OnGame
+            MoveCharacter, ChatSpeak, OnGame, SaveNpc,
         }
 
         /// <summary>
@@ -39,7 +40,21 @@ namespace Nero.Server.Network
                 case Packets.MoveCharacter: MoveCharacter(peer, buffer); break;
                 case Packets.ChatSpeak: ChatSpeak(peer, buffer); break;
                 case Packets.OnGame: OnGame(peer, buffer); break;
+                case Packets.SaveNpc: SaveNpc(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Salva o npc
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void SaveNpc(NetPeer peer, NetDataReader buffer)
+        {
+            var id = buffer.GetInt();
+            var json = buffer.GetString();
+            Npc.Items[id] = JsonConvert.DeserializeObject<Npc>(json);
+            Npc.Save(id);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using Nero.Server.Map;
 using Nero.Server.Player;
+using Nero.Server.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,41 @@ namespace Nero.Server.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
-            ChatText, ChatTextSystem
+            ChatText, ChatTextSystem, UpdateNpc,
+        }
+
+        /// <summary>
+        /// Atualiza todos os npcs
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void UpdateNpcAll(NetPeer peer)
+        {
+            for (int i = 0; i < Constants.MAX_NPCS; i++)
+                UpdateNpc(peer, i);
+        }
+
+        /// <summary>
+        /// Atualiza o npc para todos
+        /// </summary>
+        /// <param name="id"></param>
+        public static void UpdateNpc(int id)
+        {
+            var buffer = Create(Packets.UpdateNpc);
+            buffer.Put(id);
+            buffer.Put(JsonConvert.SerializeObject(Npc.Items[id]));
+            SendToAll(buffer);
+        }
+
+        /// <summary>
+        /// Atualiza o npc
+        /// </summary>
+        /// <param name="id"></param>
+        public static void UpdateNpc(NetPeer peer, int id)
+        {
+            var buffer = Create(Packets.UpdateNpc);
+            buffer.Put(id);
+            buffer.Put(JsonConvert.SerializeObject(Npc.Items[id]));
+            SendTo(peer, buffer);
         }
 
         /// <summary>
