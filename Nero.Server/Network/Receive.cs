@@ -55,6 +55,7 @@ namespace Nero.Server.Network
             var json = buffer.GetString();
             Npc.Items[id] = JsonConvert.DeserializeObject<Npc>(json);
             Npc.Save(id);
+            Sender.UpdateNpc(id);
         }
 
         /// <summary>
