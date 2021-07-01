@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -43,5 +43,13 @@ namespace Nero
         /// <returns></returns>
         public string GetText(int at)
             => item[at].word[(int)Game.CurrentLanguage];
+
+        /// <summary>
+        /// Indexador
+        /// </summary>
+        /// <param name="at"></param>
+        /// <returns></returns>
+        public string this[int at]
+            => GetText(at);
     }
 }
