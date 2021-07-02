@@ -47,6 +47,8 @@ namespace Nero.Client.Player
 
         // Privates
         int FrameStep = 0;
+        long timerFrame = 0;
+        SpriteAnimation animation;
 
 
         /// <summary>
@@ -63,28 +65,17 @@ namespace Nero.Client.Player
         /// <param name="target"></param>
         public void Draw(RenderTarget target)
         {
-            var tex = GlobalResources.Character[SpriteID];
-            var size = tex.size / 4;
-            var pos = Position * 32 + OffSet + new Vector2(16);
-            var origin = new Vector2(size.x / 2, size.y);
+            if (animation == null)
+                CreateAnimation();
+                        
+            var pos = Position * 8 + OffSet + new Vector2(4);
+            string[] dirs = { "up", "down", "left", "right" };
+            string key = "normal_" + dirs[(int)Direction];
+            if (timerFrame > 0)
+                key = "move_" + dirs[(int)Direction];
 
-            // Frames no eixo Y
-            int framey = 0; 
-            switch(Direction)
-            {
-                case Directions.Up: framey = 3; break;
-                case Directions.Left: framey = 1; break;
-                case Directions.Right: framey = 2; break;
-            }
-
-            // Frames no eixo X
-            int framex = 0; // Parado
-            if (Moving && (OffSet.x <= -12 || OffSet.y <= -12 || OffSet.x >= 12 || OffSet.y >= 12))
-                framex = 1 + FrameStep * 2;
-
-            var source = new Rectangle(new Vector2(framex, framey) * size, size);
-            var dest = new Rectangle(pos, size);
-            DrawTexture(target, tex, dest, source, Color.White, origin);            
+            animation.Position = pos.Floor();
+            animation.Play(target, key);
         }
 
         /// <summary>
@@ -95,7 +86,7 @@ namespace Nero.Client.Player
         {
             var tex = GlobalResources.Character[SpriteID];
             var size = tex.size / 4;
-            var pos = Position * 32 + OffSet.Floor() + new Vector2(16);
+            var pos = Position * 8 + OffSet.Floor() + new Vector2(4);
             var colorName = Color.White;
 
             switch(AccessLevel)
@@ -108,11 +99,43 @@ namespace Nero.Client.Player
         }
 
         /// <summary>
+        /// Cria a animação
+        /// </summary>
+        void CreateAnimation()
+        {
+            var tex = GlobalResources.Character[SpriteID];
+            var size = tex.size / 4;
+            animation = new SpriteAnimation(tex);
+            animation.origin = new Vector2(size.x / 2, size.y);
+            animation.repeat = true;
+            animation.frame_timer = 150;
+
+            // Normal
+            animation.Add("normal_up", new Rectangle(new Vector2(0, size.y * 3), size));
+            animation.Add("normal_down", new Rectangle(new Vector2(0, size.y * 0), size));
+            animation.Add("normal_left", new Rectangle(new Vector2(0, size.y * 1), size));
+            animation.Add("normal_right", new Rectangle(new Vector2(0, size.y * 2), size));
+
+            // Move
+            animation.Add("move_up", new Rectangle(new Vector2(size.x * 1, size.y * 3), size),
+                new Rectangle(new Vector2(size.x * 3, size.y * 3), size));
+            animation.Add("move_down", new Rectangle(new Vector2(size.x * 1, size.y * 0), size),
+                new Rectangle(new Vector2(size.x * 3, size.y * 0), size));
+            animation.Add("move_left", new Rectangle(new Vector2(size.x * 1, size.y * 1), size),
+                new Rectangle(new Vector2(size.x * 3, size.y * 1), size));
+            animation.Add("move_right", new Rectangle(new Vector2(size.x * 1, size.y * 2), size),
+                new Rectangle(new Vector2(size.x * 3, size.y * 2), size));
+        }
+
+        /// <summary>
         ///  Atualiza o personagem
         /// </summary>
         public void Update()
         {
             ProcessMovement();
+
+            if (timerFrame > 0 && Environment.TickCount64 > timerFrame)
+                timerFrame = 0;
         }
 
         /// <summary>
@@ -124,8 +147,7 @@ namespace Nero.Client.Player
                 return;
 
             // Velocidade
-            float speed = 200 * Game.DeltaTime;
-            
+            float speed = 200 * Game.DeltaTime;            
 
             if (OffSet.x > 0)            
                 OffSet.x = Math.Max(0, OffSet.x - speed);
@@ -142,6 +164,7 @@ namespace Nero.Client.Player
                 FrameStep++;
                 if (FrameStep > 1) FrameStep = 0;
                 Moving = false;
+                timerFrame = Environment.TickCount64 + 150;
             }
 
         }

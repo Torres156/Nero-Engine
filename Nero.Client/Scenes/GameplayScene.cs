@@ -68,11 +68,11 @@ namespace Nero.Client.Scenes
                 {
                     // Players
                     foreach (var i in Character.Items)
-                        if ((int)i.Position.y == y)
+                        if ((int)i.Position.y / 8 == y)
                             i.Draw(target);
 
                     // Me
-                    if ((int)Character.My.Position.y == y)
+                    if ((int)Character.My.Position.y / 8 == y)
                         Character.My?.Draw(target);
                 }
 
@@ -165,7 +165,7 @@ namespace Nero.Client.Scenes
             if (Character.My != null)
             {
                 Character.My.Update();
-                Camera.Position = Character.My.Position * 32 + Character.My.OffSet + new Vector2(16);
+                Camera.Position = Character.My.Position * 8 + Character.My.OffSet + new Vector2(4);
             }
 
             // Mapa

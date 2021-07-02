@@ -42,6 +42,7 @@ namespace Nero.Client.Scenes.GameplayComponents
                 Position = new Vector2(5, 30),
                 Size = new Vector2(150, Size.y - BAR_HEIGHT - 15 - 30 - 25 ),
             };
+            
 
             txtNpcID = new TextBox(this)
             {
@@ -85,15 +86,28 @@ namespace Nero.Client.Scenes.GameplayComponents
             cbDir = new ComboBox(this)
             {
                 Anchor = Anchors.TopRight,
-                Position = new Vector2(5, 5 + 25 * 2),
+                Position = new Vector2(5, 5 + 25 * 3),
+                Size = new Vector2(150,20),
             };
-            cbDir.Item.AddRange(new string[] {"" }.AsEnumerable());
+            cbDir.Item.AddRange(new string[] {"UP", "DOWN", "LEFT", "RIGHT" }.AsEnumerable());
+            cbDir.SelectIndex = 0;
 
             // Eventos
             OnDraw += FrmEditor_Spawn_OnDraw;
+            OnVisibleChanged += FrmEditor_Spawn_OnVisibleChanged;
 
             // Palavras
             words.AddText("Bloqueio M.:", "M. Block:");
+            words.AddText("Direção:", "Direction:");
+        }
+
+        private void FrmEditor_Spawn_OnVisibleChanged(ControlBase sender)
+        {
+            if (Visible)
+            {
+                lstIndex.Add("New Spawn");
+                lstIndex.SelectIndex = lstIndex.Item.Count - 1;
+            }
         }
 
         /// <summary>
@@ -107,6 +121,7 @@ namespace Nero.Client.Scenes.GameplayComponents
 
             DrawText(target, "Npc ID:", 12, new Vector2(gp.x + 160, txtNpcID.GlobalPosition().y), Color.White);
             DrawText(target, words[0], 12, new Vector2(gp.x + 160, chkBlock.GlobalPosition().y), Color.White);
+            DrawText(target, words[1], 12, new Vector2(gp.x + 160, cbDir.GlobalPosition().y), Color.White);
         }
     }
 }

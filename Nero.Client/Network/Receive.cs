@@ -99,16 +99,16 @@ namespace Nero.Client.Network
             switch(dir)
             {
                 case Directions.Up:
-                    find.OffSet.y += 32;
+                    find.OffSet.y += 8;
                     break;
                 case Directions.Down:
-                    find.OffSet.y -= 32;
+                    find.OffSet.y -= 8;
                     break;
                 case Directions.Left:
-                    find.OffSet.x += 32;
+                    find.OffSet.x += 8;
                     break;
                 case Directions.Right:
-                    find.OffSet.x -= 32;
+                    find.OffSet.x -= 8;
                     break;
             }
         }
@@ -212,7 +212,7 @@ namespace Nero.Client.Network
             player.MapID = mapID;
             player.Position = pos;
             player.OffSet = Vector2.Zero;
-            player.Direction = dir;
+            player.Direction = dir;            
         }
 
         /// <summary>

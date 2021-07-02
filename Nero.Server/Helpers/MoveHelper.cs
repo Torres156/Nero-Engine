@@ -39,7 +39,7 @@ namespace Nero.Server.Helpers
             }
             
             // Atributos no mapa
-            var attr = map.Attributes[(int)newPos.x, (int)newPos.y];
+            var attr = map.Attributes[(int)newPos.x / 8, (int)newPos.y / 8];
             foreach(var i in attr)
             {
                 switch(i.Type)

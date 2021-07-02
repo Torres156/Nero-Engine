@@ -22,7 +22,7 @@ namespace Nero.Server.Helpers
 
             // Muda para cena de Gameplay
             Sender.ChangeToGameplay(player.peer);
-            
+
             // Entra no mapa
             GoMap(player, player.MapID, player.Position, true); 
         }
@@ -40,7 +40,7 @@ namespace Nero.Server.Helpers
 
             // Posição
             player.MapID = mapID;
-            player.Position = Vector2.Min(position, MapInstance.Items[mapID].Size.ToVector2());
+            player.Position = Vector2.Min(position, MapInstance.Items[mapID].Size.ToVector2() * 8);
             Sender.UpdateCharacterPosition(player);
 
             // Verifica a revisão do mapa

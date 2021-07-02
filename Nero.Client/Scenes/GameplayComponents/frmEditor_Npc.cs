@@ -15,7 +15,7 @@ namespace Nero.Client.Scenes.GameplayComponents
         ListBox lstIndex;
         TabControl tabs;
         TextBox txtName, txtLevel, txtExp, txtSpriteID, txtScale, txtHP, txtRegen, txtDamage, txtResistPhysic, txtResistMagic,
-            txtAttackSpeed, txtMoveSpeed, txtFind;
+            txtAttackSpeed, txtMoveSpeed, txtFind, txtRespawn;
         ComboBox cmbBehavior, cmbRange;
         Button btnSave;
 
@@ -247,6 +247,19 @@ namespace Nero.Client.Scenes.GameplayComponents
                 Size = new Vector2(200, 20),
             };
 
+            txtRespawn = new TextBox(tabs[1])
+            {
+                Anchor = Anchors.TopRight,
+                isNumeric = true,
+                Minimum = 0,
+                Text = "0",
+                Maximum = int.MaxValue,
+                FillColor = Color.White,
+                TextColor = Color.Black,
+                Position = new Vector2(5, 5 + 25 * 7),
+                Size = new Vector2(200, 20),
+            };
+
             // Eventos
             tabs.OnDrawTabPanel += Tabs_OnDrawTabPanel;
             OnVisibleChanged += FrmEditor_Npc_OnVisibleChanged;
@@ -269,9 +282,10 @@ namespace Nero.Client.Scenes.GameplayComponents
             words.AddText("Resistência F.:", "Resist P.:");                 // 11
             words.AddText("Resistência M.:", "Resist M.:");                 // 12            
             words.AddText("Digite um nome!", "Enter a name!");              // 13
-            words.AddText("Velocidade de ataque:", "Attack Speed:");        // 14
-            words.AddText("Velocidade de Movimento:", "Move Speed:");       // 15
+            words.AddText("Vel. de ataque:", "Attack Speed:");              // 14
+            words.AddText("Vel. de Movimento:", "Move Speed:");             // 15
             words.AddText("Não pode repetir nome!", "Cannot repeat name!"); // 16
+            words.AddText("Tempo de Respawn:", "Respawn Time:");            // 17
         }
 
         private void BtnSave_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
@@ -309,6 +323,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             n.ResistMagic = (int)txtResistMagic.Value;
             n.AttackSpeed = (int)txtAttackSpeed.Value;
             n.MoveSpeed = (int)txtMoveSpeed.Value;
+            n.RespawnTime = (int)txtRespawn.Value;
 
             lstIndex.Item[Index] = Array.IndexOf(Npc.Items, n) + " - " + n.Name;
             Network.Sender.SaveNpc(Array.IndexOf(Npc.Items, n));
@@ -338,6 +353,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             txtResistMagic.Value = n.ResistMagic;
             txtAttackSpeed.Value = n.AttackSpeed;
             txtMoveSpeed.Value = n.MoveSpeed;
+            txtRespawn.Value = n.RespawnTime;
         }
 
         private void FrmEditor_Npc_OnVisibleChanged(ControlBase sender)
@@ -406,13 +422,14 @@ namespace Nero.Client.Scenes.GameplayComponents
             }
             else if (Index == 1)
             {
-                DrawText(target, words.GetText(8), 14, new Vector2(gp.x + 5, txtHP.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(9), 14, new Vector2(gp.x + 5, txtRegen.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(10), 14, new Vector2(gp.x + 5, txtDamage.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(11), 14, new Vector2(gp.x + 5, txtResistPhysic.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(12), 14, new Vector2(gp.x + 5, txtResistMagic.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(14), 14, new Vector2(gp.x + 5, txtAttackSpeed.GlobalPosition().y), Color.White);
-                DrawText(target, words.GetText(15), 14, new Vector2(gp.x + 5, txtMoveSpeed.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(8), 12, new Vector2(gp.x + 5, txtHP.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(9), 12, new Vector2(gp.x + 5, txtRegen.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(10), 12, new Vector2(gp.x + 5, txtDamage.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(11), 12, new Vector2(gp.x + 5, txtResistPhysic.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(12), 12, new Vector2(gp.x + 5, txtResistMagic.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(14), 12, new Vector2(gp.x + 5, txtAttackSpeed.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(15), 12, new Vector2(gp.x + 5, txtMoveSpeed.GlobalPosition().y), Color.White);
+                DrawText(target, words.GetText(17), 12, new Vector2(gp.x + 5, txtRespawn.GlobalPosition().y), Color.White);
             }
         }
     }

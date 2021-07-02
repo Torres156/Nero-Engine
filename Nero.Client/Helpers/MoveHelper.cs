@@ -31,19 +31,19 @@ namespace Nero.Client.Helpers
                 {
                     case Directions.Up:
                         c.Position.y--;
-                        c.OffSet.y = 32;
+                        c.OffSet.y = 8;
                         break;
                     case Directions.Down:
                         c.Position.y++;
-                        c.OffSet.y = -32;
+                        c.OffSet.y = -8;
                         break;
                     case Directions.Left:
                         c.Position.x--;
-                        c.OffSet.x = 32;
+                        c.OffSet.x = 8;
                         break;
                     case Directions.Right:
                         c.Position.x++;
-                        c.OffSet.x = -32;
+                        c.OffSet.x = -8;
                         break;
                 }                
             }
@@ -81,9 +81,9 @@ namespace Nero.Client.Helpers
 
             var m = Map.MapInstance.Current;
             if (nextPos.x < 0 || nextPos.y < 0) return false;
-            if (nextPos.x > m.Size.x || nextPos.y > m.Size.y) return false;
+            if ((int)nextPos.x / 8 > m.Size.x || (int)nextPos.y / 8 > m.Size.y) return false;
 
-            var attr = m.Attributes[(int)nextPos.x, (int)nextPos.y];
+            var attr = m.Attributes[(int)nextPos.x / 8, (int)nextPos.y / 8];
             if (attr.Any(i => i.Type == AttributeTypes.Block)) // Bloqueios
                 return false;
 

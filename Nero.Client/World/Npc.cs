@@ -26,6 +26,7 @@ namespace Nero.Client.World
         public int Range { get; set; } = 0;                                 // Alcance
         public int AttackSpeed { get; set; } = 1000;                        // Velocidade de ataque
         public int MoveSpeed { get; set; } = 70;                            // Velocidade de Movimento
+        public int RespawnTime { get; set; }                                // Tempo de respawn
 
         /// <summary>
         /// Construtor
