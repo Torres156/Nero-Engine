@@ -2,6 +2,7 @@ using LiteNetLib.Utils;
 using Nero.Client.Helpers;
 using Nero.Client.Map;
 using Nero.Client.Player;
+using Nero.Client.Scenes;
 using Nero.Client.World;
 using Nero.Client.World.Chat;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ namespace Nero.Client.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
-            ChatText, ChatTextSystem, UpdateNpc,
+            ChatText, ChatTextSystem, UpdateNpc, RequestSpawnFactory,
         }
 
         /// <summary>
@@ -47,7 +48,18 @@ namespace Nero.Client.Network
                 case Packets.ChatText: ChatText(buffer); break;
                 case Packets.ChatTextSystem: ChatTextSystem(buffer); break;
                 case Packets.UpdateNpc: UpdateNpc(buffer); break;
+                case Packets.RequestSpawnFactory: RequestSpawnFactory(buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Requerir produção de spawn
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void RequestSpawnFactory(NetDataReader buffer)
+        {
+            SpawnFactory.Items = JsonConvert.DeserializeObject<List<SpawnFactoryItem>>(buffer.GetString());
+            Game.GetScene<GameplayScene>().SetEditor<Scenes.GameplayComponents.frmEditor_Spawn>();
         }
 
         /// <summary>

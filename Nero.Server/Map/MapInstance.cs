@@ -1,3 +1,4 @@
+using Nero.Client.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,12 @@ namespace Nero.Server.Map
         /// Inicializa as classes
         /// </summary>
         public static void Initialize()
-        {                                    
-            var dirpath = Environment.CurrentDirectory + "/data/map/";
+        {                                   
+            
             for (int i = 0; i < Constants.MAX_MAPS; i++)
             {
-                MapInstance.Items[i] = Load(i);
+                Items[i] = Load(i);
+                Items[i].CreateSpawnDevice();
                 Console.Write("\rCarregando os mapas...{0}", (int)(((i + 1) / (float)Constants.MAX_MAPS) * 100) + "%");
             }
             Console.WriteLine("");
@@ -84,6 +86,10 @@ namespace Nero.Server.Map
         public int PanoramaID = 0;                  // Gráfico do panorama
         public int[] Warps = new int[4];            // Teleportes
 
+        // Server Only
+        [JsonIgnore]
+        public Spawn Spawn { get; private set; }    // Dispositivo de spawn
+
         /// <summary>
         /// Construtor
         /// </summary>
@@ -96,14 +102,23 @@ namespace Nero.Server.Map
             Attributes = new List<AttributeInfo>[Size.x + 1, Size.y + 1];
             for (int x = 0; x <= Size.x; x++)
                 for (int y = 0; y <= Size.y; y++)
-                    Attributes[x, y] = new List<AttributeInfo>();
+                    Attributes[x, y] = new List<AttributeInfo>();            
+        }
+
+        /// <summary>
+        /// Cria o dispositivo de spawn
+        /// </summary>
+        void CreateSpawnDevice()
+        {
+            Spawn = new Spawn(Array.IndexOf(Items, this), this);
         }
 
         /// <summary>
         /// Atualiza o mapa
         /// </summary>
         public void Update()
-        {            
+        {      
+            
         }
     }
 }

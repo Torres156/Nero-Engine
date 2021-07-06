@@ -19,7 +19,18 @@ namespace Nero.Server.Network
             UpdateCharacters, ChangeToGameplay, UpdateMyCharacter,
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
-            ChatText, ChatTextSystem, UpdateNpc,
+            ChatText, ChatTextSystem, UpdateNpc, RequestSpawnFactory,
+        }
+
+        /// <summary>
+        /// Requesita a produção de spawn
+        /// </summary>
+        public static void RequestSpawnFactory(NetPeer peer)
+        {
+            var player = Character.Find(peer);
+            var buffer = Create(Packets.RequestSpawnFactory);            
+            buffer.Put(JsonConvert.SerializeObject(SpawnFactory.Factories[player.MapID].Items));
+            SendTo(peer, buffer);
         }
 
         /// <summary>

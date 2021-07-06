@@ -17,7 +17,8 @@ namespace Nero.Server.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter, ChatSpeak, OnGame, SaveNpc,
+            MoveCharacter, ChatSpeak, OnGame, SaveNpc, RequestSpawnFactory,
+            UpdateSpawnFactory,
         }
 
         /// <summary>
@@ -41,7 +42,33 @@ namespace Nero.Server.Network
                 case Packets.ChatSpeak: ChatSpeak(peer, buffer); break;
                 case Packets.OnGame: OnGame(peer, buffer); break;
                 case Packets.SaveNpc: SaveNpc(peer, buffer); break;
+                case Packets.RequestSpawnFactory: RequestSpawnFactory(peer, buffer); break;
+                case Packets.UpdateSpawnFactory: UpdateSpawnFactory(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Atualiza a produção de spawns
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void UpdateSpawnFactory(NetPeer peer, NetDataReader buffer)
+        {
+            var player = Character.Find(peer);
+            SpawnFactory.Factories[player.MapID] = JsonConvert.DeserializeObject<SpawnFactory>(buffer.GetString());
+            SpawnFactory.Save(player.MapID);
+
+
+        }
+
+        /// <summary>
+        /// Requesita a produção de spawn
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void RequestSpawnFactory(NetPeer peer, NetDataReader buffer)
+        {
+            Sender.RequestSpawnFactory(peer);
         }
 
         /// <summary>

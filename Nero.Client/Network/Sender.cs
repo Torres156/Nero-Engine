@@ -14,8 +14,22 @@ namespace Nero.Client.Network
         enum Packets
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
-            MoveCharacter, ChatSpeak, OnGame, SaveNpc,
+            MoveCharacter, ChatSpeak, OnGame, SaveNpc, RequestSpawnFactory, UpdateSpawnFactory,
         }
+
+        /// <summary>
+        /// Atualiza a produção de spawn
+        /// </summary>
+        public static void UpdateSpawnFactory()
+        {
+
+        }
+
+        /// <summary>
+        /// Requesita a produção de spawn
+        /// </summary>
+        public static void RequestSpawnFactory()
+            => SendTo(Create(Packets.RequestSpawnFactory));
 
         /// <summary>
         /// Salva o npc

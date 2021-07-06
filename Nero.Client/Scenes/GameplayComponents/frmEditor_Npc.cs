@@ -326,6 +326,8 @@ namespace Nero.Client.Scenes.GameplayComponents
             n.RespawnTime = (int)txtRespawn.Value;
 
             lstIndex.Item[Index] = Array.IndexOf(Npc.Items, n) + " - " + n.Name;
+            if (isNotNew)
+                lstIndex.Add("New npc");
             Network.Sender.SaveNpc(Array.IndexOf(Npc.Items, n));
         }
 
