@@ -65,7 +65,10 @@ namespace Nero.Client.Network
             var id = buffer.GetInt();
             var dir = (Directions)buffer.GetByte();
             var pos = buffer.GetVector2();
-            if (Spawn.Items.Length == 0) return;
+
+            // Bug
+            if (Spawn.Items == null || Spawn.Items.Length == 0) return;
+
             Spawn.Items[id].Direction = dir;
             Spawn.Items[id].Position = pos;
             Spawn.Items[id].Moving = true;

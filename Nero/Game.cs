@@ -192,19 +192,17 @@ namespace Nero
 
                     Window.Display();
 
+                    count_fps++;
+                    if (Environment.TickCount64 > timer_fps)
+                    {
+                        FPS = count_fps;
+                        count_fps = 0;
+                        timer_fps = Environment.TickCount64 + 1000;
+                    }
+
                     timer_delay = Environment.TickCount64 + 1;
                 }
-                
-
-                count_fps++;
-                if (Environment.TickCount64 > timer_fps)
-                {
-                    FPS = count_fps;
-                    count_fps = 0;
-                    timer_fps = Environment.TickCount64 + 1000;
-                }
-
-
+             
             }
             scene?.UnloadContent();
         }
