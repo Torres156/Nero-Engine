@@ -81,13 +81,16 @@ namespace Nero.Client.Helpers
 
             var m = Map.MapInstance.Current;
             if (nextPos.x < 0 || nextPos.y < 0) return false;
-            if ((int)nextPos.x / 8 > m.Size.x || (int)nextPos.y / 8 > m.Size.y) return false;
+            if ((int)nextPos.x / 4 > m.Size.x || (int)nextPos.y / 4 > m.Size.y) return false;
 
-            var attr = m.Attributes[(int)nextPos.x / 8, (int)nextPos.y / 8];
+            var attr = m.Attributes[(int)nextPos.x / 4, (int)nextPos.y / 4];
             if (attr.Any(i => i.Type == AttributeTypes.Block)) // Bloqueios
                 return false;
 
             if (Character.Items.Any(i => i.Position.Equals(nextPos)))
+                return false;
+
+            if (Spawn.Items.Any(i => (i.Position.ToInt2() / 2).Equals(nextPos.ToInt2() / 2)))
                 return false;
 
             return true;

@@ -116,7 +116,7 @@ namespace Nero.Server.Player
         /// Instancia no qual o jogador está
         /// </summary>
         /// <returns></returns>
-        public IInstance GetInstance()
+        public absInstance GetInstance()
             => MapInstance.Items[MapID];
 
         /// <summary>

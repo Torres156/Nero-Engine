@@ -1,3 +1,4 @@
+using Nero.Client.Map;
 using Nero.Client.World;
 using Nero.Control;
 using System;
@@ -12,9 +13,9 @@ namespace Nero.Client.Scenes.GameplayComponents
     class frmEditor_Spawn : Form
     {
         ListBox lstIndex;
-        TextBox txtFind, txtNpcID;
+        TextBox txtFind, txtNpcID, txtPositionX, txtPositionY;
         Button btnCopy, btnDelete, btnSave;
-        CheckBox chkBlock;
+        CheckBox chkBlock, chkModePosition;
         ComboBox cbDir;
 
         bool isUpdate = false;
@@ -107,6 +108,36 @@ namespace Nero.Client.Scenes.GameplayComponents
             cbDir.Item.AddRange(new string[] { "UP", "DOWN", "LEFT", "RIGHT" }.AsEnumerable());
             cbDir.SelectIndex = 0;
 
+            chkModePosition = new CheckBox(this)
+            {
+                Anchor = Anchors.TopRight,
+                Position = new Vector2(5, 5 + 25 * 4),
+            };
+
+            txtPositionX = new TextBox(this)
+            {
+                Anchor = Anchors.TopRight,
+                FillColor = Color.White,
+                TextColor = Color.Black,
+                isNumeric = true,
+                Size = new Vector2(150, 20),
+                Position = new Vector2(5, 5 + 25 * 5),
+                Minimum = 0,                
+                Text = "0",
+            };
+
+            txtPositionY = new TextBox(this)
+            {
+                Anchor = Anchors.TopRight,
+                FillColor = Color.White,
+                TextColor = Color.Black,
+                isNumeric = true,
+                Size = new Vector2(150, 20),
+                Position = new Vector2(5, 5 + 25 * 6),
+                Minimum = 0,
+                Text = "0",
+            };
+
             // Eventos
             OnDraw += FrmEditor_Spawn_OnDraw;
             OnVisibleChanged += FrmEditor_Spawn_OnVisibleChanged;
@@ -119,6 +150,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             // Palavras
             words.AddText("Bloqueio M.:", "M. Block:");
             words.AddText("Direção:", "Direction:");
+            words.AddText("Modo Pos:", "Mode Pos:");
         }
 
         private void BtnDelete_OnMouseReleased(ControlBase sender, SFML.Window.MouseButtonEvent e)
@@ -169,6 +201,8 @@ namespace Nero.Client.Scenes.GameplayComponents
             s.NpcID = (int)txtNpcID.Value;
             s.BlockMove = chkBlock.Checked;
             s.Direction = (Directions)cbDir.SelectIndex;
+            s.UsePositionSpawn = chkModePosition.Checked;
+            s.Position = new Vector2(txtPositionX.Value, txtPositionY.Value);
 
             lstIndex.Item[Index] = Npc.Items[s.NpcID].Name;
             if (!isNotNew)
@@ -196,21 +230,24 @@ namespace Nero.Client.Scenes.GameplayComponents
             txtNpcID.Value = s.NpcID;
             chkBlock.Checked = s.BlockMove;
             cbDir.SelectIndex = (int)s.Direction;
+            chkModePosition.Checked = s.UsePositionSpawn;
+            txtPositionX.Value = (long)s.Position.x;
+            txtPositionY.Value = (long)s.Position.y;
         }
 
         private void FrmEditor_Spawn_OnVisibleChanged(ControlBase sender)
         {
             if (!Visible)
             {
-                if (isUpdate)
-                {
-                    Network.Sender.UpdateSpawnFactory();
-                }
+                if (isUpdate)                
+                    Network.Sender.UpdateSpawnFactory();                
 
                 Game.GetScene<GameplayScene>().ExitEditor();
             }
             else // Visivel
             {
+                txtPositionX.Maximum = MapInstance.Current.Size.x;
+                txtPositionY.Maximum = MapInstance.Current.Size.y;
                 isUpdate = false;
                 UpdateList();
             }
@@ -239,6 +276,9 @@ namespace Nero.Client.Scenes.GameplayComponents
             DrawText(target, "Npc ID:", 12, new Vector2(gp.x + 160, txtNpcID.GlobalPosition().y), Color.White);
             DrawText(target, words[0], 12, new Vector2(gp.x + 160, chkBlock.GlobalPosition().y), Color.White);
             DrawText(target, words[1], 12, new Vector2(gp.x + 160, cbDir.GlobalPosition().y), Color.White);
+            DrawText(target, words[2], 12, new Vector2(gp.x + 160, chkModePosition.GlobalPosition().y), Color.White);
+            DrawText(target, "X:", 12, new Vector2(gp.x + 160, txtPositionX.GlobalPosition().y), Color.White);
+            DrawText(target, "Y:", 12, new Vector2(gp.x + 160, txtPositionY.GlobalPosition().y), Color.White);
         }
 
         IEnumerable<SpawnFactoryItem> GetSpawns()

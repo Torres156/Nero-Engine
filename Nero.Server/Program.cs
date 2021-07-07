@@ -28,11 +28,11 @@ namespace Nero.Server
 
             // Inicializa
             CharacterClass.Initialize();
-            MapInstance.Initialize();
+            SpawnFactory.Initialize();            
             Npc.Initialize();
-            SpawnFactory.Initialize();
-            
-            
+            MapInstance.Initialize();
+
+
             Console.WriteLine("");
             Console.WriteLine("Servidor iniciado!");
             Console.WriteLine("");

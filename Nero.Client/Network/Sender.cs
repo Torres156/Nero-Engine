@@ -22,7 +22,18 @@ namespace Nero.Client.Network
         /// </summary>
         public static void UpdateSpawnFactory()
         {
-
+            var buffer = Create(Packets.UpdateSpawnFactory);            
+            
+            buffer.Put(SpawnFactory.Items.Count);
+            foreach (var i in SpawnFactory.Items)
+            {
+                buffer.Put(i.NpcID);
+                buffer.Put(i.BlockMove);
+                buffer.Put((byte)i.Direction);
+                buffer.Put(i.UsePositionSpawn);
+                buffer.Put(i.Position);
+            }
+            SendTo(buffer);
         }
 
         /// <summary>

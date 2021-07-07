@@ -39,7 +39,7 @@ namespace Nero.Client.World
             Character.Add(null);
             while(File.Exists(path + $"{i}.{Ext}"))
             {
-                Character.Add(new Texture(path + $"{i}.{Ext}"));
+                Character.Add(new Texture(path + $"{i}.{Ext}") { Smooth = true });
                 i++;
             }
         }

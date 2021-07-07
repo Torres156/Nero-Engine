@@ -20,6 +20,82 @@ namespace Nero.Server.Network
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
             ChatText, ChatTextSystem, UpdateNpc, RequestSpawnFactory,
+            SpawnData, PrepareSpawn, SpawnMove,
+        }
+
+        /// <summary>
+        /// Movimento do spawn
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="spawn"></param>
+        public static void SpawnMove(absInstance instance, SpawnItem spawn)
+        {
+            var buffer = Create(Packets.SpawnMove);
+            buffer.Put(spawn.IndexOf);
+            buffer.Put((byte)spawn.Direction);
+            buffer.Put(spawn.Position);
+            SendToInstance(instance, buffer);
+        }
+
+        /// <summary>
+        /// Prepara todos os spawns do mapa
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void PrepareSpawn(NetPeer peer)
+        {
+            var buffer = Create(Packets.PrepareSpawn);
+            var player = Character.Find(peer);
+            buffer.Put(player.GetInstance().Spawn.Items.Length);
+            SendTo(peer, buffer);
+        }
+        
+        /// <summary>
+        /// Envia dados de todos os spawns
+        /// </summary>
+        /// <param name="peer"></param>
+        public static void SpawnDataAll(NetPeer peer)
+        {
+            var player = Character.Find(peer);
+
+            foreach (var i in player.GetInstance().Spawn.Items)
+                SpawnData(player, i);
+        }
+
+        /// <summary>
+        /// Envia dados do spawn
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="spawnItem"></param>
+        public static void SpawnData(Character player, SpawnItem spawnItem)
+        {
+            SendTo(player, SpawnDataPacket(player.GetInstance(), spawnItem));
+        }
+
+        /// <summary>
+        /// Envia dados do spawn
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="spawnItem"></param>
+        public static void SpawnData(absInstance instance, SpawnItem spawnItem)
+        {
+            SendToInstance(instance, SpawnDataPacket(instance, spawnItem));
+        }
+
+        /// <summary>
+        /// Pacote de dados do spawn
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="spawnItem"></param>
+        /// <returns></returns>
+        static NetDataWriter SpawnDataPacket(absInstance instance, SpawnItem spawnItem)
+        {
+            var buffer = Create(Packets.SpawnData);
+            buffer.Put(Array.IndexOf(instance.Spawn.Items, spawnItem));
+            buffer.Put(spawnItem.NpcID);
+            buffer.Put(spawnItem.HP);
+            buffer.Put((byte)spawnItem.Direction);
+            buffer.Put(spawnItem.Position);
+            return buffer;
         }
 
         /// <summary>
@@ -28,8 +104,18 @@ namespace Nero.Server.Network
         public static void RequestSpawnFactory(NetPeer peer)
         {
             var player = Character.Find(peer);
-            var buffer = Create(Packets.RequestSpawnFactory);            
-            buffer.Put(JsonConvert.SerializeObject(SpawnFactory.Factories[player.MapID].Items));
+            var buffer = Create(Packets.RequestSpawnFactory);
+            var fac = SpawnFactory.Factories[player.MapID];
+
+            buffer.Put(fac.Items.Count);
+            foreach(var i in fac.Items)
+            {
+                buffer.Put(i.NpcID);
+                buffer.Put(i.BlockMove);
+                buffer.Put((byte)i.Direction);
+                buffer.Put(i.UsePositionSpawn);
+                buffer.Put(i.Position);
+            }
             SendTo(peer, buffer);
         }
 
@@ -100,7 +186,7 @@ namespace Nero.Server.Network
         /// <param name="instance"></param>
         /// <param name="text"></param>
         /// <param name="color"></param>
-        public static void ChatTextToInstance(IInstance instance, string text, Color color)
+        public static void ChatTextToInstance(absInstance instance, string text, Color color)
         {
             var buffer = Create(Packets.ChatText);
             buffer.Put(text);
@@ -382,7 +468,7 @@ namespace Nero.Server.Network
         /// <summary>
         /// Envia o pacote para a Instancia
         /// </summary>
-        static void SendToInstance(IInstance instance, NetDataWriter buffer)
+        static void SendToInstance(absInstance instance, NetDataWriter buffer)
         {
             var lst = Character.Items.Where(i => i.GetInstance() == instance).ToList();
 

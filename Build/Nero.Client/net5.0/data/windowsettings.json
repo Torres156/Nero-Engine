@@ -1,12 +1,12 @@
 {
   "WindowSize": {
-    "x": 976.0,
-    "y": 687.0
+    "x": 974.0,
+    "y": 661.0
   },
   "VSync": false,
   "IP": "localhost",
   "PORT": 4000,
-  "Language": 0,
+  "Language": 1,
   "WindowMaximize": false,
   "Volume_Music": 0,
   "Volume_Sound": 100,

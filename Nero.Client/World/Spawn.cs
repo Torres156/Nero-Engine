@@ -1,81 +1,52 @@
-using Nero.Client.World;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Nero.Client.Player
+namespace Nero.Client.World
 {
     using static Renderer;
-    class Character
+    class Spawn
     {
         #region Static
-        public static Character My;
-        public static List<Character> Items = new List<Character>();
-
-        /// <summary>
-        /// Encontra um personagem
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static Character Find(string name)
-        {
-            if (My.Name.Trim().ToLower() == name.Trim().ToLower())
-                return My;
-
-            return Items.Find(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
-        }
+        public static Spawn[] Items;
         #endregion
 
-        // Publics
-        public string Name = "";                                        // Nome
-        public int ClassID = 0;                                         // Id da classe
-        public int SpriteID = 0;                                        // Aparência
-        public int Level = 1;                                           // Nível do personagem
-        public long Experience = 0;                                     // Experiência
-        public int[] StatPrimary = new int[(int)StatPrimaries.count];   // Atributos primários
-        public Directions Direction = Directions.Down;                  // Direção do personagem
-        public int Points = 0;                                          // Pontos de atributos
-        public int MapID = 0;                                           // Id do mapa
-        public Vector2 Position = Vector2.Zero;                         // Posição
-        public AccessLevels AccessLevel = AccessLevels.Player;          // Acesso de administrador
 
+        public int NpcID { get; set; }
+        public Vector2 Position { get; set; }
+        public long HP { get; set; }
+        public Directions Direction { get; set; }
 
         // Client Only
-        public Vector2 OffSet;
-        public bool Moving = false;
-
-
-        // Privates
-        int FrameStep = 0;
-        long timerFrame = 0;
         SpriteAnimation animation;
-
-
-        /// <summary>
-        /// Construtor
-        /// </summary>
-        public Character()
-        {
-
-        }
+        public Vector2 OffSet;
+        public bool Moving;
+        long timerFrame;
+        int FrameStep;
 
         /// <summary>
-        /// Desenha o personagem
+        /// Desenha o Spawn
         /// </summary>
         /// <param name="target"></param>
         public void Draw(RenderTarget target)
         {
+            if (Npc.Items[NpcID].SpriteID == 0)
+                return;
+
             if (animation == null)
                 CreateAnimation();
-                        
+
             var pos = Position * 8 + OffSet + new Vector2(4);
             string[] dirs = { "up", "down", "left", "right" };
             string key = "normal_" + dirs[(int)Direction];
             if (timerFrame > 0)
                 key = "move_" + dirs[(int)Direction];
 
+            animation.Scale = Npc.Items[NpcID].Scale / 100f;
             animation.Position = pos.Floor();
-            animation.Play(target, key);            
+            animation.Play(target, key);
         }
 
         /// <summary>
@@ -84,18 +55,15 @@ namespace Nero.Client.Player
         /// <param name="target"></param>
         public void DrawTexts(RenderTarget target)
         {
-            var tex = GlobalResources.Character[SpriteID];
+            if (Npc.Items[NpcID].SpriteID == 0)
+                return;
+            var n = Npc.Items[NpcID];
+            var tex = GlobalResources.Character[n.SpriteID];
             var size = tex.size / 4;
             var pos = Position * 8 + OffSet.Floor() + new Vector2(4);
-            var colorName = Color.White;
+            var colorName = Color.White;            
 
-            switch(AccessLevel)
-            {
-                case AccessLevels.GameMaster: colorName = new Color(254, 131, 65); break;
-                case AccessLevels.Administrator: colorName = new Color(108, 181, 246, 255); break;
-            }
-
-            DrawText(target, Name, 14, pos - new Vector2(GetTextWidth(Name,14) / 2, size.y + 20), colorName, 1, new Color(30,30,30));            
+            DrawText(target, n.Name, 14, pos - new Vector2(GetTextWidth(n.Name, 14) / 2, size.y + 20), colorName, 1, new Color(30, 30, 30));
         }
 
         /// <summary>
@@ -103,7 +71,9 @@ namespace Nero.Client.Player
         /// </summary>
         void CreateAnimation()
         {
-            var tex = GlobalResources.Character[SpriteID];
+            if (Npc.Items[NpcID].SpriteID == 0)
+                return;
+            var tex = GlobalResources.Character[Npc.Items[NpcID].SpriteID];
             var size = tex.size / 4;
             animation = new SpriteAnimation(tex);
             animation.origin = new Vector2(size.x / 2, size.y);
@@ -128,7 +98,7 @@ namespace Nero.Client.Player
         }
 
         /// <summary>
-        ///  Atualiza o personagem
+        ///  Atualiza o spawn
         /// </summary>
         public void Update()
         {
@@ -147,9 +117,10 @@ namespace Nero.Client.Player
                 return;
 
             // Velocidade
-            float speed = 200 * Game.DeltaTime;            
+            var n = Npc.Items[NpcID];
+            float speed = n.MoveSpeed * Game.DeltaTime;
 
-            if (OffSet.x > 0)            
+            if (OffSet.x > 0)
                 OffSet.x = Math.Max(0, OffSet.x - speed);
             if (OffSet.x < 0)
                 OffSet.x = Math.Min(0, OffSet.x + speed);
@@ -170,4 +141,3 @@ namespace Nero.Client.Player
         }
     }
 }
-

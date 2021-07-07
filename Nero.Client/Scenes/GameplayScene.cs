@@ -68,12 +68,16 @@ namespace Nero.Client.Scenes
                 {
                     // Players
                     foreach (var i in Character.Items)
-                        if ((int)i.Position.y / 8 == y)
+                        if ((int)i.Position.y / 4 == y)
                             i.Draw(target);
 
                     // Me
-                    if ((int)Character.My.Position.y / 8 == y)
+                    if ((int)Character.My.Position.y / 4 == y)
                         Character.My?.Draw(target);
+
+                    foreach (var i in Spawn.Items)
+                        if ((int)i.Position.y / 4 == y)
+                            i.Draw(target);
                 }
 
                 // Fringe
@@ -93,6 +97,10 @@ namespace Nero.Client.Scenes
                 foreach (var i in Character.Items)
                     i.DrawTexts(target);
                 Character.My?.DrawTexts(target);
+
+                // Npcs
+                foreach (var i in Spawn.Items)
+                    i.DrawTexts(target);
 
 
                 // Editor de mapa
@@ -162,11 +170,16 @@ namespace Nero.Client.Scenes
             // Personagem
             foreach (var i in Character.Items)
                 i.Update();
+
             if (Character.My != null)
             {
                 Character.My.Update();
                 Camera.Position = Character.My.Position * 8 + Character.My.OffSet + new Vector2(4);
             }
+
+            // Npcs
+            foreach (var i in Spawn.Items)
+                i.Update();
 
             // Mapa
             Map.MapInstance.Current?.Update();

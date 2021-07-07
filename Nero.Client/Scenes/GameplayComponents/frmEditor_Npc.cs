@@ -238,7 +238,7 @@ namespace Nero.Client.Scenes.GameplayComponents
             {
                 Anchor = Anchors.TopRight,
                 isNumeric = true,
-                Minimum = 50,
+                Minimum = 10,
                 Text = "80",
                 Maximum = 10000,
                 FillColor = Color.White,

@@ -55,10 +55,21 @@ namespace Nero.Server.Network
         static void UpdateSpawnFactory(NetPeer peer, NetDataReader buffer)
         {
             var player = Character.Find(peer);
-            SpawnFactory.Factories[player.MapID] = JsonConvert.DeserializeObject<SpawnFactory>(buffer.GetString());
+            SpawnFactory.Factories[player.MapID].Items.Clear();
+            var count = buffer.GetInt();
+            if (count > 0)
+                for (int i = 0; i < count; i++)
+                {
+                    var s = new SpawnFactoryItem();
+                    s.NpcID = buffer.GetInt();
+                    s.BlockMove = buffer.GetBool();
+                    s.Direction = (Directions)buffer.GetByte();
+                    s.UsePositionSpawn = buffer.GetBool();
+                    s.Position = buffer.GetVector2();
+                    SpawnFactory.Factories[player.MapID].Items.Add(s);
+                }
+
             SpawnFactory.Save(player.MapID);
-
-
         }
 
         /// <summary>
@@ -160,6 +171,8 @@ namespace Nero.Server.Network
             // Envia dados
             Sender.CharacterDataToInstance(Character.Find(peer));
             Sender.CharacterDataAllForMe(peer);
+            Sender.PrepareSpawn(peer);
+            Sender.SpawnDataAll(peer);
         }
 
         /// <summary>

@@ -15,6 +15,7 @@ namespace Nero
         public bool repeat = true;
         public Color color = Color.White;
         public float rotation = 0f;
+        public float Scale = 1f;
 
         int frame_current = 0;
         int frame_currenttimer = 0;
@@ -59,7 +60,7 @@ namespace Nero
             }
 
             // Desenha a sprite
-            Renderer.DrawTexture(target, texture, new Rectangle(Position, frames[frame_current].size), frames[frame_current], color, origin, rotation,
+            Renderer.DrawTexture(target, texture, new Rectangle(Position, frames[frame_current].size * Scale), frames[frame_current], color, origin, rotation,
                 RenderStates.Default);
 
             // Processa os frames
