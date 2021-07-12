@@ -15,6 +15,25 @@ namespace Nero.Client.Network
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
             MoveCharacter, ChatSpeak, OnGame, SaveNpc, RequestSpawnFactory, UpdateSpawnFactory,
+            RequestAttack, ChangeDirection,
+        }
+
+        /// <summary>
+        /// Altera a direção
+        /// </summary>
+        public static void ChangeDirection()
+        {
+            var buffer = Create(Packets.ChangeDirection);
+            buffer.Put((byte)Character.My.Direction);
+            SendTo(buffer);
+        }
+
+        /// <summary>
+        /// Requer um ataque
+        /// </summary>
+        public static void RequestAttack()
+        {
+            SendTo(Create(Packets.RequestAttack));
         }
 
         /// <summary>

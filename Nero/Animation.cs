@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,7 +80,8 @@ namespace Nero
         /// Destroi a animação
         /// </summary>
         public bool Destroy { get; private set; } = false;
-            
+
+  
         /// <summary>
         /// Construtor
         /// </summary>

@@ -20,7 +20,86 @@ namespace Nero.Server.Network
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
             ChatText, ChatTextSystem, UpdateNpc, RequestSpawnFactory,
-            SpawnData, PrepareSpawn, SpawnMove,
+            SpawnData, PrepareSpawn, SpawnMove, AttackAnimation, ChangeDirection,
+            FloatMessage, SpawnAttackAnimation,
+        }
+
+        /// <summary>
+        /// Animação do npc atacando
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="spawn"></param>
+        public static void SpawnAttackAnimation(SpawnItem spawn)
+        {
+            var buffer = Create(Packets.SpawnAttackAnimation);
+            buffer.Put(spawn.IndexOf);
+            SendToInstance(spawn.SpawnDevice.Instance, buffer);
+        }
+
+        /// <summary>
+        /// Mensagem flutuante
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        /// <param name="position"></param>
+        public static void FloatMessage(Character player, string text, Color color, Vector2 position)
+        {
+            var buffer = FloatMessagePacket(text, color, position);
+            SendTo(player, buffer);
+        }
+
+        /// <summary>
+        /// Mensagem flutuante
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void FloatMessage(absInstance instance, string text, Color color, Vector2 position)
+        {
+            var buffer = FloatMessagePacket(text, color, position);
+            SendToInstance(instance, buffer);
+        }
+
+        /// <summary>
+        /// Pacote de mensagem flutuante
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        static NetDataWriter FloatMessagePacket(string text, Color color, Vector2 position)
+        {
+            var buffer = Create(Packets.FloatMessage);
+            buffer.Put(text);
+            buffer.Put(color);
+            buffer.Put(position);
+            return buffer;
+        }
+
+        /// <summary>
+        /// Altera a direção do personagem
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="player"></param>
+        public static void ChangeDirection(absInstance instance, Character player)
+        {
+            var buffer = Create(Packets.ChangeDirection);
+            buffer.Put(player.Name);
+            buffer.Put((byte)player.Direction);
+            SendToInstanceBut(player, buffer);
+        }
+
+        /// <summary>
+        /// Animação de ataque
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="player"></param>
+        public static void AttackAnimation(absInstance instance, Character player)
+        {
+            var buffer = Create(Packets.AttackAnimation);
+            buffer.Put(player.Name);
+            SendToInstanceBut(player, buffer);
         }
 
         /// <summary>
@@ -95,6 +174,7 @@ namespace Nero.Server.Network
             buffer.Put(spawnItem.HP);
             buffer.Put((byte)spawnItem.Direction);
             buffer.Put(spawnItem.Position);
+            buffer.Put((byte)spawnItem.State);
             return buffer;
         }
 
@@ -334,6 +414,7 @@ namespace Nero.Server.Network
             buffer.Put(c.Level);
             buffer.Put(c.Position);
             buffer.Put((byte)c.AccessLevel);
+            buffer.Put((byte)c.Direction);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +17,15 @@ namespace Nero
         public float rotation = 0f;
         public float Scale = 1f;
 
+        /// <summary>
+        /// Atual chave
+        /// </summary>
+        public string CurrentKey { get; private set; }
+
         int frame_current = 0;
         int frame_currenttimer = 0;
         string frame_key = "";
-        Texture texture;
+        public Texture texture { get; private set; }
 
         /// <summary>
         /// Construtor
@@ -58,6 +63,8 @@ namespace Nero
                 else
                     return;
             }
+
+            CurrentKey = key;
 
             // Desenha a sprite
             Renderer.DrawTexture(target, texture, new Rectangle(Position, frames[frame_current].size * Scale), frames[frame_current], color, origin, rotation,

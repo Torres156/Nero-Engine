@@ -39,4 +39,26 @@ namespace Nero.Server
 
         count,
     }
+
+    enum StatCombats
+    {
+        Damage_Physic,
+
+        Damage_Magic,
+
+        Resist_Physic,
+
+        Resist_Magic,
+
+        Regeneration_HP,
+
+        Regeneration_MP,
+    }
+
+    enum DamageTypes
+    {
+        Physic,
+
+        Magic,
+    }
 }

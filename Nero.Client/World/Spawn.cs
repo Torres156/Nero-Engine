@@ -18,6 +18,8 @@ namespace Nero.Client.World
         public Vector2 Position { get; set; }
         public long HP { get; set; }
         public Directions Direction { get; set; }
+        public SpawnStates State { get; set; }
+        
 
         // Client Only
         SpriteAnimation animation;
@@ -35,7 +37,7 @@ namespace Nero.Client.World
             if (Npc.Items[NpcID].SpriteID == 0)
                 return;
 
-            if (animation == null)
+            if (animation == null || animation.texture != GlobalResources.Character[Npc.Items[NpcID].SpriteID])
                 CreateAnimation();
 
             var pos = Position * 8 + OffSet + new Vector2(4);
@@ -73,6 +75,7 @@ namespace Nero.Client.World
         {
             if (Npc.Items[NpcID].SpriteID == 0)
                 return;
+
             var tex = GlobalResources.Character[Npc.Items[NpcID].SpriteID];
             var size = tex.size / 4;
             animation = new SpriteAnimation(tex);
@@ -118,7 +121,7 @@ namespace Nero.Client.World
 
             // Velocidade
             var n = Npc.Items[NpcID];
-            float speed = n.MoveSpeed * Game.DeltaTime;
+            float speed = n.MoveSpeed * Game.FixedTime;
 
             if (OffSet.x > 0)
                 OffSet.x = Math.Max(0, OffSet.x - speed);

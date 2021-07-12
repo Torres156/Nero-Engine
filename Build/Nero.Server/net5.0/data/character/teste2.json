@@ -1,0 +1,25 @@
+{
+  "Name": "Teste2",
+  "ClassID": 1,
+  "SpriteID": 2,
+  "Level": 1,
+  "Experience": 0,
+  "StatPrimary": [
+    4,
+    20,
+    8,
+    12
+  ],
+  "Direction": 3,
+  "Points": 0,
+  "AccessLevel": 0,
+  "MapID": 1,
+  "Position": {
+    "x": 32.0,
+    "y": 27.0
+  },
+  "Vital": [
+    0,
+    0
+  ]
+}

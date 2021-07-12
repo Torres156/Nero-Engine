@@ -21,8 +21,9 @@ namespace Nero.Client.Helpers
             if (!c.Moving && c.Direction != direction)
             {
                 c.Direction = direction;
-                // SEND UPDATE DIR
+                Sender.ChangeDirection();
             }
+            
             if (CanMove(direction))
             {                
                 c.Moving = true;
@@ -90,7 +91,7 @@ namespace Nero.Client.Helpers
             if (Character.Items.Any(i => i.Position.Equals(nextPos)))
                 return false;
 
-            if (Spawn.Items.Any(i => (i.Position.ToInt2() / 2).Equals(nextPos.ToInt2() / 2)))
+            if (Spawn.Items.Any(i => (i.Position.ToInt2() ).Equals(nextPos.ToInt2())))
                 return false;
 
             return true;

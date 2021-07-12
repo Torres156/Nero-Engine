@@ -70,5 +70,11 @@ namespace Nero.Client.Network
             obj.Put(value.x);
             obj.Put(value.y);
         }
+
+        public static Color GetColor(this NetDataReader obj)
+            => new Color(obj.GetUInt());
+
+        public static void Put(this NetDataWriter obj, Color value)
+            => obj.Put(value.ToInteger());
     }
 }

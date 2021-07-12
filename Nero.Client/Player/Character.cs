@@ -38,17 +38,18 @@ namespace Nero.Client.Player
         public int MapID = 0;                                           // Id do mapa
         public Vector2 Position = Vector2.Zero;                         // Posição
         public AccessLevels AccessLevel = AccessLevels.Player;          // Acesso de administrador
-
+        public int[] Vital;                                             // Atributos vitais
 
         // Client Only
         public Vector2 OffSet;
         public bool Moving = false;
+        public long timerAttack;
 
 
         // Privates
         int FrameStep = 0;
         long timerFrame = 0;
-        SpriteAnimation animation;
+        SpriteAnimation animation;       
 
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Nero.Client.Player
         /// </summary>
         public Character()
         {
-
+            Vital = new int[(int)Vitals.count];
         }
 
         /// <summary>
@@ -67,15 +68,19 @@ namespace Nero.Client.Player
         {
             if (animation == null)
                 CreateAnimation();
-                        
-            var pos = Position * 8 + OffSet + new Vector2(4);
+
+            var pos = Position * 8 + OffSet + new Vector2(4);            
             string[] dirs = { "up", "down", "left", "right" };
             string key = "normal_" + dirs[(int)Direction];
             if (timerFrame > 0)
                 key = "move_" + dirs[(int)Direction];
 
+            // Ataque
+            if (timerAttack > 0 && timerAttack - Environment.TickCount64 > 500)
+                    key = "attack_" + dirs[(int)Direction];
+
             animation.Position = pos.Floor();
-            animation.Play(target, key);            
+            animation.Play(target, key);
         }
 
         /// <summary>
@@ -89,13 +94,13 @@ namespace Nero.Client.Player
             var pos = Position * 8 + OffSet.Floor() + new Vector2(4);
             var colorName = Color.White;
 
-            switch(AccessLevel)
+            switch (AccessLevel)
             {
                 case AccessLevels.GameMaster: colorName = new Color(254, 131, 65); break;
                 case AccessLevels.Administrator: colorName = new Color(108, 181, 246, 255); break;
             }
 
-            DrawText(target, Name, 14, pos - new Vector2(GetTextWidth(Name,14) / 2, size.y + 20), colorName, 1, new Color(30,30,30));            
+            DrawText(target, Name, 14, pos - new Vector2(GetTextWidth(Name, 14) / 2, size.y + 20), colorName, 1, new Color(30, 30, 30));
         }
 
         /// <summary>
@@ -125,6 +130,13 @@ namespace Nero.Client.Player
                 new Rectangle(new Vector2(size.x * 3, size.y * 1), size));
             animation.Add("move_right", new Rectangle(new Vector2(size.x * 1, size.y * 2), size),
                 new Rectangle(new Vector2(size.x * 3, size.y * 2), size));
+
+
+            // Attack
+            animation.Add("attack_up", new Rectangle(new Vector2(size.x * 1, size.y * 3), size));
+            animation.Add("attack_down", new Rectangle(new Vector2(size.x * 1, size.y * 0), size));
+            animation.Add("attack_left", new Rectangle(new Vector2(size.x * 1, size.y * 1), size));
+            animation.Add("attack_right", new Rectangle(new Vector2(size.x * 1, size.y * 2), size));
         }
 
         /// <summary>
@@ -136,6 +148,9 @@ namespace Nero.Client.Player
 
             if (timerFrame > 0 && Environment.TickCount64 > timerFrame)
                 timerFrame = 0;
+
+            if (timerAttack > 0 && Environment.TickCount64 > timerAttack)            
+                timerAttack = 0;
         }
 
         /// <summary>
@@ -147,9 +162,9 @@ namespace Nero.Client.Player
                 return;
 
             // Velocidade
-            float speed = 200 * Game.DeltaTime;            
+            float speed = 200 * Game.FixedTime;
 
-            if (OffSet.x > 0)            
+            if (OffSet.x > 0)
                 OffSet.x = Math.Max(0, OffSet.x - speed);
             if (OffSet.x < 0)
                 OffSet.x = Math.Min(0, OffSet.x + speed);
@@ -166,7 +181,6 @@ namespace Nero.Client.Player
                 Moving = false;
                 timerFrame = Environment.TickCount64 + 150;
             }
-
         }
     }
 }

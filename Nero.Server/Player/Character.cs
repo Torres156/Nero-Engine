@@ -1,5 +1,6 @@
 using LiteNetLib;
 using Nero.Server.Map;
+using Nero.Server.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Nero.Server.Player
         #region 
         public static List<Character> Items = new List<Character>();
         public static readonly string Path = Environment.CurrentDirectory + "/data/character/";
-        
+
 
         /// <summary>
         /// Verifica a existência do diretório
@@ -54,7 +55,7 @@ namespace Nero.Server.Player
 
             if (!File.Exists(filePath))
                 return null;
-            
+
             Character c;
             JsonHelper.Load(filePath, out c);
             return c;
@@ -86,7 +87,6 @@ namespace Nero.Server.Player
 
         #endregion 
 
-
         // Publics
         public string Name = "";                                        // Nome
         public int ClassID = 0;                                         // Id da classe
@@ -99,10 +99,14 @@ namespace Nero.Server.Player
         public AccessLevels AccessLevel = AccessLevels.Player;          // Acesso de administrador
 
 
+        // Server Only
         [JsonIgnore]
         public NetPeer peer = null;     // Entrada de conexão
         [JsonIgnore]
         public Account account = null;  // Conta vinculada
+
+        // Privates
+        long timerRegen;
 
 
         /// <summary>
@@ -129,17 +133,210 @@ namespace Nero.Server.Player
             if (vital == Vitals.HP)
             {
                 int value = 150 + 50 * Level;
-                value += StatPrimary[(int)StatPrimaries.Constitution] * 5; 
+                value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Constitution) * .015f)); // 1,5% por CON
                 return value;
             }
-            else if(vital == Vitals.MP)
+            else if (vital == Vitals.MP)
             {
                 int value = 50 + 20 * Level;
-                value += StatPrimary[(int)StatPrimaries.Mental] * 2;
+                value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Mental) * .025f + GetStatPrimary(StatPrimaries.Intelligency) * .01f)); // 2,5% por MEN + 1% por INT
                 return value;
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Sai da instância
+        /// </summary>
+        public void ExitInstance()
+        {
+            GetInstance().PlayerCount--;
+            Network.Sender.RemoveCharacter(this);
+        }
+
+        /// <summary>
+        /// Antes do ataque basico
+        /// </summary>
+        public void BeforeAttackBasic(ref int damage)
+        {
+
+        }
+
+        /// <summary>
+        /// Modifica o dano em npcs
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <param name="spawn"></param>
+        public void ModifyAttackBasic(ref int damage, SpawnItem spawn)
+        {
+
+        }
+
+        /// <summary>
+        /// Antes do ataque do npc
+        /// </summary>
+        /// <param name="damage"></param>
+        public void BeforeAttackedByNpc(ref int damage)
+        {
+
+        }
+
+        /// <summary>
+        /// Calcula o dano recebido
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <param name="damageType"></param>
+        /// <param name="ignoreResist"></param>
+        public void CalculateDamageReceive(ref int value, DamageTypes damageType, int ignoreResist = 0)
+        {
+            var resist = damageType == DamageTypes.Physic ? GetStatCombat(StatCombats.Resist_Physic) : GetStatCombat(StatCombats.Resist_Magic);
+            resist = Math.Max(resist - ignoreResist, 1);
+            value = (int)(MathF.Pow(value, 2) / (resist * 3));
+        }
+
+        /// <summary>
+        /// Leva um dano
+        /// </summary>
+        /// <param name="spawn"></param>
+        /// <param name="damage"></param>
+        /// <param name="damageType"></param>
+        public void ReceiveDamage(SpawnItem spawn, int damage, DamageTypes damageType)
+        {
+            var die = ReceiveDamage(damage, damageType);
+            if (die)
+                spawn.target = null;
+        }
+
+        /// <summary>
+        /// Leva um dano
+        /// </summary>
+        /// <param name="spawn"></param>
+        /// <param name="damage"></param>
+        /// <param name="damageType"></param>
+        public void ReceiveDamage(Character player, int damage, DamageTypes damageType)
+        {
+            ReceiveDamage(damage, damageType);
+        }
+
+        /// <summary>
+        /// Leva um dano
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <param name="damageType"></param>
+        bool ReceiveDamage(int damage, DamageTypes damageType)
+        {
+            if (damage < 0) return false;
+
+            if (damage > Vital[(int)Vitals.HP])
+            {
+                Death();
+                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 - new Vector2(10));
+                return true;
+            }
+            else
+            {
+                Vital[(int)Vitals.HP] -= damage;
+                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 - new Vector2(10));
+                // Send Update Vital
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Morre o personagem
+        /// </summary>
+        public void Death()
+        {
+            Vital[(int)Vitals.HP] = VitalMaximum(Vitals.HP);
+            Vital[(int)Vitals.MP] = VitalMaximum(Vitals.MP);
+        }
+
+        /// <summary>
+        /// Pega atributo de combate
+        /// </summary>
+        /// <param name="stat"></param>
+        public int GetStatCombat(StatCombats stat)
+        {
+            int value = 0;
+
+            switch (stat)
+            {
+                case StatCombats.Damage_Physic:
+                    value = 10;
+                    value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Strenght) * .025f)); // 2,5% por STR
+                    break;
+
+                case StatCombats.Damage_Magic:
+                    value = 10;
+                    value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Intelligency) * .035f)); // 3,5% por INT
+                    break;
+
+                case StatCombats.Resist_Physic:
+                    value = 5;
+                    value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Constitution) * .01)); // 1% por CON
+                    break;
+
+                case StatCombats.Resist_Magic:
+                    value = 5;
+                    value = (int)(value * (1f + GetStatPrimary(StatPrimaries.Mental) * .015)); // 1,5% por MEN
+                    break;
+
+                case StatCombats.Regeneration_HP:
+                    value = 1 + (int)(VitalMaximum(Vitals.HP) * .015f); // 1,5%
+                    break;
+
+                case StatCombats.Regeneration_MP:
+                    value = 1 + (int)(VitalMaximum(Vitals.MP) * .02f); // 2%
+                    break;
+            }
+            return value;
+        }
+
+        /// <summary>
+        /// Atributos primarios
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public int GetStatPrimary(StatPrimaries stat)
+        {
+            var baseValue = StatPrimary[(int)stat];
+
+            return baseValue;
+        }
+
+        /// <summary>
+        /// Atualiza o jogador
+        /// </summary>
+        public void Update()
+        {
+            // Regeneração
+            if (Environment.TickCount64 > timerRegen)
+            {
+                AddVital(Vitals.HP, GetStatCombat(StatCombats.Regeneration_HP));
+                AddVital(Vitals.MP, GetStatCombat(StatCombats.Regeneration_MP));
+                timerRegen = Environment.TickCount64 + Constants.TIMER_REGEN;
+            }
+        }
+
+        /// <summary>
+        /// Adiciona um vital
+        /// </summary>
+        /// <param name="vitalType"></param>
+        /// <param name="value"></param>
+        public void AddVital(Vitals vitalType, int value)
+        {
+            if (Vital[(int)vitalType] < VitalMaximum(vitalType))
+            {
+                Vital[(int)vitalType] += value;
+                if (Vital[(int)vitalType] > VitalMaximum(vitalType))
+                    Vital[(int)vitalType] = VitalMaximum(vitalType);
+
+                Network.Sender.FloatMessage(GetInstance(), $"+{value}", vitalType == Vitals.HP ? Color.Green : Color.CornflowerBlue,
+                    Position * 8 + (vitalType == Vitals.HP ? new Vector2(5, -12 + Utils.Rand(1, 5)) : new Vector2(-10, -10 + Utils.Rand(1, 5))));
+
+                // SEND UPDATE VITALS
+            }
         }
     }
 }

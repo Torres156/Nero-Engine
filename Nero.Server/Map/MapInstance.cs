@@ -1,4 +1,4 @@
-using Nero.Client.World;
+using Nero.Server.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -101,15 +101,14 @@ namespace Nero.Server.Map
             for (int x = 0; x <= Size.x; x++)
                 for (int y = 0; y <= Size.y; y++)
                     Attributes[x, y] = new List<AttributeInfo>();            
-        }
-              
+        }              
 
         /// <summary>
         /// Atualiza o mapa
         /// </summary>
         public override void Update()
         {
-            Spawn.Update();
+            base.Update();
         }
     }
 }

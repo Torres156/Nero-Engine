@@ -19,6 +19,7 @@ namespace Nero
         public static Vector2 MousePosition;                                                // Posição do Mouse
         public static readonly string Path = AppDomain.CurrentDomain.BaseDirectory + "/";   // Diretório do jogo
         public static RenderWindow Window;                                                  // Dispositivo gráfico para janela
+        public static readonly float FixedTime = 1f / 60f;                                  // Tempo fixo em 60FPS
 
 
         // Configurações

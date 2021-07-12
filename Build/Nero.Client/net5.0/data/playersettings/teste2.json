@@ -1,0 +1,13 @@
+{
+  "MoveUp": 22,
+  "MoveDown": 18,
+  "MoveLeft": 0,
+  "MoveRight": 3,
+  "MoveUp2": 73,
+  "MoveDown2": 74,
+  "MoveLeft2": 71,
+  "MoveRight2": 72,
+  "NormalAttack": 37,
+  "NormalAttack2": 41,
+  "GetDrop": 57
+}

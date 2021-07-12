@@ -35,13 +35,16 @@ namespace Nero.Server.Helpers
         public static void GoMap(Character player, int mapID, Vector2 position, bool startingGame = false)
         {
             // Remove o personagem do mapa anterior
-            if (startingGame)
-                Sender.RemoveCharacter(player);
+            if (!startingGame)
+                player.ExitInstance();
 
             // Posição
             player.MapID = mapID;
             player.Position = Vector2.Min(position, MapInstance.Items[mapID].Size.ToVector2() * 8);
             Sender.UpdateCharacterPosition(player);
+
+            var inst = player.GetInstance();
+            inst.PlayerCount++;
 
             // Verifica a revisão do mapa
             Sender.CheckMapRevision(player);

@@ -18,7 +18,7 @@ namespace Nero.Server.Network
         {
             Register, Login, CreateCharacter, UseCharacter, MapAnswer, MapSave,
             MoveCharacter, ChatSpeak, OnGame, SaveNpc, RequestSpawnFactory,
-            UpdateSpawnFactory,
+            UpdateSpawnFactory, RequestAttack, ChangeDirection,
         }
 
         /// <summary>
@@ -44,7 +44,31 @@ namespace Nero.Server.Network
                 case Packets.SaveNpc: SaveNpc(peer, buffer); break;
                 case Packets.RequestSpawnFactory: RequestSpawnFactory(peer, buffer); break;
                 case Packets.UpdateSpawnFactory: UpdateSpawnFactory(peer, buffer); break;
+                case Packets.RequestAttack: RequestAttack(peer, buffer); break;
+                case Packets.ChangeDirection: ChangeDirection(peer, buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Altera a direção do personagem
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void ChangeDirection(NetPeer peer, NetDataReader buffer)
+        {
+            var c = Character.Find(peer);
+            c.Direction = (Directions)buffer.GetByte();
+            Sender.ChangeDirection(c.GetInstance(), c);
+        }
+
+        /// <summary>
+        /// Requer um ataque
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="buffer"></param>
+        static void RequestAttack(NetPeer peer, NetDataReader buffer)
+        {
+            CombatHelper.RequestAttack(Character.Find(peer));
         }
 
         /// <summary>

@@ -1,10 +1,11 @@
-using Nero.Client.World;
+using Nero.Server.World;
 using Nero.Server.Map;
 using Nero.SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Nero.Server.Player;
 
 namespace Nero.Server.Core
 {
@@ -29,6 +30,8 @@ namespace Nero.Server.Core
                     for (int i = 0; i < Constants.MAX_MAPS; i++)
                         MapInstance.Items[i].Update();
 
+                    foreach (var i in Character.Items)
+                        i.Update();
 
                     timerDelay = Environment.TickCount64 + 1;
                 }

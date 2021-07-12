@@ -1,4 +1,4 @@
-using Nero.Client.World;
+using Nero.Server.World;
 using Nero.Server.Core;
 using Nero.Server.Map;
 using Nero.Server.Player;

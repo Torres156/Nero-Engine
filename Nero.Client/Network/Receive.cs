@@ -21,7 +21,8 @@ namespace Nero.Client.Network
             UpdateCharacterPosition, CheckMapRevision, MapData,
             CharacterData, RemoveCharacter, MoveCharacter,
             ChatText, ChatTextSystem, UpdateNpc, RequestSpawnFactory,
-            SpawnData, PrepareSpawn, SpawnMove,
+            SpawnData, PrepareSpawn, SpawnMove, AttackAnimation, ChangeDirection,
+            FloatMessage,
         }
 
         /// <summary>
@@ -53,7 +54,51 @@ namespace Nero.Client.Network
                 case Packets.SpawnData: SpawnData(buffer); break;
                 case Packets.PrepareSpawn: PrepareSpawn(buffer); break;
                 case Packets.SpawnMove: SpawnMove(buffer); break;
+                case Packets.AttackAnimation: AttackAnimation(buffer); break;
+                case Packets.ChangeDirection: ChangeDirection(buffer); break;
+                case Packets.FloatMessage: FloatMessage(buffer); break;
             }
+        }
+
+        /// <summary>
+        /// Mensagem flutuante
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void FloatMessage(NetDataReader buffer)
+        {
+            var text = buffer.GetString();
+            var color = buffer.GetColor();
+            var position = buffer.GetVector2();
+
+            Client.FloatMessage.Add(text, color, position);
+        }
+
+        /// <summary>
+        /// Altera a direção
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void ChangeDirection(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+            var c = Character.Find(name);
+            if (c == null)
+                return;
+
+            c.Direction = (Directions)buffer.GetByte();
+        }
+
+        /// <summary>
+        /// Animação de ataque
+        /// </summary>
+        /// <param name="buffer"></param>
+        static void AttackAnimation(NetDataReader buffer)
+        {
+            var name = buffer.GetString();
+            var c = Character.Find(name);
+            if (c == null)
+                return;
+
+            c.timerAttack = Environment.TickCount64 + 1000;
         }
 
         /// <summary>
@@ -120,6 +165,7 @@ namespace Nero.Client.Network
             s.HP = buffer.GetLong();
             s.Direction = (Directions)buffer.GetByte();
             s.Position = buffer.GetVector2();
+            s.State = (SpawnStates)buffer.GetByte();
         }
 
         /// <summary>
@@ -243,6 +289,7 @@ namespace Nero.Client.Network
             find.Level = buffer.GetInt();
             find.Position = buffer.GetVector2();
             find.AccessLevel = (AccessLevels)buffer.GetByte();
+            find.Direction = (Directions)buffer.GetByte();
         }
 
         /// <summary>
@@ -327,6 +374,9 @@ namespace Nero.Client.Network
             c.Level = buffer.GetInt();
             c.Position = buffer.GetVector2();
             c.AccessLevel = (AccessLevels)buffer.GetByte();
+            c.Direction = (Directions)buffer.GetByte();
+
+            PlayerSettings.Load();
         }
 
         /// <summary>

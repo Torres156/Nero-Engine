@@ -1,4 +1,4 @@
-using Nero.Client.World;
+using Nero.Server.World;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,13 @@ namespace Nero.Server
         // Server Only
         [JsonIgnore]
         public Spawn Spawn { get; protected set; }    // Dispositivo de spawn
+        [JsonIgnore]
+        public int PlayerCount { get; set; } = 0;
 
-        public abstract void Update();
+        public virtual void Update()
+        {
+            Spawn.Update();
+        }
 
         /// <summary>
         /// Cria o dispositivo de spawn

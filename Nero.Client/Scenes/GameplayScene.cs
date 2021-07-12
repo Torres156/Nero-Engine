@@ -26,6 +26,7 @@ namespace Nero.Client.Scenes
             Map.MapInstance.Current = Map.MapInstance.Load(0);
             Camera.Initialize();
             ChatHelper.Initialize();
+            FloatMessage.messages = new List<FloatMessage>();
 
             // Controles
             var controls = Utils.GetTypesInNamespace<ControlBase>(Assembly.GetExecutingAssembly(), "Nero.Client.Scenes.GameplayComponents");
@@ -64,20 +65,21 @@ namespace Nero.Client.Scenes
                 if (Environment.TickCount64 > tmrMapDelay)
                     MapInstance.Current.DrawGround(target);
 
-                for (int y = Camera.Start().y; y <= Camera.End(MapInstance.Current).y; y++)
+                for (int y = Camera.Start().y * 4; y <= Camera.End(MapInstance.Current).y * 4; y++)
                 {
                     // Players
                     foreach (var i in Character.Items)
-                        if ((int)i.Position.y / 4 == y)
+                        if ((int)i.Position.y == y)
                             i.Draw(target);
 
                     // Me
-                    if ((int)Character.My.Position.y / 4 == y)
+                    if ((int)Character.My.Position.y == y)
                         Character.My?.Draw(target);
 
-                    foreach (var i in Spawn.Items)
-                        if ((int)i.Position.y / 4 == y)
-                            i.Draw(target);
+                    if (Spawn.Items != null)
+                        foreach (var i in Spawn.Items)
+                            if (i.State != SpawnStates.Dead && (int)i.Position.y == y)
+                                i.Draw(target);
                 }
 
                 // Fringe
@@ -88,6 +90,7 @@ namespace Nero.Client.Scenes
                 }
 
                 Camera.End();
+
                 // Fog
                 MapInstance.Current.DrawFog(target);
                 Camera.Begin();
@@ -100,7 +103,8 @@ namespace Nero.Client.Scenes
 
                 // Npcs
                 foreach (var i in Spawn.Items)
-                    i.DrawTexts(target);
+                    if (i.State != SpawnStates.Dead)
+                        i.DrawTexts(target);
 
 
                 // Editor de mapa
@@ -126,12 +130,20 @@ namespace Nero.Client.Scenes
                     }
                 }
 
+                FloatMessage.Draw(target);
+
                 Camera.End();
             }
 
             if (FindControl<frmEditor_Map>().Visible)
             {
                 var cam_mouse = (Camera.GetMousePosition() / 32);
+                DrawText(target, $"Mouse X: {cam_mouse.x} Y:{cam_mouse.y}", 14, new Vector2(10, 10 + 16), Color.White, 1, new Color(30, 30, 30));
+            }
+
+            if (FindControl<frmEditor_Spawn>().Visible)
+            {
+                var cam_mouse = (Camera.GetMousePosition() / 8);
                 DrawText(target, $"Mouse X: {cam_mouse.x} Y:{cam_mouse.y}", 14, new Vector2(10, 10 + 16), Color.White, 1, new Color(30, 30, 30));
             }
 
@@ -149,22 +161,25 @@ namespace Nero.Client.Scenes
             if (Game.Window.HasFocus() && TextBox.Focus == null)
             {
                 // Up
-                if (Keyboard.IsKeyPressed(Keyboard.Key.W) || Keyboard.IsKeyPressed(Keyboard.Key.Up))
+                if (Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveUp) || Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveUp2))
                 { MoveHelper.Request(Directions.Up); goto breakMove; }
 
                 // Down
-                if (Keyboard.IsKeyPressed(Keyboard.Key.S) || Keyboard.IsKeyPressed(Keyboard.Key.Down))
+                if (Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveDown) || Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveDown2))
                 { MoveHelper.Request(Directions.Down); goto breakMove; }
 
                 // Left
-                if (Keyboard.IsKeyPressed(Keyboard.Key.A) || Keyboard.IsKeyPressed(Keyboard.Key.Left))
+                if (Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveLeft) || Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveLeft2))
                 { MoveHelper.Request(Directions.Left); goto breakMove; }
 
                 // Right
-                if (Keyboard.IsKeyPressed(Keyboard.Key.D) || Keyboard.IsKeyPressed(Keyboard.Key.Right))
+                if (Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveRight) || Keyboard.IsKeyPressed(PlayerSettings.Instance.MoveRight2))
                 { MoveHelper.Request(Directions.Right); goto breakMove; }
-
             breakMove:;
+
+                // Ataque
+                if (Keyboard.IsKeyPressed(PlayerSettings.Instance.NormalAttack) || Keyboard.IsKeyPressed(PlayerSettings.Instance.NormalAttack2))
+                    CombatHelper.Request();
             }
 
             // Personagem
@@ -179,11 +194,14 @@ namespace Nero.Client.Scenes
 
             // Npcs
             foreach (var i in Spawn.Items)
-                i.Update();
+                if (i.State != SpawnStates.Dead)
+                    i.Update();
 
             // Mapa
             Map.MapInstance.Current?.Update();
 
+            // Mensagens flutuantes
+            FloatMessage.Update();
             base.Update();
         }
 
@@ -291,5 +309,6 @@ namespace Nero.Client.Scenes
 
             return result;
         }
+
     }
 }

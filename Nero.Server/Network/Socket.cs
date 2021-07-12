@@ -64,7 +64,7 @@ namespace Nero.Server.Network
             var findChar = Character.Find(peer);
             if (findChar != null)
             {
-                Sender.RemoveCharacter(findChar);
+                findChar.ExitInstance();
                 Character.Save(findChar);
                 Character.Items.Remove(findChar);
             }
@@ -107,5 +107,11 @@ namespace Nero.Server.Network
             obj.Put(value.x);
             obj.Put(value.y);
         }
+
+        public static Color GetColor(this NetDataReader obj)
+            => new Color(obj.GetUInt());
+
+        public static void Put(this NetDataWriter obj, Color value)
+            => obj.Put(value.ToInteger());
     }
 }

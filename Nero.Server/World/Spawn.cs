@@ -1,21 +1,23 @@
 using Nero.Server;
+using Nero.Server.Core;
 using Nero.Server.Map;
 using Nero.Server.World;
-using Nero.World.Pathfinder;
+using Nero.Server.World.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nero.Client.World
+namespace Nero.Server.World
 {
     class Spawn
     {
         public absInstance Instance { get; private set; }
         public int MapID { get; private set; }
         public SpawnItem[] Items;
-        public AStar AStar { get; private set; }
+        public Greedy Greedy { get; private set; }
+
 
         /// <summary>
         /// Construtor
@@ -27,6 +29,9 @@ namespace Nero.Client.World
             this.Instance = Instance;
         }
 
+        /// <summary>
+        /// Cria os items
+        /// </summary>
         public void CreateItems()
         {
             var f = GetFactory();
@@ -37,7 +42,7 @@ namespace Nero.Client.World
                 Items[i].Respawn();
             }
 
-            AStar = new AStar(this);
+            Greedy = new Greedy(this);
         }
 
         /// <summary>
@@ -45,7 +50,8 @@ namespace Nero.Client.World
         /// </summary>
         public void Update()
         {
-            foreach (var i in Items)
+            if (Instance.PlayerCount > 0)
+                foreach (var i in Items)
                 i.Update();
         }
 
