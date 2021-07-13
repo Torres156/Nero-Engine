@@ -1,4 +1,5 @@
 using LiteNetLib;
+using Nero.Server.Helpers;
 using Nero.Server.Map;
 using Nero.Server.World;
 using Newtonsoft.Json;
@@ -106,7 +107,7 @@ namespace Nero.Server.Player
         public Account account = null;  // Conta vinculada
 
         // Privates
-        long timerRegen;
+        long timerRegen;        
 
 
         /// <summary>
@@ -205,7 +206,12 @@ namespace Nero.Server.Player
         {
             var die = ReceiveDamage(damage, damageType);
             if (die)
-                spawn.target = null;
+            {
+                var spawnDevice = spawn.SpawnDevice;
+                foreach (var i in spawnDevice.Items)
+                    if (i.target == this)
+                        i.target = null;
+            }
         }
 
         /// <summary>
@@ -217,6 +223,7 @@ namespace Nero.Server.Player
         public void ReceiveDamage(Character player, int damage, DamageTypes damageType)
         {
             ReceiveDamage(damage, damageType);
+            Network.Sender.FloatMessage(player, $"-{damage}", Color.Red, Position * 8 + new Vector2(20, -20));
         }
 
         /// <summary>
@@ -231,13 +238,13 @@ namespace Nero.Server.Player
             if (damage > Vital[(int)Vitals.HP])
             {
                 Death();
-                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 - new Vector2(10));
+                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 + new Vector2(20,-20));
                 return true;
             }
             else
             {
                 Vital[(int)Vitals.HP] -= damage;
-                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 - new Vector2(10));
+                Network.Sender.FloatMessage(this, $"-{damage}", Color.Red, Position * 8 + new Vector2(20,-20));
                 // Send Update Vital
             }
             return false;
@@ -250,6 +257,9 @@ namespace Nero.Server.Player
         {
             Vital[(int)Vitals.HP] = VitalMaximum(Vitals.HP);
             Vital[(int)Vitals.MP] = VitalMaximum(Vitals.MP);
+
+            var c = CharacterClass.Items[ClassID];
+            PlayerHelper.GoMap(this, c.MapID, c.StartPosition);
         }
 
         /// <summary>

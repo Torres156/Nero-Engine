@@ -56,6 +56,22 @@ namespace Nero.Server.World
             switch (State)
             {
                 case SpawnStates.Normal:
+
+                    // Se for agressivo
+                    if (GetNpc().Behavior == NpcBehavior.Agressive)
+                    {
+                        var players = Character.Items.Where(i => i.GetInstance() == SpawnDevice.Instance &&
+                        i.Position.Distance(Position) < 20); // 5 Tile de distancia  | 5x4 = 20
+
+                        if (players.Count() > 0)
+                        {
+                            State = SpawnStates.Combat;
+                            target = players.First();
+                            targetPosition = target.Position;
+                            return;
+                        }
+                    }
+
                     // Modo hibernado
                     if (tmrHibern > 0)
                     {
@@ -161,6 +177,12 @@ namespace Nero.Server.World
                     {
                         State = SpawnStates.Normal;
                         tmrHibern = Environment.TickCount64 + 1000 * Utils.Rand(5, 15);
+                        return;
+                    }
+
+                    if (targetPosition.Distance(Position) > 40) // + 10 tiles sai o agro
+                    {
+                        target = null;
                         return;
                     }
 
@@ -489,10 +511,11 @@ namespace Nero.Server.World
             {
                 HP -= value;
                 target = player;
+                targetPosition = target.Position;
                 State = SpawnStates.Combat;
                 // SEND HP UPDATE
             }
-            Network.Sender.FloatMessage(SpawnDevice.Instance, $"-{value}", Color.Red, Position * 8 + new Vector2(10, -10));
+            Network.Sender.FloatMessage(player, $"-{value}", Color.White, Position * 8 + new Vector2(-10, -20));
         }
 
         /// <summary>

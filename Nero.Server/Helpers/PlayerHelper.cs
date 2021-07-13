@@ -36,8 +36,16 @@ namespace Nero.Server.Helpers
         {
             // Remove o personagem do mapa anterior
             if (!startingGame)
+            {
+                // Apenas altera a posição
+                if (mapID == player.MapID)
+                {
+                    player.Position = Vector2.Min(position, MapInstance.Items[mapID].Size.ToVector2() * 8);
+                    Sender.UpdateCharacterPosition(player);
+                    return;
+                }
                 player.ExitInstance();
-
+            }
             // Posição
             player.MapID = mapID;
             player.Position = Vector2.Min(position, MapInstance.Items[mapID].Size.ToVector2() * 8);

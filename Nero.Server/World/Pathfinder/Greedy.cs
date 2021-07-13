@@ -8,6 +8,8 @@ namespace Nero.Server.World.Pathfinder
 {
     class Greedy
     {
+        const int MAX_LOOPS = 100;
+
         bool[,] grid, gridCache;
         List<CellNode> OpenNodes = new List<CellNode>();
         List<CellNode> CloseNodes = new List<CellNode>();
@@ -58,6 +60,9 @@ namespace Nero.Server.World.Pathfinder
         {
             ResetGrid(spawn);
             Int2 startPoint = spawn.Position.ToInt2();
+            if (startPoint.Distance(endPoint) > 30)
+                return new List<Int2>(); // Sem caminho
+
             OpenNodes.Clear();
             OpenNodes.Add(new CellNode(startPoint)
             {
@@ -66,8 +71,12 @@ namespace Nero.Server.World.Pathfinder
             });
             CloseNodes.Clear();
 
+            int processLoop = 0;
             while (OpenNodes.Count > 0)
             {
+                if (processLoop > MAX_LOOPS)
+                    return new List<Int2>(); // Evitar loop infinito
+
                 var current = FindBestNode();
                 if (current == null || OpenNodes.Count == 0)
                     return new List<Int2>(); // Não encontrado
@@ -114,6 +123,7 @@ namespace Nero.Server.World.Pathfinder
                 current.Closed = true;
                 CloseNodes.Add(current);
                 OpenNodes.Remove(current);
+                processLoop++;
             }
 
             return new List<Int2>(); // No path
